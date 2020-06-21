@@ -1,4 +1,4 @@
-# AlgorithmStudy
+# PS Study
 ---
 - `BOJ Online Judge`의 소스코드
 
