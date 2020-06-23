@@ -1,63 +1,63 @@
 #include <iostream>
-#include <utility>
-#include <vector>
+#include <cstring>
 using namespace std;
 
-const int dy[4]={1,-1,0,0};
-const int dx[4]={0,0,1,-1};
+const int dy[4]={0,0,1,-1};
+const int dx[4]={1,-1,0,0};
 
-int m, n, answer;
-int board[500][500];
-int cache[500][500];
-int visited[500][500];
-vector<pair<int,int> > route;
+int m, n, answer=0;
+int board[501][501];
+int check[501][501];
 
-bool Search(int y, int x)
+int DFS(int y, int x)
 {
-	int& ret = cache[y][x];
-	
+	if(check[y][x]) return check[y][x];
+	if(y<0 || x<0 || y>=m || x>=n) return 0;
 	if(y==m-1 && x==n-1)
-	{	
+	{
 		answer++;
-		return true;
+		return 1;
 	}
-	
-	if(ret != -1) return ret;
-	
-	ret=0;
+
 	for(int i=0; i<4; i++)
 	{
-		int ny = y+dy[i];
-		int nx = x+dx[i];
-		
-		if(ny<0 || nx<0 || ny>=m || nx>=n) continue;
-		
-		if(board[y][x] > board[ny][nx])
-		{
-			ret = Search(ny, nx);
-		}
+		int ny = y + dy[i];
+		int nx = x + dx[i];
+
+		if(board[y][x]>board[ny][nx])
+			check[y][x] = max(check[y][x], DFS(ny, nx));
 	}
-	
-	return false;
+	return check[y][x];
 }
 
 int main()
 {
 	ios::sync_with_stdio(false);
 	cin.tie(NULL);
-	
+
 	cin>>m>>n;
-	
+
 	for(int i=0; i<m; i++)
-	for(int j=0; j<n; j++)
+		for(int j=0; j<n; j++)
+			cin>>board[i][j];
+
+	for(int i=0; i<m; i++)
+		memset(check[i], -1, sizeof(int)*n);
+
+	DFS(0, 0);
+
+	/*
+	for(int i=0; i<m; i++)
 	{
-		cin>>board[i][j];
-		cache[i][j]=-1;
+		for(int j=0; j<n; j++)
+		{
+			cout<<check[i][j]<<' ';
+		}
+		cout<<'\n';
 	}
-	
-	Search(0, 0);
-	
+	*/
+
 	cout<<answer<<'\n';
-	
+
 	return 0;
 }
