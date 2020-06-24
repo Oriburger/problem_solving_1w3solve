@@ -11,21 +11,19 @@ int check[501][501];
 
 int DFS(int y, int x)
 {
-	if(check[y][x]) return check[y][x];
 	if(y<0 || x<0 || y>=m || x>=n) return 0;
-	if(y==m-1 && x==n-1)
-	{
-		answer++;
-		return 1;
-	}
+	if((y==m-1 && x==n-1))	return 1;
 
+	if(check[y][x]!=-1) return check[y][x];
+	
+	check[y][x]=0;
 	for(int i=0; i<4; i++)
 	{
 		int ny = y + dy[i];
 		int nx = x + dx[i];
 
 		if(board[y][x]>board[ny][nx])
-			check[y][x] = max(check[y][x], DFS(ny, nx));
+			check[y][x] += DFS(ny, nx);
 	}
 	return check[y][x];
 }
@@ -38,26 +36,13 @@ int main()
 	cin>>m>>n;
 
 	for(int i=0; i<m; i++)
+	{
+		memset(check[i], -1, sizeof(int)*n);
 		for(int j=0; j<n; j++)
 			cin>>board[i][j];
-
-	for(int i=0; i<m; i++)
-		memset(check[i], -1, sizeof(int)*n);
-
-	DFS(0, 0);
-
-	/*
-	for(int i=0; i<m; i++)
-	{
-		for(int j=0; j<n; j++)
-		{
-			cout<<check[i][j]<<' ';
-		}
-		cout<<'\n';
 	}
-	*/
 
-	cout<<answer<<'\n';
+	cout<<DFS(0,0)<<'\n';
 
 	return 0;
 }
