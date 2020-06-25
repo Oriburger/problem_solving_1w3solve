@@ -8,13 +8,34 @@ typedef pair<int,int> P;
 P st = {-1,-1}, fin; //레이저 pos 
 int w, h, ans;
 int board[101][101];
+int visited[101][101];
 
 const int dy[4]={1,-1,0,0};
 const int dx[4]={0,0,1,-1};
 
 int BFS(int y, int x)
 {
+	queue<P> q;
+	q.push({y, x});
 	
+	while(!q.empty())
+	{
+		P curr = q.top();
+		q.pop();
+		
+		for(int i=0; i<4; i++)
+		{
+			P next = make_pair(curr.first + dy[i], curr.second + dx[i]);
+				
+			if(next.first < 0 || next.second < 0
+				|| next.first >= w || next.second >=h
+				|| board[next.first][next.second] != '.')
+					continue;
+			
+			q.push(next);
+			visited[next.first][next.second] = 1;
+		}
+	}
 }
 
 int main()
@@ -41,14 +62,7 @@ int main()
 		}
 	}
 	
-	for(int i=0; i<w; i++)
-	{
-		for(int j=0; j<h; j++)
-		{
-			if(board[i][j]=='.')
-				answer = BFS(i, j);
-		}
-	}
+	BFS(st.first, st.second);
 	
 	
 	return 0;
