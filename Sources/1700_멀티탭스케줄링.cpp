@@ -39,7 +39,6 @@ int main()
 				if(check[j] && cnt[j]==0)
 				{
 					check[j]=false; //해당 장치를 뽑는다.
-					cout<<j<<" pop!!!\n";
 					flag = true; ans++;
 					break;
 				}
@@ -47,20 +46,25 @@ int main()
 
 			if(!flag) //현재 꽂혀있는 장치들이 모두 사용될 예정인 경우
 			{
-				for(int j=0; j<k; j++) 
+				int z=0;
+				bool visited[100]={false}; //중복 체크
+				for(int j=i+1; j<k; j++)
 				{
-					if(check[schedule[j]])
+					if(check[schedule[j]] && !visited[schedule[j]])
+					{
 						lastIdx = schedule[j];
+						visited[schedule[j]]=true;
+						z++;
+					}
+					if(z==n) break;
 				}
 				ans++;
 				
-				cout<<lastIdx<<" pop!\n";
 				check[lastIdx]=false;
 			}
 		}
-		remaining = remaining > 0 && schedule[i]!=check[i] ? remaining - 1 : 0; //빈칸에 꽂았을 경우에 값 갱신
+		if(!check[schedule[i]] && remaining>0 ) remaining--;
 
-		cout<<schedule[i]<<" push!\n";
 		check[schedule[i]]=true; 
 		cnt[schedule[i]]--;
 	}
@@ -69,5 +73,3 @@ int main()
 	
 	return 0;
 }
-
-//https://dundung.tistory.com/90
