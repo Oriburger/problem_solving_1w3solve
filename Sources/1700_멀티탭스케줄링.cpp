@@ -50,13 +50,14 @@ int main()
 				bool visited[100]={false}; //중복 체크
 				for(int j=i+1; j<k; j++)
 				{
+					//schedule[i+1]부터 돌며 꼽혀있는 용품들을 중복체크
 					if(check[schedule[j]] && !visited[schedule[j]])
 					{
 						lastIdx = schedule[j];
 						visited[schedule[j]]=true;
-						z++;
+						z++; //중복되지 않는 "꽂혀있는 용품" 개수 ++
 					}
-					if(z==n) break;
+					if(z==n) break; //n번째를 찾았다면,break
 				}
 				ans++;
 				
