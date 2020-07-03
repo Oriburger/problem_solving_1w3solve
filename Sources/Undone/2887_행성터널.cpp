@@ -4,7 +4,7 @@
 using namespace std;
 
 struct Pos{ int x; int y; int z; int idx; };
-struct Edge{ int u; int v; int cost; };
+struct Edge{ int cost; int u; int v; };
 
 bool CompX(const Pos p1, const Pos p2) { return p1.x < p2.x; }
 bool CompY(const Pos p1, const Pos p2) { return p1.y < p2.y; }
