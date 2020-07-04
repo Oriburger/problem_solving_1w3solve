@@ -1,6 +1,6 @@
 # PS Study
 ---
-- `BOJ Online Judge`의 소스코드
+- `BaekJoon Online Judge`의 소스코드
 
 - 오답 소스도 섞여있음
 
