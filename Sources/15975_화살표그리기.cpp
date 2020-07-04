@@ -37,22 +37,18 @@ int main()
 	{
 		int curr = posArr[i];
 		
-		if(adj[curr].size()==1) break;
-			
-		else if(adj[curr].size()==2)
-			answer += 2*abs(adj[curr][0] - adj[curr][1]);
-		
-		else if(adj[curr].size()>=3)
-			for(int j=0; j<adj[curr].size(); j++)
-			{
-				if(j==0)
-					answer += abs(adj[curr][j+1] - adj[curr][j]);
-				else if(j==adj[curr].size()-1)
-					answer += abs(adj[curr][j] - adj[curr][j-1]);
-				else
-					answer += min(abs(adj[curr][j+1]-adj[curr][j]),
-								  abs(adj[curr][j]-adj[curr][j-1]));
-			}
+		if(adj[curr].size() < 2) continue;
+
+		for(int j=0; j<adj[curr].size(); j++)
+		{
+			if(j==adj[curr].size()-1)
+				answer+=adj[curr][j] - adj[curr][j-1];
+			else if(j==0)
+				answer+=adj[curr][j+1] - adj[curr][j]; 
+			else
+				answer += min(adj[curr][j]-adj[curr][j-1], 
+								adj[curr][j+1]-adj[curr][j]);
+		}
 	}
 	
 	cout<<answer<<'\n';
