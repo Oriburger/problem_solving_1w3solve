@@ -3,7 +3,7 @@
 using namespace std;
 
 int n, m, indegree[1001]={0}, result[1001];
-vector<int> adj[1000];
+vector<vector<int> > adj;
 queue<int> q;
 
 int main()
@@ -12,6 +12,8 @@ int main()
 	cin.tie(NULL); cout.tie(NULL);
 
 	cin>>n>>m;
+
+	adj.resize(n+1);
 	for(int i=0; i<m; i++)
 	{
 		int k, curr, prev;
@@ -28,10 +30,27 @@ int main()
 		}
 	}
 
-	for(int i=0; i<n; i++)
+	for(int i=1; i<=n; i++)
 		if(indegree[i]==0) q.push(i);
 	
+	for(int i=0; i<n; i++)
+	{
+		if(q.empty())
+		{
+			cout<<0<<'\n';
+			return 0;
+		}
 
+		int curr = q.front();
+		q.pop();
+		result[i] = curr;
+
+		for(int next : adj[curr])
+			if(--indegree[next]==0) q.push(next);
+	}
+
+	for(int i=0; i<n; i++)
+		cout<<result[i]<<'\n';
 
 	return 0;
 }
