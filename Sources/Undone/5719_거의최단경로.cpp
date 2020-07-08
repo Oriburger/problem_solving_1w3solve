@@ -9,6 +9,66 @@ typedef pair<int, int> P;
 const int INF = 2147000000;
 const int MAX_N = 501;
 
+int n, m, s, d;
+vector<vector<P> > adj;
+vector<vector<P> > radj;
+vector<int> dist;
+vector<vector<bool> > check;
+
+void Dijkstra()
+{
+	priority_queue<P, vector<P>, greater<P> > pq;
+	
+	dist.clear();
+	dist.resize(n, INF);
+	dist[s] = 0;
+	pq.push({dist[s], s});
+
+	while(!pq.empty())
+	{
+		int curr = pq.top().second;
+		int currCost = pq.top().first;
+		pq.pop();
+
+		if(dist[curr] < currCost) continue;
+
+		for(auto &p : adj[curr])
+		{
+			int next = p.first;
+			int nextDist = p.second + currCost;
+
+			if(dist[next] > nextDist && !check[curr][next])
+			{
+				dist[next] = nextDist;
+				pq.push({dist[next], next});
+			}
+		}
+	}
+}
+
+void BFS()
+{
+	queue<int> q;
+	q.push(d);
+	while(!q.empty())
+	{
+		int curr = q.front();
+		q.pop();
+		if(curr == s) continue;
+		for(auto &p : radj[curr])
+		{
+			int prev = p.first;
+			int cost = p.second;
+			
+			if(dist[curr]==dist[prev]+cost)
+			{
+				check[prev][curr] = true;
+				q.push(prev);
+			}
+		}
+	}
+}
+
 int main()
 {
 	ios::sync_with_stdio(false);
@@ -16,102 +76,35 @@ int main()
 
 	while(1)
 	{
-		int n, m, s, d;
-		vector<vector<P> > adj;
-		vector<int> dist;
-
 		cin>>n>>m;
 
 		if(n==0 && m==0) break;
 
 		adj.resize(n);
+		radj.resize(n);
 		dist.resize(n, INF);
+		check = vector<vector<bool> >(n, vector<bool>(n,false));
 		
 		cin>>s>>d;
-		for(int i=0; i<n; i++)
+		for(int i=0; i<m; i++)
 		{
 			int u, v, c;
 			cin>>u>>v>>c;
 			adj[u].push_back({v, c});
+			radj[v].push_back({u, c});
 		}
 
-		bool flag = false;
-		int minDist = INF;
-		bool check[MAX_N][MAX_N]={0};
-
-		while(1)
-		{
-			priority_queue<P, vector<P>, greater<P> > pq;
-			vector<int> parents(n, -1);
-			
-			dist.resize(n, INF);
-			dist[s] = 0;
-			pq.push({dist[s], s});
-
-			while(!pq.empty())
-			{
-				int curr = pq.top().second;
-				int currCost = pq.top().first;
-				pq.pop();
-
-				if(dist[curr] < currCost) continue;
-
-				for(auto &p : adj[curr])
-				{
-					int next = p.first;
-					int nextDist = p.second + currCost;
-
-					if(check[curr][next]) continue;
-
-					if(dist[next] > nextDist)
-					{
-						dist[next] = nextDist;
-						parents[next] = curr;
-						pq.push({dist[next], next});
-					}
-				}
-			}
-				
-			if(!flag) minDist = dist[d]; //d까지 가는 경로가 없는 경우가 있을까? / 일단 PASS
-
-			else
-			{
-				if(dist[d] > minDist)
-				{
-					cout<<dist[d]<<'\n';
-					break;
-				}
-				else if(dist[d] == INF)
-				{
-					cout<<-1<<'\n';
-					break;
-				}
-				else
-				{
-					cout<<"ERROR\n";
-					break;
-				}
-			}
-			
-			if(!flag || minDist == dist[d])
-			{
-				int curr=d, next=parents[d];
-				while(next != -1)
-				{
-					check[curr][next] = true;
-					check[next][curr] = true;
-
-					curr = next;
-					next = parents[curr];
-				}
-			}
-
-			dist.clear();
-			flag = true;
-		}
-
+		Dijkstra(); //첫 최단경로 찾아서 dist 갱신  
+		BFS(); //dist값 기준으로 최단경로 역추적 and 삭제 
+		Dijkstra(); //거의 최단경로 구함 
+		
+		if(dist[d]!=INF) cout<<dist[d]<<'\n';
+		else cout<<-1<<'\n';
+		
 		adj.clear();
+		radj.clear();
 		dist.clear();
+		check.clear();
 	}
 
 	return 0;
