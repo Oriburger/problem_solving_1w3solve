@@ -10,7 +10,7 @@ const int dx[4] = {1,-1,0,0};
 
 int r, c;
 int wCnt, sCnt; //wolf cnt, sheep cnt;
-int wSum, sSum; 
+int wTotal, sTotal; 
 char board[251][251];
 bool visited[251][251];
 
@@ -18,16 +18,17 @@ void BFS(int y, int x)
 {
 	queue<P> q;
 	q.push({y, x});
+
+	visited[y][x]=true;
 	
 	while(!q.empty())
 	{
 		P curr = q.front();
-		
+		q.pop();
+	
 		if(board[curr.first][curr.second] == 'v') wCnt++;
 		else if(board[curr.first][curr.second] == 'o') sCnt++;
-		
-		q.pop();
-		
+
 		for(int i=0; i<4; i++)
 		{
 			P next = {curr.first + dy[i], curr.second + dx[i]};
@@ -53,27 +54,29 @@ int main()
 	
 	for(int i=0; i<r; i++)
 	for(int j=0; j<c; j++)
+	{
 		cin>>board[i][j];
+		if(board[i][j]=='v') wTotal++;
+		else if(board[i][j]=='o') sTotal++;
+	}
 	
 	for(int i=0; i<r; i++)
 	{
 		for(int j=0; j<c; j++)
 		{
-			if(!visited[i][j])
+			if(!visited[i][j] && board[i][j]!='#')
 			{
 				BFS(i, j);
 				
-				if(wCnt < sCnt)
-					sSum += sCnt;
-				else
-					wSum += wCnt;		
+				if(sCnt>wCnt) wTotal -= wCnt;
+				else sTotal -= sCnt;
 			}
 			wCnt=0;
 			sCnt=0;
 		}
 	}
 	
-	cout<<sSum<<' '<<wSum<<'\n';
+	cout<<sTotal<<' '<<wTotal<<'\n';
 	
 	return 0;
 }
