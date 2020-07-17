@@ -12,31 +12,42 @@ map<int, int> JBNU, nJBNU;
 
 vector<int> FindKey(int key)
 {
-	map<int, int>::iterator iter = JBNU.lower_bound(key);
-	map<int, int>::iterator niter = nJBNU.lower_bound(-key);
+	map<int, int>::iterator iter = JBNU.lower_bound(key); //key값 이상의 근접키
+	map<int, int>::iterator niter = nJBNU.lower_bound(-key); //key값 이하의 근접키
 
-	//printf("-> %d %d\n", iter->first, niter->first);
+	int diff = abs(key - (iter->first)); //key값과의 차이
+	int ndiff = abs(key + (niter->first)); 
 
-	if(abs(key - iter->first) > k && abs(key + (niter->first)) > k) return { };
-
-	else if(abs(key - iter->first) > k || abs(key + (niter->first)) > k  )
+	//diff와 ndiff의 차이가 모두 k보다 크다면,
+	if(diff > k && ndiff > k) return { };
+	
+	//둘 중 하나만 k보다 크다면
+	else if(diff > k || ndiff > k)
 	{
-		if(abs(key + (niter->first)) <= k)  
-			return { -((niter->first)) };
-		else if(abs(key + (iter->first)) <= k)  
+		//key값 이하의 근접키는 k 이하라면,
+		if(ndiff <= k)  
+			return { -(niter->first) };
+		//key값 이상의 근접키는 k 이하라면,
+		else if(diff <= k)  
 			return { iter->first };
 	}
-
-	else if(abs(key - iter->first) <= k 
-			&& abs(key + (niter->first)) <= k)
+	
+	//둘 다 k 이하라면,
+	else if(diff <= k && ndiff <= k)
 	{
-		if(abs(key - iter->first) > abs(key + (niter->first))) 
+		//key값 이하의 근접키가 더 차이가 적다면,
+		if(diff > ndiff) 
 			return { -((niter->first))};
-		else if(abs(key - iter->first) < abs(key + (niter->first)))
+		//key값 이상의 근접키가 더 차이가 적다면,
+		else if(diff < ndiff)
 			return { iter->first };
-		else return { iter->first, -((niter->first)) };
+		//두 근접키의 차이는 같지만, 실제 값은 다르다면,
+		else if( iter->first != -(niter->first) )
+			return { iter->first, -(niter->first) };
+		//두 근접키의 차이도 같고, 실제 키 값도 같다면,
+		else return { iter->first };
 	}
-
+	
 	return { };
 }
 
