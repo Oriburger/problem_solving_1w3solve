@@ -3,6 +3,7 @@
 #include <queue>
 #include <utility>
 #include <algorithm>
+#define INF 2147000000
 using namespace std;
 
 struct Pos { int y; int x; };
@@ -14,17 +15,20 @@ int h, w;
 char board[100][100];
 vector<Pos> exitArr, prisoner;
 
-int BFS(Pos start)
+int BFS(vector<Pos> start)
 {
 	queue<pair<Pos, int> > q;
-	bool visied[100][100]={false};
-	int ret=0;
+	int visited[100][100]={0};
 	
-	q.push({start, 0});
-	visited[start.y][start.x]=true;	
+	for(int i=0; i<start.size(); i++)
+	{
+		q.push(start[i]);
+		visited[start[i].y][start[i].x]=true;	
+	}
+	
 	while(!q.empty())
 	{
-		Pos curr = q.front();
+		pair<Pos, int> curr = q.front();
 		q.pop();
 		
 		for(int i=0; i<4; i++)
@@ -37,14 +41,15 @@ int BFS(Pos start)
 			if(board[ny][nx]=='*') continue;
 			
 			visited[ny][nx] = true;
-			if(board[ny][nx]=='$')
+			
+			if(board[ny][nx]=='#') 
 				q.push({{ny, nx}, curr.second+1});
-			else
+			else 
 				q.push({{ny, nx}, curr.second});
 		}
 	}
 	
-	prisoner[i].y
+	return INF; 
 }
 
 int main()
@@ -55,9 +60,7 @@ int main()
 	int t; cin>>t;
 	
 	while(t--)
-	{
-		int answer=2147000000;
-
+	{		
 		cin>>h>>w;
 		
 		for(int i=0; i<h; i++)
@@ -73,13 +76,15 @@ int main()
 			}
 		}
 		
-		for(int i=0; i<exitArr.size(); i++)
-		{
-			answer = min(answer, BFS(exitArr[i]););
-		}
+		int ansA = BFS({prisonerArr[0]});
+		int ansB = BFS({prisonerArr[1]});
+		int ansAB = BFS({prisonerArr[0], prisonerArr[1]});
+		
+		cout<<aAns+bAns<<'\n';
 		
 		prisoner.clear();
 		exitArr.clear();
+		cout<<"\n";
 	}
 	
 	return 0;
