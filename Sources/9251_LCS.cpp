@@ -1,26 +1,34 @@
-#include<cstdio>
-#include<algorithm>
-
+#include <iostream>
+#include <string>
 using namespace std;
 
-char s1[1002], s2[1002];
-int dp[1001][1001], i, j;
+string s1, s2;
+int dp[4001][4001];
 
-int main() 
+int main()
 {
-    scanf("%s %s", s1 + 1, s2 + 1);
-    
-    for (i = 1; s1[i]; i++)
-    {
-        for (j = 1; s2[j]; j++)
-        {
-            dp[i][j] = max({ dp[i][j - 1], dp[i - 1][j],
-                             dp[i - 1][j - 1] + (s1[i] == s2[j]) 
-                           });
-    	}
-	}
-	
-    printf("%d", dp[i - 1][j - 1]);
-    return 0;
-}
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
 
+	cin>>s1>>s2;
+
+	s1.insert(s1.begin(), '.');
+	s2.insert(s2.begin(), '.');
+
+	for(int i=0; i<s1.size(); i++)
+	{
+		for(int j=0; j<s2.size(); j++)
+		{
+			if(i==0 || j==0) dp[i][j]=0;
+
+			else if(s1[i]==s2[j])
+				dp[i][j] = dp[i-1][j-1] + 1;
+			else
+				dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+		}
+	}
+
+	cout<<dp[s1.size()-1][s2.size()-1]<<'\n';
+
+	return 0;
+}
