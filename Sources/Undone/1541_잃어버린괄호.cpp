@@ -35,27 +35,26 @@ int main()
 		}
 	}
 
-	int result=0;
+	int result=0, pos=0;
 	for(int i=0; i<oper.size(); i++)
 	{
 		if(oper[i]=='+')
 		{
-			if(arr.size()==3) break;
+			if(arr.size()==1) break;
 
-			arr[i]+=arr[i+1];
-			arr.erase(arr.begin()+i+1);
+			arr[pos]+=arr[pos+1];
+			arr.erase(arr.begin()+pos+1);
 
-			for(int i=0; i<arr.size(); i++)
-				cout<<arr[i]<<' ';
-			cout<<'\n';
-
-			//oper.erase(oper.begin()+i);
-			//i--;
+			oper.erase(oper.begin()+i);
+			i--;
 		}
 	}
 
-	for(int i=0; i<arr.size(); i++)
-		cout<<arr[i]<<' ';
+	for(int i=0; i<oper.size(); i++)
+		cout<<oper[i]<<' ';
+	cout<<'\n';
+	for(auto &p : arr)
+		cout<<p<<' ';
 
 	return 0;
 }
