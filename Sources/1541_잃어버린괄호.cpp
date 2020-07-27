@@ -48,13 +48,21 @@ int main()
 			oper.erase(oper.begin()+i);
 			i--;
 		}
+		
+		else pos++;
 	}
 
+	pos = 0;
 	for(int i=0; i<oper.size(); i++)
-		cout<<oper[i]<<' ';
-	cout<<'\n';
-	for(auto &p : arr)
-		cout<<p<<' ';
+	{
+		arr[pos]-=arr[pos+1];
+		arr.erase(arr.begin()+pos+1);
 
+		oper.erase(oper.begin()+i);
+		i--;
+	}
+
+	cout<<arr[0]<<'\n';
+    
 	return 0;
 }
