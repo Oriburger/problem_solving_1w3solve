@@ -10,10 +10,7 @@ int main()
 
 	cin>>x;
 
-	while(sum <= x)
-		sum+=(++level);
-	
-	cout<<sum<<' '<<level<<'\n';
+	while(sum < x) sum+=(++level);
 
 	if(level%2==1)
 	{
