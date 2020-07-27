@@ -17,8 +17,14 @@ int main()
 
 	if(level%2==1)
 	{
-		int a = level - x - (sum-level+1);
-		cout<<a<<'/'<<level-a;
+		int a = level - (x - (sum-level+1));
+		cout<<a<<'/'<<level-a+1;
+	}
+
+	else
+	{
+		int a = level - (x - (sum-level+1));
+		cout<<level-a+1<<'/'<<a;
 	}
 
 	return 0;
