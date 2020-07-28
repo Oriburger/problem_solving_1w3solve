@@ -5,6 +5,10 @@
 <br>
 
 ***
+<details>
+<summary>2020/05</summary>
+<div markdown="1">
+  
 ## 2020/05/15
 - BOJ 6359 DP
 
@@ -112,7 +116,15 @@
 - BOJ 1967 BFS
 - **BOJ 2631 DP (LIS) ★★★**
 - ~~*BOJ 11054 DP*~~
+</div>
+</details>
 
+---
+
+<details>
+<summary>2020/06</summary>
+<div markdown="1">
+  
 ## 2020/06/01
 - BOJ 11654 출력
 - ~*BOJ 1722*~
@@ -252,6 +264,15 @@
 ## 2020/06/30
 - BOJ 2858 완전탐색
 - BOJ 4641 완전탐색
+
+</div>
+</details>
+
+---
+
+<details>
+<summary>2020/07</summary>
+<div markdown="1">
 
 ## 2020/07/01
 - ~~*BOJ 1107 완전탐색*~~
@@ -462,8 +483,13 @@
 
 ## 2020/07/31
 
+</div>
+</details>
+
+---
+
 <details>
-<summary>접기/펼치기 버튼</summary>
+<summary>2020/08</summary>
 <div markdown="1">
 
 ## 2020/08/01
