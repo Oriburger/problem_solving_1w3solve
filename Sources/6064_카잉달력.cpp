@@ -30,22 +30,32 @@ int main()
 			swap(m, n);
 		}
 
-		int lcm = m*n/GCD(x, y);
+		int lcm =0;
+		int gcd = GCD(m, n);
+
+		if(gcd == 1) lcm = m*n;
+		else lcm = m*n/gcd;
+
+		//cout<<"lcm : "<<lcm<<'\n';
 
 		int temp=x; ans=x;
-		
 		for(int i=0; i<lcm; i++)
 		{
-			cout<<temp<<' ';
-			temp=temp%n;
+		//	cout<<temp<<' '<<ans<<'\n';
 
-			if(temp==0) temp = n;
-			if(temp==y) break;
-
+			temp=temp%n==0 ? n : temp%n;
+			
+			if(temp==y)	break;
+			if(ans-x>lcm)
+			{
+				ans=-1;
+				break;
+			}
+			
 			temp+=m;
 			ans+=m;
 		}
-
+		
 		cout<<ans<<'\n';
 	}
 
