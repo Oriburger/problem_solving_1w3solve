@@ -492,6 +492,7 @@
 - **BOJ 9019 BFS ★★**
 - BOJ 9375 STL Map
 - BOJ 17219 STL Map
+- BOJ 10807 기초
 
 ### 2020/07/31
 
