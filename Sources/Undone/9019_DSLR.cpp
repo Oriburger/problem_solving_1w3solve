@@ -1,80 +1,47 @@
 #include <iostream>
 #include <queue>
 #include <vector>
+#include <string>
 #include <utility>
-#include <set>
 using namespace std;
 
-typedef pair<int, int> P;
+typedef pair<int, string> P;
 
-const char cmd[4] = {'D','S','L','R'};
+vector<bool> visited;
 
-int DFunc(int n){ return n*2 > 9999 ? n*2%10000 : n*2; }
-int SFunc(int n){ return n-1 == 0 ? 9999 : n-1; }
-int LRFunc(int n, const char dir)
-{
-	int temp;
-
-	if(dir == 'L')
-	{
-		temp = n/1000;
-		return (n-temp*1000)*10+temp;
-	}
-	else if(dir == 'R')
-	{
-		temp = n%10;
-		return n/10+temp*1000;
-	}
-
-	return 0;
-}
-
-int BFS(int start, int end)
+void BFS(int start, int end)
 {
 	queue<P> q;
-	vector<pair<P, int> > path;
-	set<int> visited;
-	q.push({start, -1});
-	visited.insert(start);
+	q.push({start, ""});
+	visited[start] = true;
 
 	while(!q.empty())
 	{
 		P curr = q.front();
 		q.pop();
 
-		//cout<<curr.first<<',';
-
 		if(curr.first == end)
 		{
-			int end = curr.first;
-			int prev = path[path.size()-2].second;
-
-			//cout<<end<<' '<<prev<<'\n';
-			
-			for(int i=path.size()-1; i>=0; i--)
-				cout<<path[i].second<<' ';
-			
-
-			return 0;
+			cout<<curr.second<<'\n';
+			return;
 		}
 
+		P next; int val = curr.first;
 		for(int i=0; i<4; i++)
 		{
-			P next;
-
-			if(i==0) next = { DFunc(curr.first), 0 };
-			else if(i==1) next = { SFunc(curr.first), 1};
-			else if(i==2) next = { LRFunc(curr.first, 'L'), 2};
-			else if(i==3) next = { LRFunc(curr.first, 'R'), 3};
-
-			if(visited.count(next.first)!=0) continue;
-
-			visited.insert(next.first);
-			q.push(next);
-			path.push_back({next, curr.first});
+			if(i==0) next = {val*2 > 9999 ? val*2%10000 : val*2, curr.second + 'D'};
+			else if(i==1) next = {val-1<=0 ? 9999 : val-1, curr.second + 'S'};
+			else if(i==2) next = {(val-(val/1000)*1000)*10 + val/1000, curr.second + 'L'};
+			else next = {val/10+val%10*1000, curr.second + 'R'};
+			
+			if(!visited[next.first])
+			{
+				visited[next.first]=true;
+				q.push(next);
+			}			
 		}
 	}
-	return 0;
+	return;
 }
 
 int main()
@@ -87,10 +54,12 @@ int main()
 	while(t--)
 	{
 		int a, b;
-
 		cin>>a>>b;
 
 		BFS(a, b);
+
+		visited.clear();
+		visited.resize(10001, false);
 	}
 
 	return 0;
