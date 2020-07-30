@@ -32,7 +32,7 @@ int LRFunc(int n, const char dir)
 int BFS(int start, int end)
 {
 	queue<P> q;
-	vector<P> path;
+	vector<pair<P, int> > path;
 	set<int> visited;
 	q.push({start, -1});
 	visited.insert(start);
@@ -46,7 +46,15 @@ int BFS(int start, int end)
 
 		if(curr.first == end)
 		{
+			int end = curr.first;
+			int prev = path[path.size()-2].second;
+
+			//cout<<end<<' '<<prev<<'\n';
 			
+			for(int i=path.size()-1; i>=0; i--)
+				cout<<path[i].second<<' ';
+			
+
 			return 0;
 		}
 
@@ -63,7 +71,7 @@ int BFS(int start, int end)
 
 			visited.insert(next.first);
 			q.push(next);
-			path.push_back(next);
+			path.push_back({next, curr.first});
 		}
 	}
 	return 0;
@@ -83,7 +91,6 @@ int main()
 		cin>>a>>b;
 
 		BFS(a, b);
-
 	}
 
 	return 0;
