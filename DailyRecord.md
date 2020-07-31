@@ -493,8 +493,14 @@
 - BOJ 9375 STL Map
 - BOJ 17219 STL Map
 - BOJ 10807 기초
+- *BOJ 16236 BFS*
+- *BOJ 17626 수학*
 
 ### 2020/07/31
+- BOJ 2587 기초
+- BOJ 2752 기초
+- BOJ 2953 기초
+- *BOJ 16236 BFS*
 
 </div>
 </details>
