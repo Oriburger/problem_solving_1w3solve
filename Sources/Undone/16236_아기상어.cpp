@@ -2,6 +2,7 @@
 #include <queue>
 #include <vector>
 #include <utility>
+#include <algorithm>
 #define INF 2147000000
 using namespace std;
 
@@ -10,13 +11,29 @@ struct Pos{ int y; int x; };
 const int dy[4] = {-1,1,0,0};
 const int dx[4] = {0,0,-1,1};
 
-int n, board[21][21];
-vector<Pos> fish;
-Pos bsPos; //baby shark du dududududu
-int bsSize=2; //아기 상어의 크기
+int n, board[21][21], answer=0;
+Pos bsPos, fish; //아기 상어의 위치, 다음 먹을 물고기
+int bsSize=2, bsCnt; //아기 상어의 크기, 먹은 물고기 마리 수
 
-//현재의 위치에서 가장 가까운 '먹을 수 있는' 물고기의 위치 리스트 반환
-vector<Pos> BFS(Pos start) 
+//전달받은 물고기의 위치들 중 우선순위가 제일 높은 것.
+bool Comp(Pos &a, Pos &b)
+{
+	if(a.y > b.y) return false;
+
+	if(a.x > b.x) return false;
+
+	return true;
+}
+
+void Debug(int dist, Pos curr)
+{
+	cout<<"dist : "<<dist<<" / ";
+	cout<<"size : "<<board[curr.y][curr.x]<<" / ";
+	cout<<"pos : {"<<curr.y<<','<<curr.x<<"}\n";
+}
+
+//다음 먹을 물고기까지의 거리 반환
+int BFS(Pos start) 
 {
 	vector<Pos> ret;
 	int dist = INF;
@@ -32,16 +49,15 @@ vector<Pos> BFS(Pos start)
 		int curDist = q.front().second;
 		q.pop();
 
-		cout<<curr.y<<','<<curr.x<<'\n';
+		//cout<<curr.y<<','<<curr.x<<'\n';
 		
 		//아기상어가 먹을 수 있는 물고기라면,
+		//ret list에 push한다. 
 		if(board[curr.y][curr.x] < bsSize
 			&& board[curr.y][curr.x] >= 1 && board[curr.y][curr.x] <= 9)
 		{
 			ret.push_back({curr.y, curr.x});
 			dist = curDist;
-
-			cout<<dist<<'\n';
 		}
 
 		if(curDist <= dist)
@@ -51,13 +67,23 @@ vector<Pos> BFS(Pos start)
 
 			if(next.y<0 || next.x<0 || next.y>=n || next.x>=n) continue;
 			if(visited[next.y][next.x]) continue;
+			//next 칸의 물고기가 상어크기보다 크다면,
+			if(board[next.y][next.x] > bsSize) continue;
+
+			if(board[next.y][next.x] < bsSize )
 
 			q.push({next, curDist+1});
 			visited[next.y][next.x]=true;
 		}
 	}
+	if(ret.size()==0) return -1;
 
-	return ret;
+	sort(ret.begin(), ret.end(), Comp);
+	fish = ret[0];
+
+	Debug(dist, ret[0]);
+
+	return dist;
 }
 
 int main()
@@ -67,19 +93,34 @@ int main()
 
 	cin>>n;
 
-	for(int i=1; i<=n; i++)
+	for(int i=0; i<n; i++)
 	{
-		for(int j=1; j<=n; j++)
+		for(int j=0; j<n; j++)
 		{
 			cin>>board[i][j];
 			if(board[i][j]==9) bsPos = {i, j};
-			if(board[i][j]==1) fish.push_back({i, j});
 		}
 	}
-	
-	cout<<
 
-	BFS(bsPos);
+	while(1)
+	{
+		int dist = BFS(bsPos);
+
+		//먹을 수 있는 물고기가 없다면
+		if(dist == -1) break;
+
+		board[fish.y][fish.x]=0;
+		bsPos = {fish.y, fish.x};
+		bsCnt++;
+		if(bsCnt==bsSize)
+		{
+			bsSize++;
+			bsCnt=0;
+		}
+		answer+=dist;
+	}
+
+	cout<<answer<<'\n';
 
 	return 0;
 }
