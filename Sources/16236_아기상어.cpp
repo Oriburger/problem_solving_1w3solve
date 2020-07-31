@@ -19,10 +19,12 @@ int bsSize=2, bsCnt; //아기 상어의 크기, 먹은 물고기 마리 수
 bool Comp(Pos &a, Pos &b)
 {
 	if(a.y > b.y) return false;
-
-	if(a.x > b.x) return false;
-
-	return true;
+	else if(a.y < b.y) return true;
+	else
+	{
+		if(a.x > b.x) return false;
+		else return true;
+	}
 }
 
 void Debug(int dist, Pos curr)
@@ -48,8 +50,6 @@ int BFS(Pos start)
 		Pos curr = q.front().first;
 		int curDist = q.front().second;
 		q.pop();
-
-		//cout<<curr.y<<','<<curr.x<<'\n';
 		
 		if(dist < curDist+1) continue;
 
@@ -82,7 +82,7 @@ int BFS(Pos start)
 	sort(ret.begin(), ret.end(), Comp);
 	fish = ret[0];
 
-	Debug(dist, ret[0]);
+	//Debug(dist, ret[0]);
 
 	return dist;
 }
