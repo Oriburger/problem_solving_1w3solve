@@ -51,16 +51,8 @@ int BFS(Pos start)
 
 		//cout<<curr.y<<','<<curr.x<<'\n';
 		
-		//아기상어가 먹을 수 있는 물고기라면,
-		//ret list에 push한다. 
-		if(board[curr.y][curr.x] < bsSize
-			&& board[curr.y][curr.x] >= 1 && board[curr.y][curr.x] <= 9)
-		{
-			ret.push_back({curr.y, curr.x});
-			dist = curDist;
-		}
+		if(dist < curDist+1) continue;
 
-		if(curDist <= dist)
 		for(int i=0; i<4; i++)
 		{
 			Pos next = {curr.y + dy[i], curr.x + dx[i]};
@@ -69,8 +61,17 @@ int BFS(Pos start)
 			if(visited[next.y][next.x]) continue;
 			//next 칸의 물고기가 상어크기보다 크다면,
 			if(board[next.y][next.x] > bsSize) continue;
+			
+			//아기상어가 먹을 수 있는 물고기라면,
+			//ret list에 push한다.
+			if(board[next.y][next.x] < bsSize && 
+				board[next.y][next.x] >= 1 && board[next.y][next.x] <= 6)
+			{
+				if(dist > curDist+1) ret.clear();
 
-			if(board[next.y][next.x] < bsSize )
+				ret.push_back({next.y, next.x});
+				dist = min(dist, curDist+1);
+			}
 
 			q.push({next, curDist+1});
 			visited[next.y][next.x]=true;
@@ -109,6 +110,7 @@ int main()
 		//먹을 수 있는 물고기가 없다면
 		if(dist == -1) break;
 
+		board[bsPos.y][bsPos.x]=0;
 		board[fish.y][fish.x]=0;
 		bsPos = {fish.y, fish.x};
 		bsCnt++;
