@@ -10,6 +10,21 @@ vector<Pos> fish;
 Pos bsPos; //baby shark du dududududu
 int bsSize=2;
 
+//현재의 위치에서 가장 가까운 '먹을 수 있는' 물고기의 위치 리스트 반환
+vector<int> BFS(Pos start) 
+{
+	queue<Pos> q;
+	bool visited[21][21]={false};
+
+	visited[start.y][start.x]=true;
+	q.push(start);
+
+	while(!q.empty())
+	{
+		Pos curr = 
+	}
+}
+
 int main()
 {
 	ios::sync_with_stdio(false);
@@ -27,6 +42,7 @@ int main()
 		}
 	}
 	
+
 
 	return 0;
 }
