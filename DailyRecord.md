@@ -501,7 +501,7 @@
 - BOJ 2752 기초
 - BOJ 2953 기초
 - BOJ 15654 백트래킹
-- *BOJ 16236 BFS*
+- BOJ 16236 BFS
 
 </div>
 </details>
