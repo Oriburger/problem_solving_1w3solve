@@ -7,14 +7,13 @@ using namespace std;
 
 typedef pair<int, int> P;
 
-int v, answer=0;
+int v;
 vector<vector<P> > adj;
-vector<int> indegree, st;
 
-int BFS(int start)
+P BFS(int start) 
 {
 	queue<P> q;
-	int	ret=0;
+	int	retDist=0, retIdx=0;
 	vector<bool> visited(v+1, false);
 
 	q.push({start, 0});
@@ -33,15 +32,19 @@ int BFS(int start)
 
 			if(visited[next]) continue;
 
-			//cout<<next<<" visited, dist : "<<nextDist<<'\n';
-
-			ret = max(ret, nextDist);
+			if(retDist < nextDist)
+			{
+				retDist = nextDist;
+				retIdx = next;
+			}
+			
 			q.push({next, nextDist});
 			visited[next]=true;
 		}
 	}
 
-	return ret;
+	//가장 먼 노드의 idx와 거리가 반환된다. 
+	return {retIdx, retDist};
 }
 
 int main()
@@ -52,7 +55,6 @@ int main()
 	cin>>v;
 
 	adj.resize(v+1);
-	indegree.resize(v+1, 0);
 	for(int i=0; i<v; i++)
 	{
 		int u, v, cost;
@@ -67,28 +69,12 @@ int main()
 
 			adj[u].push_back({v, cost});
 			adj[v].push_back({u, cost});
-
-			indegree[u]++;
-			indegree[v]++;
 		}
-	}
-	int minVal = 1000000;
-	for(int i=1; i<=v; i++)
-	{
-		if(minVal > indegree[i])
-		{
-			minVal = indegree[i];
-			st.clear();
-			st.push_back(i);
-		}
-		else if(minVal == indegree[i])
-			st.push_back(i);
 	}
 	
-	for(auto p : st)
-		answer = max(answer, BFS(p));
-
-	cout<<answer<<'\n';
+	//임의의 노드 1에서 가장 먼 노드에서
+	//BFS를 돌려 트리의 지름을 알아낸다. 
+	cout<<BFS(BFS(1).first).second<<'\n'; 
 
 	return 0;
 }
