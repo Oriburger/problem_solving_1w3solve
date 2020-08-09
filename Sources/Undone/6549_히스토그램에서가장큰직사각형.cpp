@@ -9,7 +9,7 @@ typedef pair<int, int> P;
 struct SegTree
 {
 	int n; //배열의 길이
-	vector<P> rangeAns; //구간의 {높이 최소값, 넓이 최대값} 저장
+	vector<P> rangeAns; //구간의 {높이 최소값, 해당 인덱스} 저장
 
 	SegTree(const vector<int>& arr)
 	{
@@ -22,20 +22,47 @@ struct SegTree
 	P Init(const vector<int>& arr, int left, int right, int node)
 	{
 		if(left == right)
-			return rangeAns[node] = {arr[left], arr[left]};
+			return rangeAns[node] = {arr[left], left};
 
 		int mid = (left + right)/2;
-		//좌측, 우측의 최댓값을 구한다.
+		//좌측, 우측의 최소 높이를 구한다.
 		P leftAns = Init(arr, left, mid, node*2);
 		leftAns.second = max(leftAns.second, (mid-left+1)*leftAns.first);
 		P rightAns = Init(arr, mid+1, right, node*2+1);
 		rightAns.second = max(rightAns.second, (right-(mid+1)+1)*rightAns.first);
 
-		cout<<left+1<<","<<right+1<<")"<<max(leftAns.second, rightAns.second)<<'\n';
-
-		return rangeAns[node] = {min(leftAns.first, rightAns.first)
-								, max(leftAns.second, rightAns.second)};
-	}
+		if(leftAns.first >= rightAns.first)
+		    return rangeAns[node]=rightAns;
+		else if(leftAns.first < rightAns.first)
+		    return rangeAns[node]=leftAns;
+  }
+    
+    P Query(int left, int right, int node, int nodeLeft, int nodeRight)
+    {
+        if(right<nodeLeft || left>nodeRight)
+            return {INF, 0};
+        if(left<=nodeLeft == nodeRight)
+            return rangeAns[node];
+        
+        int mid = (nodeLeft+nodeRight)/2;
+        
+        P leftAns = Query(left, right, node*2, nodeLeft, mid);
+        P rightAns = Query(left, right, node*2+1, mid+1, nodeRight);
+        
+        int leftVal = (mid-nodeLeft+1)*leftAns.first;
+        int rightVal = (nodeRight-mid)*rightAns.first;
+        
+        
+        if(leftAns.first == rightAns.first) 
+            return {leftAns.first, leftVal+rightVal};
+        else
+            return {min(leftAns.first, rightAns.first), max(leftVal, rightVal)};
+    }
+    
+    int Query(int left, int right)
+    {
+        return Query(left, right, 1, 0, n-1).second;
+    }
 };
 
 int main()
@@ -55,7 +82,7 @@ int main()
 		
 		SegTree st(arr);
 
-		cout<<st.rangeAns[1].second<<'\n';
+        cout<<st.Query(0, n-1)<<"\n";
 	}
 
 	return 0;
