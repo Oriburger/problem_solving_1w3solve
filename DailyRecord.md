@@ -565,7 +565,8 @@
 ### 2020/08/09
 - BOJ 10942 DP
 - BOJ 2693 기초
-
+- BOJ 5176 기초
+- <strong><i>BOJ 6549 세그먼트 트리</strong></i>
 
 </div>
 </details>
