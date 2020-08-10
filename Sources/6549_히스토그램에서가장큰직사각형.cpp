@@ -4,12 +4,14 @@
 using namespace std;
 
 const int INF = 2100000000;
-typedef pair<int, int> P;
+
+typedef pair<ll, int> P;
+typedef long long ll;
 
 struct SegTree
 {
 	int n; //배열의 길이
-	vector<P> rangeAns; //구간의 {높이 최소값, 해당 인덱스} 저장
+	vector<P> rangeAns; //구간의 {높이 최소, 해당 인덱스} 저장
 
 	SegTree(const vector<int>& arr)
 	{
@@ -27,13 +29,11 @@ struct SegTree
 		int mid = (left + right)/2;
 		//좌측, 우측의 최소 높이를 구한다.
 		P leftAns = Init(arr, left, mid, node*2);
-		leftAns.second = max(leftAns.second, (mid-left+1)*leftAns.first);
 		P rightAns = Init(arr, mid+1, right, node*2+1);
-		rightAns.second = max(rightAns.second, (right-(mid+1)+1)*rightAns.first);
-
+	
 		if(leftAns.first >= rightAns.first)
 		    return rangeAns[node]=rightAns;
-		else if(leftAns.first < rightAns.first)
+		else
 		    return rangeAns[node]=leftAns;
   }
     
@@ -41,7 +41,7 @@ struct SegTree
     {
         if(right<nodeLeft || left>nodeRight)
             return {INF, 0};
-        if(left<=nodeLeft == nodeRight)
+        if(left<=nodeLeft && nodeRight <= right)
             return rangeAns[node];
         
         int mid = (nodeLeft+nodeRight)/2;
@@ -49,19 +49,31 @@ struct SegTree
         P leftAns = Query(left, right, node*2, nodeLeft, mid);
         P rightAns = Query(left, right, node*2+1, mid+1, nodeRight);
         
-        int leftVal = (mid-nodeLeft+1)*leftAns.first;
-        int rightVal = (nodeRight-mid)*rightAns.first;
-        
-        
-        if(leftAns.first == rightAns.first) 
-            return {leftAns.first, leftVal+rightVal};
+        if(leftAns.first >= rightAns.first)
+            return rightAns;
         else
-            return {min(leftAns.first, rightAns.first), max(leftVal, rightVal)};
+            return leftAns;
     }
     
-    int Query(int left, int right)
+    P Query(int left, int right)
     {
-        return Query(left, right, 1, 0, n-1).second;
+        return Query(left, right, 1, 0, n-1);
+    }
+    
+    ll GetMaxArea(int s, int e)
+    {
+    	if(s<0 || s>e || e>=n) return 0;
+
+    	P minVal = Query(s, e);
+    	
+        ll ret = (e-s+1)*minVal.first;
+        
+        if(s==e) return ret;
+        
+        ret = max(ret, GetMaxArea(s, minVal.second-1));
+        ret = max(ret, GetMaxArea(minVal.second+1, e));
+        
+        return ret;
     }
 };
 
@@ -82,7 +94,7 @@ int main()
 		
 		SegTree st(arr);
 
-        cout<<st.Query(0, n-1)<<"\n";
+        cout<<st.GetMaxArea(0, n-1)<<"\n";
 	}
 
 	return 0;
