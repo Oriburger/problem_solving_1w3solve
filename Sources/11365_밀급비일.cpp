@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string>
+#include <cstring>
 using namespace std;
 
 int main()
@@ -7,14 +7,14 @@ int main()
 	ios::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
 	
-	string str;
-	
 	while(1)
 	{
-		cin>>str;
-		if(str=="END") break;
+		char str[10000];
+		cin.getline(str,10000, '\n');
 		
-		for(int i=str.size()-1; i>=0; i--)
+		if(!strcmp(str, "END")) break;
+		
+		for(int i=strlen(str)-1; i>=0; i--)
 		  cout<<str[i];
 		cout<<"\n";
 	}
