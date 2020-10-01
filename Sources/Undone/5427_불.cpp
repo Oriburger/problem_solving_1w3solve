@@ -97,12 +97,29 @@ int main()
 		for(const Pos &p : firePos) 
 			FireBFS(p);
 		
+		//======Debug Code===============================
+		printf("------------\n");
 		for(int i=0; i<h; i++)
-		
-		for(int j=0; j<w; j++)
-		{
-
+		{			
+			for(int j=0; j<w; j++)
+			{
+				printf("%d ", player[i][j]);
+			}
+			printf("\n");
 		}
+		printf("-----------\n\n");
+
+		printf("------------\n");
+		for(int i=0; i<h; i++)
+		{			
+			for(int j=0; j<w; j++)
+			{
+				printf("%d ", fire[i][j]);
+			}
+			printf("\n");
+		}
+		printf("-----------\n\n");
+		//===============================================
 
 		//Check exit
 		int answer=INF;
