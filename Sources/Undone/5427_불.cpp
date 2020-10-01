@@ -1,4 +1,4 @@
-#include <cstdio>
+#include <iostream>
 #include <queue>
 #include <cstring>
 #include <vector>
@@ -69,54 +69,58 @@ void PlayerBFS(Pos start)
 
 int main()
 {
-	scanf("%d", &t);
+	ios::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+
+	cin>>t;
 
 	while(t--)
 	{
-		scanf("%d %d", &w, &h);
-
-		for(int i=0; i<h; i++)
+		cin>>w>>h;
+		cout<<"w : "<<w<<", h : "<<h<<'\n';
+		
+		/*for(int i=0; i<h; i++)
 		{
 			memset(fire[i], 0, sizeof(int)*w);
 			memset(player[i], 0, sizeof(int)*w);
 		}
-
+*/
 		for(int i=0; i<h; i++)
 		for(int j=0; j<w; j++)
 		{
-			scanf("%c", &board[i][j]);
+			cin>>board[i][j];
 
-			if(board[i][j]=='@') playerPos={i, j};
-			else if(board[i][j]=='*') firePos.push_back({i, j});
+			//if(board[i][j]=='@') playerPos={i, j};
+			//else if(board[i][j]=='*') firePos.push_back({i, j});
 
-			if(i==0 || i==w-1 || j==0 || j==h-1 || board[i][j]=='.')
-				exitPos.push_back({i, j});
+			//if(i==0 || i==h-1 || j==0 || j==w-1 || board[i][j]=='.')
+			//	exitPos.push_back({i, j});
 		}
-
+/*
 		PlayerBFS(playerPos);
 		for(const Pos &p : firePos) 
 			FireBFS(p);
 		
 		//======Debug Code===============================
-		printf("------------\n");
+		cout<<"------------\n";
 		for(int i=0; i<h; i++)
 		{			
 			for(int j=0; j<w; j++)
 			{
-				printf("%d ", player[i][j]);
+				cout<<player[i][j];
 			}
-			printf("\n");
+			cout<<'\n';
 		}
-		printf("-----------\n\n");
+		cout<<"------------\n";
 
-		printf("------------\n");
+		cout<<"------------\n";
 		for(int i=0; i<h; i++)
 		{			
 			for(int j=0; j<w; j++)
 			{
-				printf("%d ", fire[i][j]);
+				cout<<fire[i][j];
 			}
-			printf("\n");
+			cout<<'\n';
 		}
 		printf("-----------\n\n");
 		//===============================================
@@ -129,9 +133,10 @@ int main()
 
 		if(answer==INF) printf("IMPOSSIBLE\n");
 		else printf("%d\n", answer);
-
+*/
 		exitPos.clear();
 		firePos.clear();
+		w=h=0;
 	}
 
 	return 0;
