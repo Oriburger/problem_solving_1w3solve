@@ -17,11 +17,15 @@ char board[1001][1001];
 Pos playerPos;
 vector<Pos> firePos, exitPos;
 
-void FireBFS(Pos start)
+void FireBFS(const vector<Pos> &firePos)
 {
 	queue<Pos> q;
-	q.push(start);
-	fire[start.y][start.x] = 1;
+
+	for(const Pos &start : firePos)
+	{
+		q.push(start);
+		fire[start.y][start.x] = 1;
+	}
 
 	while(!q.empty())
 	{
@@ -34,7 +38,7 @@ void FireBFS(Pos start)
 
 			if(next.y<0 || next.x<0 || next.y>=h || next.x>=w) continue;
 			if(board[next.y][next.x]=='#' || board[next.y][next.x]=='@') continue;
-			if(fire[next.y][next.x]!=0) continue;
+			if(fire[next.y][next.x] != -1) continue;
 
 			q.push(next);
 			fire[next.y][next.x] = fire[curr.y][curr.x]+1;
@@ -59,7 +63,7 @@ void PlayerBFS(Pos start)
 
 			if(next.y<0 || next.x<0 || next.y>=h || next.x>=w) continue;
 			if(board[next.y][next.x]=='#' || board[next.y][next.x]=='*') continue;
-			if(player[next.y][next.x]!=0) continue;
+			if(player[next.y][next.x]!=-1) continue;
 
 			q.push(next);
 			player[next.y][next.x] = player[curr.y][curr.x]+1;
@@ -77,63 +81,37 @@ int main()
 	while(t--)
 	{
 		cin>>w>>h;
-		cout<<"w : "<<w<<", h : "<<h<<'\n';
 		
-		/*for(int i=0; i<h; i++)
+		for(int i=0; i<h; i++)
 		{
-			memset(fire[i], 0, sizeof(int)*w);
-			memset(player[i], 0, sizeof(int)*w);
+			memset(fire[i], -1, sizeof(int)*w);
+			memset(player[i], -1, sizeof(int)*w);
 		}
-*/
+
 		for(int i=0; i<h; i++)
 		for(int j=0; j<w; j++)
 		{
 			cin>>board[i][j];
 
-			//if(board[i][j]=='@') playerPos={i, j};
-			//else if(board[i][j]=='*') firePos.push_back({i, j});
+			if(board[i][j]=='@') playerPos={i, j};
+			else if(board[i][j]=='*') firePos.push_back({i, j});
 
-			//if(i==0 || i==h-1 || j==0 || j==w-1 || board[i][j]=='.')
-			//	exitPos.push_back({i, j});
+			if(i==0 || i==h-1 || j==0 || j==w-1)
+				exitPos.push_back({i, j});
 		}
-/*
+
 		PlayerBFS(playerPos);
-		for(const Pos &p : firePos) 
-			FireBFS(p);
-		
-		//======Debug Code===============================
-		cout<<"------------\n";
-		for(int i=0; i<h; i++)
-		{			
-			for(int j=0; j<w; j++)
-			{
-				cout<<player[i][j];
-			}
-			cout<<'\n';
-		}
-		cout<<"------------\n";
-
-		cout<<"------------\n";
-		for(int i=0; i<h; i++)
-		{			
-			for(int j=0; j<w; j++)
-			{
-				cout<<fire[i][j];
-			}
-			cout<<'\n';
-		}
-		printf("-----------\n\n");
-		//===============================================
+		FireBFS(firePos);
 
 		//Check exit
 		int answer=INF;
 		for(const Pos &p : exitPos)
-			if(fire[p.y][p.x] > player[p.y][p.x])
+			if(player[p.y][p.x]!=-1 
+				&& (fire[p.y][p.x] > player[p.y][p.x] || fire[p.y][p.x]==-1))
 				answer=min(answer, player[p.y][p.x]);
+		if(answer==INF) cout<<"IMPOSSIBLE\n";
+		else cout<<answer<<'\n';
 
-		if(answer==INF) printf("IMPOSSIBLE\n");
-		else printf("%d\n", answer);
-*/
 		exitPos.clear();
 		firePos.clear();
 		w=h=0;
