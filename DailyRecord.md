@@ -601,6 +601,14 @@
 
 ## ... 사지방 소멸 ...
 
+---
+
+## 2020/10
+
+<details>
+<summary>Details</summary>
+<div markdown="1">
+
 ### 2020/10/2
 - 5427 BFS
 
@@ -616,3 +624,5 @@
 
 </div>
 </details>
+
+---
