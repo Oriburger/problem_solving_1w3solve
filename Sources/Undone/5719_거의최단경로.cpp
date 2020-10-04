@@ -1,8 +1,9 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 #include <queue>
 #include <utility>
+#include <cstring>
+#include <algorithm>
 using namespace std;
 
 typedef pair<int, int> P;
@@ -10,18 +11,21 @@ const int INF = 2147000000;
 const int MAX_N = 501;
 
 int n, m, s, d;
-vector<vector<P> > adj;
-vector<vector<P> > radj;
-vector<int> dist;
-vector<vector<bool> > check;
+vector<int> dist; //최단거리 저장
+vector<P> adj[MAX_N]; //그래프
+vector<P> radj[MAX_N]; //반대 방향의 간선들이 저장된 그래프
+vector<bool> check[MAX_N]; //최단거리 구성 간선들 체크
 
+//다익스트라
 void Dijkstra()
 {
 	priority_queue<P, vector<P>, greater<P> > pq;
 	
 	dist.clear();
-	dist.resize(n, INF);
-	dist[s] = 0;
+	dist.resize(n);
+	dist.assign(n, INF);
+
+	dist[s]=0;
 	pq.push({dist[s], s});
 
 	while(!pq.empty())
@@ -37,7 +41,10 @@ void Dijkstra()
 			int next = p.first;
 			int nextDist = p.second + currCost;
 
-			if(dist[next] > nextDist && !check[curr][next])
+			//최단경로를 구성하는 간선을 걸러냄
+			if(check[curr][next]) continue; 
+			
+			if(dist[next] > nextDist)
 			{
 				dist[next] = nextDist;
 				pq.push({dist[next], next});
@@ -46,22 +53,29 @@ void Dijkstra()
 	}
 }
 
-void BFS()
+//최단경로를 구성하는 간선들은 check!
+void EraseEdge()
 {
 	queue<int> q;
 	q.push(d);
+
 	while(!q.empty())
 	{
 		int curr = q.front();
 		q.pop();
-		if(curr == s) continue;
+		
+		//시작 지점을 만난다면 종료
+		if(curr==s) return;
+
+		//그래프를 거꾸로 거슬러 올라가며
 		for(auto &p : radj[curr])
 		{
 			int prev = p.first;
-			int cost = p.second;
-			
-			if(dist[curr]==dist[prev]+cost)
+
+			//최단경로를 구성하는 간선을 찾는다면
+			if(dist[prev] + p.second == dist[curr])
 			{
+				//체크
 				check[prev][curr] = true;
 				q.push(prev);
 			}
@@ -77,34 +91,31 @@ int main()
 	while(1)
 	{
 		cin>>n>>m;
-
 		if(n==0 && m==0) break;
 
-		adj.resize(n);
-		radj.resize(n);
-		dist.resize(n, INF);
-		check = vector<vector<bool> >(n, vector<bool>(n,false));
-		
-		cin>>s>>d;
-		for(int i=0; i<m; i++)
+		//초기화
+		for(int i=0; i<MAX_N; i++)
 		{
-			int u, v, c;
-			cin>>u>>v>>c;
-			adj[u].push_back({v, c});
-			radj[v].push_back({u, c});
+			check[i].clear();
+			check[i].resize(n, false);
+			adj[i].clear();
+			radj[i].clear();
 		}
 
-		Dijkstra(); //첫 최단경로 찾아서 dist 갱신  
-		BFS(); //dist값 기준으로 최단경로 역추적 and 삭제 
-		Dijkstra(); //거의 최단경로 구함 
+		cin>>s>>d;
+		for(int i=0; i<m; i++)		
+		{
+			int u, v, cost;
+			cin>>u>>v>>cost;
+			adj[u].push_back({v,cost});
+			radj[v].push_back({u,cost});
+		}
+		Dijkstra();
+		EraseEdge();
+		Dijkstra();
 		
-		if(dist[d]!=INF) cout<<dist[d]<<'\n';
-		else cout<<-1<<'\n';
-		
-		adj.clear();
-		radj.clear();
-		dist.clear();
-		check.clear();
+		if(dist[d]==INF) cout<<-1<<'\n';
+		else cout<<dist[d]<<'\n';
 	}
 
 	return 0;
