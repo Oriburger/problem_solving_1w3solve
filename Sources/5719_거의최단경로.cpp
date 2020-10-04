@@ -64,13 +64,14 @@ void EraseEdge()
 		int curr = q.front();
 		q.pop();
 		
-		//시작 지점을 만난다면 종료
-		if(curr==s) return;
+		//시작 지점을 만난다면
+		if(curr==s) continue;
 
 		//그래프를 거꾸로 거슬러 올라가며
 		for(auto &p : radj[curr])
 		{
 			int prev = p.first;
+            if(check[prev][curr]) continue;
 
 			//최단경로를 구성하는 간선을 찾는다면
 			if(dist[prev] + p.second == dist[curr])
@@ -93,7 +94,7 @@ int main()
 		cin>>n>>m;
 		if(n==0 && m==0) break;
 
-		//초기화
+		//컨테이너 초기화
 		for(int i=0; i<MAX_N; i++)
 		{
 			check[i].clear();
@@ -110,9 +111,9 @@ int main()
 			adj[u].push_back({v,cost});
 			radj[v].push_back({u,cost});
 		}
-		Dijkstra();
-		EraseEdge();
-		Dijkstra();
+		Dijkstra(); //최단경로를 찾아 dist를 업데이트
+		EraseEdge(); //dist기반으로 최단경로를 구성하는 간선들을 체크
+		Dijkstra(); //체크된 간선들을 제외하고 다시 최단경로를 찾는다
 		
 		if(dist[d]==INF) cout<<-1<<'\n';
 		else cout<<dist[d]<<'\n';
