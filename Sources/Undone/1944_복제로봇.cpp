@@ -1,4 +1,4 @@
-#include <cstdio>
+#include <iostream>
 #include <vector>
 #include <queue>
 #include <algorithm>
@@ -37,7 +37,8 @@ struct DisjointSet
     }
 };
 
-int n, m, vCnt=0, eCnt=0;
+int n, m, vCnt=0;
+bool ansFlag = false;
 char board[MAX_N][MAX_N];
 int vID[MAX_N][MAX_N];
 vector<Edge> edges;
@@ -46,8 +47,9 @@ vector<Pos> stPos;
 void BFS(Pos start)
 {
 	queue<Edge> q;
-    bool visited[MAX_N][MAX_N];
-    
+    bool visited[MAX_N][MAX_N]={false};
+    int cnt=0;
+
 	q.push({0, start.y, start.x});
 	visited[start.y][start.x]=true;
 
@@ -66,55 +68,76 @@ void BFS(Pos start)
 
 			if(board[next.y][next.x]=='K' || board[next.y][next.x]=='S')
 			{
-				edges.push_back({next.cost, vID[curr.y][curr.x], vID[next.y][next.x]});
-				eCnt++; next.cost=0;
+				edges.push_back({next.cost, vID[start.y][start.x], vID[next.y][next.x]});
+				cnt++;// next.cost=0;
 			}
 			visited[next.y][next.x]=true;
+           // cout<<"curr : ("<<curr.y<<","<<curr.x<<")=("<<board[curr.y][curr.x]<<")\n";
+           // cout<<"next : ("<<next.y<<","<<next.x<<")=("<<board[next.y][next.x]<<")\n";
 			q.push(next);
 		}
 	}
+    
+    if(cnt!=m) ansFlag = true;
 }
 
 int main()
 {
-	scanf("%d %d", &n, &m);
+	cin>>n>>m;
 
 	for(int i=0; i<n; i++)
 	for(int j=0; j<n; j++)
 	{
-		scanf("%c", &board[i][j]);
+		cin>>board[i][j];
 		if(board[i][j]=='S' || board[i][j]=='K')
         {
 			stPos.push_back({i, j});
-            vID[i][j] = (vCnt++);
+            vID[i][j] = (++vCnt);
         }
 	}
 
+    cout<<"\n";
+    for(int i=0; i<n; i++)
+    {
+    	for(int j=0; j<n; j++)
+    	{
+		    cout<<vID[i][j];
+    	}
+        cout<<"\n";
+    }
+
 	for(int i=0; i<stPos.size(); i++)
+    {
         BFS(stPos[i]);
+        if(ansFlag)
+        {
+            cout<<-1<<'\n';
+            return 0;
+        }
+    }
 
     sort(edges.begin(), edges.end(), CompEdge);
     
-    printf("vCnt : %d, eCnt : %d, \n", vCnt, eCnt);
-    for(int i=0; i<edges.size(); i++)
-    {
-        printf(">%d : (%d, %d) = %d\n", i+1, edges[i].y, edges[i].x, edges[i].cost);
-    }
 
+    cout<<"vCnt : "<< vCnt<<", eCnt : "<<edges.size()<<"\n";
+    for(int i=0; i<edges.size(); i++)
+   
+        cout<<">"<<i+1<<"-> cost :"<<edges[i].cost<<", ("<<edges[i].x<<", "<<edges[i].y<<")\n";
     
+
     int cnt=0, ans=0;
-    /*
-    DisjointSet djs(vCnt);
-    for(int i=0; i<eCnt; i++)
+    
+    DisjointSet djs(m+1);
+    for(int i=0; i<edges.size(); i++)
     {
         if(djs.Find(edges[i].y) == djs.Find(edges[i].x)) continue;
         if(cnt==vCnt-1) break;
 
         djs.Merge(edges[i].y, edges[i].x);
-        cnt++, ans += edges[i].cost;
+        cnt++; ans+=edges[i].cost;
     }
-    */
-    printf("%d\n", ans);
+    
+    cout<<ans<<'\n';
 
 	return 0;
 }
