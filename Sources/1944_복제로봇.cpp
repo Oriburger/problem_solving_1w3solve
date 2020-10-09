@@ -65,15 +65,13 @@ void BFS(Pos start)
 			if(visited[next.y][next.x]) continue;
 			if(board[next.y][next.x]=='1') continue;
 			if(next.y<0 || next.x<0 || next.y>=n || next.x>=n) continue;
-
+            
 			if(board[next.y][next.x]=='K' || board[next.y][next.x]=='S')
 			{
 				edges.push_back({next.cost, vID[start.y][start.x], vID[next.y][next.x]});
-				cnt++;// next.cost=0;
+				cnt++;
 			}
 			visited[next.y][next.x]=true;
-           // cout<<"curr : ("<<curr.y<<","<<curr.x<<")=("<<board[curr.y][curr.x]<<")\n";
-           // cout<<"next : ("<<next.y<<","<<next.x<<")=("<<board[next.y][next.x]<<")\n";
 			q.push(next);
 		}
 	}
@@ -96,38 +94,22 @@ int main()
         }
 	}
 
-    cout<<"\n";
-    for(int i=0; i<n; i++)
-    {
-    	for(int j=0; j<n; j++)
-    	{
-		    cout<<vID[i][j];
-    	}
-        cout<<"\n";
-    }
-
+    // BFS를 통해 S와 K를 그래프화 시킨다. 
 	for(int i=0; i<stPos.size(); i++)
     {
         BFS(stPos[i]);
-        if(ansFlag)
+        if(ansFlag) //발견할 수 없는 K가 있다면,
         {
             cout<<-1<<'\n';
             return 0;
         }
     }
 
-    sort(edges.begin(), edges.end(), CompEdge);
-    
-
-    cout<<"vCnt : "<< vCnt<<", eCnt : "<<edges.size()<<"\n";
-    for(int i=0; i<edges.size(); i++)
-   
-        cout<<">"<<i+1<<"-> cost :"<<edges[i].cost<<", ("<<edges[i].x<<", "<<edges[i].y<<")\n";
-    
-
     int cnt=0, ans=0;
+    sort(edges.begin(), edges.end(), CompEdge); //간선 정렬
     
-    DisjointSet djs(m+1);
+    DisjointSet djs(vCnt+1); //DisjointSet
+    //크루스칼 알고리즘
     for(int i=0; i<edges.size(); i++)
     {
         if(djs.Find(edges[i].y) == djs.Find(edges[i].x)) continue;
