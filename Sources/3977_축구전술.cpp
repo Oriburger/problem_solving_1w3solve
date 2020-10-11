@@ -48,6 +48,8 @@ int DFS(int curr)
 			int v = stk.top();
 			stk.pop();
 			sccID[v] = sccCnt;
+			finished[v]=true;
+
 			if(v == curr) break;
 		}
 		sccCnt++;
@@ -88,19 +90,21 @@ int main()
 		bool flag = false;	
 		int cnt=0;
 		for(int i=0; i<sccCnt; i++)
-		{
 			if(!indegree[i]) cnt++;
-		}
 
-		for(int i=0; i<n; i++)
+		if(cnt==1)
 		{
-			if(!indegree[sccID[i]])
+			for(int i=0; i<n; i++)
 			{
-				cout<<i<<'\n';
-				flag=true;
+				if(!indegree[sccID[i]])
+				{
+					cout<<i<<'\n';
+					flag=true;
+				}
 			}
 		}
-		if(!flag) cout<<"Confused\n";
+
+		if(cnt!=1 || !flag) cout<<"Confused\n";
 		cout<<'\n';
 	}
 
