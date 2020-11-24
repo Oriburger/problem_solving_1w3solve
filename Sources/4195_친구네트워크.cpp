@@ -4,8 +4,6 @@
 #include <vector>
 using namespace std;
 
-unordered_map<string, int> myMap;
-
 struct DisjointSet
 {
 	vector<int> parent, size, rank;
@@ -20,7 +18,7 @@ struct DisjointSet
 	{
 		if(parent[u]==u) return parent[u];
 
-		return parent[u]=Find(parent[u]);
+		return parent[u] = Find(parent[u]);
 	}
 
 	void Merge(int u, int v)
@@ -28,7 +26,7 @@ struct DisjointSet
 		u = Find(u); v = Find(v);
 		if(u==v) return;
 
-		if(rank[u]>rank[v]) swap(u, v);
+		if(rank[u] > rank[v]) swap(u, v);
 		size[v] += size[u];
 		parent[u]=v; //랭크가 낮은 u를 v의 자식으로 넣음 
 		if(rank[u]==rank[v]) rank[v]+=1;
@@ -40,9 +38,17 @@ struct DisjointSet
 
 		return size[u];
 	}
+
+	void Reset()
+	{
+		parent.clear();
+		size.clear();
+		rank.clear();
+	}
 };
 
 int t, f;
+unordered_map<string, int> myMap;
 
 int main()
 {
@@ -55,8 +61,9 @@ int main()
 	{
 		cin>>f;
 
+		DisjointSet d(f*2);
+
 		int cnt=0;
-		DisjointSet d(f);
 		for(int i=0; i<f; i++)
 		{
 			string str1, str2;
