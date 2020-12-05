@@ -667,7 +667,21 @@
 
 ### 2020/11/24
 - 4195 서로소 집합 (재채점 수정)
-- 
+
+</div>
+</details>
 
 ---
+
+## 2020/12
+
+<details>
+<summary>Details</summary>
+<div markdown="1">
+
+### 2020/12/05
+- 17070 DP
+
+</div>
+</details>
 
