@@ -42,9 +42,8 @@ int main()
 	ios::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
 
-	int n, m;
-	int totalCost=0, cnt=0;
-	ull k;
+	int n, m, cnt=0;
+	ull k, totalCost=0;
 
 	cin>>n>>m; cin>>k;
 
@@ -89,10 +88,10 @@ int main()
 	{
 		int u = edges[i].u;
 		int v = edges[i].v;
-		int cost = edges[i].cost;
+		ull cost = edges[i].cost;
 
 		if(djs.find(u)==djs.find(v)) continue;
-		if(cnt==n || totalCost>k) break;
+		if(cnt==n || totalCost>=k) break;
 		
 		totalCost+=cost; cnt++;
 		djs.merge(u, v);
