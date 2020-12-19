@@ -7,7 +7,7 @@
 
 ***
 ## 2020/05
-<details>
+<details value="보기">
 <summary>Details</summary>
 <div markdown="1">
   
