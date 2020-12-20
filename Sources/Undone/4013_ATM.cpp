@@ -61,7 +61,7 @@ void SccCompress(int curr) //scc 압축
 {
 	visited[curr]=true;
 
-	cout<<curr<<" visited\n";
+	//cout<<curr<<" visited\n";
 
 	for(auto &next : adj[curr])
 	{
@@ -74,14 +74,7 @@ void SccCompress(int curr) //scc 압축
 
 int GetAnswer(int curr)
 {
-	int ret = sccVal[curr];
-
-	for(auto &next : sccAdj[curr])
-		ret=max(ret, ret+GetAnswer(next));
 	
-	cout<<"curr : "<<curr<<" / ret : "<<ret<<'\n';
-
-	return ret;
 }
 
 int main()
@@ -122,7 +115,7 @@ int main()
 	SccCompress(s);
 	//----------------------
 
-	/* Debug -------------*/
+	/* Debug -------------
 	cout<<'\n';
 
 	cout<<"sccId\n";
@@ -142,10 +135,10 @@ int main()
 			cout<<next<<' ';
 		cout<<'\n';
 	}
-	//--------------------
+	//--------------------*/
 
 	cache.resize(sccCnt, -1);
-	cout<<GetAnswer(s)<<'\n';
+	cout<<GetAnswer(sccId[s])<<'\n';
 
 	return 0;
 }
