@@ -56,7 +56,7 @@ int TarjanDFS(int curr)
 	return lowLink;
 }
 
-int SccCompress(int curr) //scc 압축
+void SccCompress(int curr) //scc 압축
 {
 	visited[curr]=true;
 
@@ -104,8 +104,23 @@ int main()
 
 	sccAdj.resize(sccCnt);
 	for(int i=0; i<sccCnt; i++)
-		sccAdj[i].resize(sccCnt);
-	SccCompress(s); 
+		sccAdj[i].resize(sccCnt, false);
+	SccCompress(s);
+	//----------------------
+
+	/* Debug -------------*/
+	cout<<'\n';
+	for(int i=1; i<=n; i++)
+		cout<<i<<" : "<<sccId[i]<<" / ";
+	cout<<'\n';	
+	for(int i=0; i<sccCnt; i++)
+	{
+		for(int j=0; j<sccCnt; j++)
+		{
+			cout<<sccAdj[i][j]<<' ';
+		}
+		cout<<'\n';
+	}
 	//--------------------
 
 	return 0;
