@@ -74,13 +74,12 @@ void SccCompress(int curr) //scc 압축
 
 int GetAnswer(int curr)
 {
-	int &ret = cache[curr];
-	if(ret!=-1) return ret;
-	
+	int ret = sccVal[curr];
+
 	for(auto &next : sccAdj[curr])
-	{
-		
-	}
+		ret=max(ret, ret+GetAnswer(next));
+	
+	return ret;
 }
 
 int main()
@@ -121,20 +120,27 @@ int main()
 	SccCompress(s);
 	//----------------------
 
-	/* Debug -------------
+	/* Debug -------------*/
 	cout<<'\n';
+	
+	cout<<"sccId\n";
 	for(int i=1; i<=n; i++)
-		cout<<i<<" : "<<sccId[i]<<" / ";
+		cout<<i<<" : "<<sccId[i]<<"\n";
+	cout<<'\n';
+
+	cout<<"sccVal\n";	
+	for(int i=0; i<sccCnt; i++)
+		cout<<i<<" : "<<sccVal[i]<<'\n';
 	cout<<'\n';	
+
 	for(int i=0; i<sccCnt; i++)
 	{
-		for(int j=0; j<sccCnt; j++)
-		{
-			if(sccAdj[i][j]==true)
-			cout<<"Adj("<<i<<' '<<j<<") is true\n";
-		}
+		cout<<"scc "<<i<<" : ";
+		for(auto &next : sccAdj[i])
+			cout<<next<<' ';
+		cout<<'\n';
 	}
-	//--------------------*/
+	//--------------------
 
 	cache.resize(sccCnt, -1);
 	cout<<GetAnswer(s)<<'\n';
