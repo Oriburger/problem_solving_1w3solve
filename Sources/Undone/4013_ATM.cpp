@@ -79,6 +79,8 @@ int GetAnswer(int curr)
 	for(auto &next : sccAdj[curr])
 		ret=max(ret, ret+GetAnswer(next));
 	
+	cout<<"curr : "<<curr<<" / ret : "<<ret<<'\n';
+
 	return ret;
 }
 
@@ -122,7 +124,7 @@ int main()
 
 	/* Debug -------------*/
 	cout<<'\n';
-	
+
 	cout<<"sccId\n";
 	for(int i=1; i<=n; i++)
 		cout<<i<<" : "<<sccId[i]<<"\n";
