@@ -9,6 +9,7 @@ const int MAX_N = 1001;
 int n, m; //정점의 개수와 간선의 개수
 int s, p; //출발 idx와 레스토랑 개수
 vector<bool> isRest(MAX_N, false);
+vector<int> cache;
 
 /* scc */
 int visitCnt=1, sccCnt=0;
@@ -23,7 +24,7 @@ vector<int> cost(MAX_N);
 
 /* scc graph */
 vector<int> indegree(MAX_N);
-vector<vector<bool> > sccAdj; //인접 행렬 형식
+vector<vector<int> > sccAdj; //인접 행렬 형식
 vector<bool> visited(MAX_N);
 
 int TarjanDFS(int curr)
@@ -60,11 +61,25 @@ void SccCompress(int curr) //scc 압축
 {
 	visited[curr]=true;
 
+	cout<<curr<<" visited\n";
+
 	for(auto &next : adj[curr])
 	{
-		if(visited[next]) continue;
 		if(sccId[curr]!=sccId[next])
-			sccAdj[sccId[curr]][sccId[next]]=true;
+			sccAdj[sccId[curr]].push_back(sccId[next]);
+		if(visited[next]) continue;
+		SccCompress(next);
+	}
+}
+
+int GetAnswer(int curr)
+{
+	int &ret = cache[curr];
+	if(ret!=-1) return ret;
+	
+	for(auto &next : sccAdj[curr])
+	{
+		
 	}
 }
 
@@ -103,12 +118,10 @@ int main()
 			indegree[sccId[i]]++;
 
 	sccAdj.resize(sccCnt);
-	for(int i=0; i<sccCnt; i++)
-		sccAdj[i].resize(sccCnt, false);
 	SccCompress(s);
 	//----------------------
 
-	/* Debug -------------*/
+	/* Debug -------------
 	cout<<'\n';
 	for(int i=1; i<=n; i++)
 		cout<<i<<" : "<<sccId[i]<<" / ";
@@ -117,11 +130,14 @@ int main()
 	{
 		for(int j=0; j<sccCnt; j++)
 		{
-			cout<<sccAdj[i][j]<<' ';
+			if(sccAdj[i][j]==true)
+			cout<<"Adj("<<i<<' '<<j<<") is true\n";
 		}
-		cout<<'\n';
 	}
-	//--------------------
+	//--------------------*/
+
+	cache.resize(sccCnt, -1);
+	cout<<GetAnswer(s)<<'\n';
 
 	return 0;
 }
