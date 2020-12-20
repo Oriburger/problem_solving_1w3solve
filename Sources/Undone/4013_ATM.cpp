@@ -4,7 +4,7 @@
 #include <algorithm>
 using namespace std;
 
-const int MAX_N = 1001;
+const int MAX_N = 500001;
 
 int n, m; //정점의 개수와 간선의 개수
 int s, p; //출발 idx와 레스토랑 개수
@@ -74,7 +74,12 @@ void SccCompress(int curr) //scc 압축
 
 int GetAnswer(int curr)
 {
-	
+	int ret=0;
+
+	for(auto &next : sccAdj[curr])
+		ret = max(ret, GetAnswer(ret));
+
+	return cache[curr] = ret + sccVal[curr];
 }
 
 int main()
@@ -138,7 +143,14 @@ int main()
 	//--------------------*/
 
 	cache.resize(sccCnt, -1);
-	cout<<GetAnswer(sccId[s])<<'\n';
+	GetAnswer(sccId[s]);
+
+	int answer=0;
+	for(int i=0; i<sccCnt; i++)
+		if(isRest[i])
+			answer=max(answer, cache[i]);
+
+	cout<<answer<<'\n';
 
 	return 0;
 }
