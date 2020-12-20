@@ -725,7 +725,7 @@
 - 2207 2-SAT 
 
 ## 2020/12/20
-- <strong>*[★]4013 2-SAT*</strong>
+- <strong>*[★] 4013 2-SAT (~ing)*</strong>
 
 </div>
 </details>
