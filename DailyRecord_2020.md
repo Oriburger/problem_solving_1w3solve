@@ -725,7 +725,11 @@
 - 2207 2-SAT 
 
 ## 2020/12/20
-- <strong>*[★] 4013 2-SAT (~ing)*</strong>
+- <strong>*[★] 4013 SCC  (~ing)*</strong>
+
+## 2020/12/21
+- <strong>[★] 4013 SCC</strong>
+
 
 </div>
 </details>
