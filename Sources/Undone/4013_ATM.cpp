@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <stack>
+#include <queue>
 #include <algorithm>
 using namespace std;
 
@@ -8,7 +9,7 @@ const int MAX_N = 500001;
 
 int n, m; //정점의 개수와 간선의 개수
 int s, p; //출발 idx와 레스토랑 개수
-vector<bool> isRest(MAX_N, false);
+vector<bool> hasRest(MAX_N, false);
 vector<int> cache;
 
 /* scc */
@@ -23,9 +24,9 @@ vector<int> adj[MAX_N];
 vector<int> cost(MAX_N);
 
 /* scc graph */
-vector<int> indegree(MAX_N);
-vector<vector<int> > sccAdj; //인접 행렬 형식
-vector<bool> visited(MAX_N);
+vector<vector<int> > sccAdjMatrix; //인접 행렬 형식
+vector<vector<int> > sccAdjList; //인접 리스트 형식
+vector<bool> visited;
 
 int TarjanDFS(int curr)
 {
@@ -61,25 +62,17 @@ void SccCompress(int curr) //scc 압축
 {
 	visited[curr]=true;
 
-	//cout<<curr<<" visited\n";
-
 	for(auto &next : adj[curr])
 	{
-		if(sccId[curr]!=sccId[next])
-			sccAdj[sccId[curr]].push_back(sccId[next]);
 		if(visited[next]) continue;
+		if(sccAdjMatrix[sccId[curr]][sccId[next]]) continue;
+		if(sccId[curr]!=sccId[next])
+		{
+			sccAdjMatrix[sccId[curr]][sccId[next]]=true;
+			sccAdjList[sccId[curr]].push_back(sccId[next]);
+		}
 		SccCompress(next);
 	}
-}
-
-int GetAnswer(int curr)
-{
-	int ret=0;
-
-	for(auto &next : sccAdj[curr])
-		ret = max(ret, GetAnswer(ret));
-
-	return cache[curr] = ret + sccVal[curr];
 }
 
 int main()
@@ -103,7 +96,7 @@ int main()
 	for(int i=0; i<p; i++)
 	{
 		int a; cin>>a;
-		isRest[a]=true;
+		hasRest[a]=true;
 	}
 	//--------------------
 
@@ -112,45 +105,60 @@ int main()
 		if(discovered[i]==0)
 			TarjanDFS(i);
 
-	for(int i=1; i<n; i++)
-		if(sccId[i]!=sccId[i+1])
-			indegree[sccId[i]]++;
-
-	sccAdj.resize(sccCnt);
+	visited.resize(n, false);
+	sccAdjMatrix.resize(sccCnt, vector<int>(sccCnt));
+	sccAdjList.resize(sccCnt);
 	SccCompress(s);
+
 	//----------------------
 
-	/* Debug -------------
-	cout<<'\n';
-
-	cout<<"sccId\n";
-	for(int i=1; i<=n; i++)
-		cout<<i<<" : "<<sccId[i]<<"\n";
-	cout<<'\n';
-
-	cout<<"sccVal\n";	
-	for(int i=0; i<sccCnt; i++)
-		cout<<i<<" : "<<sccVal[i]<<'\n';
-	cout<<'\n';	
-
-	for(int i=0; i<sccCnt; i++)
 	{
-		cout<<"scc "<<i<<" : ";
-		for(auto &next : sccAdj[i])
-			cout<<next<<' ';
+		/* Debug -------------
 		cout<<'\n';
-	}
+
+		cout<<"sccId\n";
+		for(int i=1; i<=n; i++)
+			cout<<i<<" : "<<sccId[i]<<"\n";
+		cout<<'\n';
+
+		cout<<"sccVal\n";	
+		for(int i=0; i<sccCnt; i++)
+			cout<<i<<" : "<<sccVal[i]<<'\n';
+		cout<<'\n';	
+
+		for(int i=0; i<sccCnt; i++)
+		{
+			cout<<"scc "<<i<<" : ";
+			for(auto &next : sccAdjList[i])
+				cout<<next<<' ';
+			cout<<'\n';
+		}
+		cout<<'\n';
+		for(int i=0; i<sccCnt; i++)
+		{
+			for(int j=0; j<sccCnt; j++)
+			{
+				cout<<sccAdjMatrix[i][j];
+			}
+			cout<<'\n';
+		}
+		cout<<'\n';
 	//--------------------*/
+	}
 
-	cache.resize(sccCnt, -1);
-	GetAnswer(sccId[s]);
+	vector<int> sccMax(sccCnt, 0);
 
-	int answer=0;
-	for(int i=0; i<sccCnt; i++)
-		if(isRest[i])
-			answer=max(answer, cache[i]);
+	sccMax[sccId[s]]=sccVal[sccId[s]];
+	for(int i=sccId[s]; i>=0; i--)
+		for(auto &next : sccAdjList[i])
+			sccMax[next] = sccMax[i]+sccVal[next];
 
-	cout<<answer<<'\n';
+	int ans=0;	
+	for(int i=1; i<=n; i++)
+		if(hasRest[i])
+			ans = max(ans, sccMax[sccId[i]]);
+
+	cout<<ans<<'\n';
 
 	return 0;
 }
