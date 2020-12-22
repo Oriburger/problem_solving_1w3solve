@@ -730,6 +730,8 @@
 ## 2020/12/21
 - <strong>[★] 4013 SCC</strong>
 
+## 2020/12/21
+- <strong>[★] 2152 SCC</strong>
 
 </div>
 </details>
