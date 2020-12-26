@@ -750,7 +750,7 @@
 - 2530 기초
 - 2480 기초
 - 2754 기초
-- <strong>[★] 10265 SCC, DP, Knapsack </strong>
+- <strong><i>[★] 10265 SCC, DP, Knapsack (~ing) </i></strong>
 
 </div>
 </details>
