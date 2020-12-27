@@ -752,6 +752,9 @@
 - 2754 기초
 - <strong><i>[★] 10265 SCC, DP, Knapsack (~ing) </i></strong>
 
+## 2020/12/26
+- <strong>[★] 10265 SCC, DP, Knapsack </strong>
+
 </div>
 </details>
 
