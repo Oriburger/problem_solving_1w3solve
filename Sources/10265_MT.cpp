@@ -11,23 +11,29 @@ const int MAX_N = 1001;
 int n, k, visitCnt=1, sccCnt=0;
 int cache[1001][MAX_N];
 vector<int> maxSize(MAX_N), minSize(MAX_N);
+vector<int> dx(MAX_N), dy(MAX_N);
 vector<int> adj[MAX_N];
+queue<int> q;
+
+/* scc */
 vector<vector<int> > scc;
 vector<int> sccId(MAX_N), discovered(MAX_N);
-vector<int> indegree(MAX_N), sccSize(MAX_N);
+vector<int> indegree(MAX_N), outdegree(MAX_N), sccSize(MAX_N);
 vector<bool> finished(MAX_N);
 stack<int> stk;
 
 int GetAnswer(int k, int idx)
 {
-	if(idx == n) return 0;
+	if(idx == sccCnt) return 0;
 
 	int &ret = cache[k][idx];
 	if(ret!=-1) return ret;
 
+
+
 	ret = GetAnswer(k, idx+1);
 	
-	for(int i=minSize[idx]; i<=maxSize[idx]; i++)
+	for(int i=dx[idx]; i<=dy[idx]; i++)
 		if(k >= i)
 			ret = max(ret, GetAnswer(k-i, idx+1)+i);
 
@@ -72,13 +78,14 @@ void Debug()
 {
 	for(int i=sccCnt-1; i>=0; i--)
 	{
-		cout<<"SccID "<<i;//<<"("<<sccSize[i]<<") :";
-		//for(auto &p : scc[i])
-		//	cout<<p<<", ";
+		cout<<"SccID "<<i<<"("<<sccSize[i]<<") :";
+	//	for(auto &p : scc[i])
+	//		cout<<p<<", ";
 		
-		//cout<<" / indegree : "<<indegree[i]; 
-		//cout<<"\n";
-		cout<<" minSize : "<<minSize[i]<<", maxSize : "<<maxSize[i]<<'\n';
+	//	cout<<"\n  indegree : "<<indegree[i]; 
+		cout<<"\n";
+		cout<<"  minSize : "<<minSize[i]<<", maxSize : "<<maxSize[i]<<'\n';
+		cout<<"  dx : "<<dx[i]<<", dy : "<<dy[i]<<'\n';
 	}
 }
 
@@ -91,46 +98,60 @@ int main()
 
 	for(int i=1; i<=n; i++)
 	{
-		int a; cin>>a;
-		adj[i].push_back(a);
+		int x; cin>>x;
+		adj[i].push_back(x);
 	}
 
 	for(int i=1; i<=n; i++)
 		if(discovered[i]==0)
 			TarjanDFS(i);
 
-	for(int i=sccCnt-1; i>=0; i--)
-	  for(auto &p : scc[i])
-	   	for(auto &next : adj[p])
-	   		if(sccId[p]!=sccId[next])
-	   			indegree[sccId[next]]++;
-	
-	for(int i=0; i<sccCnt; i++)
-		if(indegree[i]==0)
-			minSize[i]=maxSize[i]=sccSize[i];
-	
-	vector<bool> checked(sccCnt, false);
-	for(int i=sccCnt-1; i>=0; i--)
-	{
-		for(auto &p : scc[i])
-		{
-		   	for(auto &next : adj[p])
+	for(int i=1; i<=n; i++)
+		for(auto &j : adj[i])
+			if(sccId[i]!=sccId[j])
 			{
-		   		if(sccId[p]!=sccId[next] && !checked[sccId[next]])
-				{
-					maxSize[sccId[next]] = sccSize[sccId[next]] + maxSize[sccId[p]];
-				//	minSize[]
+				indegree[sccId[j]]++;
+				outdegree[sccId[i]]++;
+			}
 
-					checked[sccId[next]]=true;
+	for(int i=0; i<sccCnt; i++)
+	{
+		if(indegree[i]==0)	q.push(i);
+
+		maxSize[i]=sccSize[i];
+		minSize[i]=sccSize[i];
+	}
+	
+	while(!q.empty())
+	{
+		int curr = q.front();
+		q.pop();
+
+		for(auto &p : scc[curr])
+		{
+			for(auto &next : adj[p])
+			{
+				if(curr != sccId[next])
+				{
+					if(--indegree[sccId[next]]==0)
+						q.push(sccId[next]);
+					maxSize[sccId[next]]+=maxSize[curr];
 				}
 			}
 		}
 	}
-	
-	Debug();
+
+	for(int i=0; i<sccCnt; i++)
+		if(outdegree[i]==0)
+		{
+			dx[i]=minSize[i];
+			dy[i]=maxSize[i];
+		}
+
+	//Debug();
 
 	for(int i=0; i<1001; i++)
-		memset(cache[i], -1, sizeof(int)*MAX_N);
+		memset(cache[i], -1, sizeof(int)*sccCnt);
 
 	cout<<GetAnswer(k, 0)<<'\n';
 
