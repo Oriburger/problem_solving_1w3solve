@@ -10,12 +10,11 @@ const int MAX_N = 1001;
 
 int n, k, visitCnt=1, sccCnt=0;
 int cache[1001][MAX_N];
-vector<int> maxSize(MAX_N), minSize(MAX_N);
+vector<int> maxSize(MAX_N);
 vector<int> dx(MAX_N), dy(MAX_N);
 vector<int> adj[MAX_N];
 queue<int> q;
 
-/* scc */
 vector<vector<int> > scc;
 vector<int> sccId(MAX_N), discovered(MAX_N);
 vector<int> indegree(MAX_N), outdegree(MAX_N), sccSize(MAX_N);
@@ -28,8 +27,6 @@ int GetAnswer(int k, int idx)
 
 	int &ret = cache[k][idx];
 	if(ret!=-1) return ret;
-
-
 
 	ret = GetAnswer(k, idx+1);
 	
@@ -74,21 +71,6 @@ int TarjanDFS(int curr)
 	return lowLink;
 }
 
-void Debug()
-{
-	for(int i=sccCnt-1; i>=0; i--)
-	{
-		cout<<"SccID "<<i<<"("<<sccSize[i]<<") :";
-	//	for(auto &p : scc[i])
-	//		cout<<p<<", ";
-		
-	//	cout<<"\n  indegree : "<<indegree[i]; 
-		cout<<"\n";
-		cout<<"  minSize : "<<minSize[i]<<", maxSize : "<<maxSize[i]<<'\n';
-		cout<<"  dx : "<<dx[i]<<", dy : "<<dy[i]<<'\n';
-	}
-}
-
 int main()
 {
 	ios::sync_with_stdio(false);
@@ -119,7 +101,6 @@ int main()
 		if(indegree[i]==0)	q.push(i);
 
 		maxSize[i]=sccSize[i];
-		minSize[i]=sccSize[i];
 	}
 	
 	while(!q.empty())
@@ -144,11 +125,9 @@ int main()
 	for(int i=0; i<sccCnt; i++)
 		if(outdegree[i]==0)
 		{
-			dx[i]=minSize[i];
+			dx[i]=sccSize[i];
 			dy[i]=maxSize[i];
 		}
-
-	//Debug();
 
 	for(int i=0; i<1001; i++)
 		memset(cache[i], -1, sizeof(int)*sccCnt);
