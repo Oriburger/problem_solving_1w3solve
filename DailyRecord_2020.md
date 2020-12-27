@@ -754,6 +754,8 @@
 
 ## 2020/12/26
 - <strong>[★] 10265 SCC, DP, Knapsack </strong>
+- 10757 기초, 구현
+- 1357 기초 
 
 </div>
 </details>
