@@ -5,12 +5,14 @@
 #include <algorithm>
 using namespace std;
 
+typedef long long ll;
+
 int n;
 string s;
 vector<int> op; //0 none, 1 plus, 2 minus
 const int opArr[3]={0, 1, -1};
 
-bool IsUgly(int val)
+bool IsUgly(ll val)
 {
 	if(val<0) val*=-1;
 	if(!val || !(val%2) || !(val%3)
@@ -20,9 +22,9 @@ bool IsUgly(int val)
 	return false;
 }
 
-int GetValue()
+ll GetValue()
 {
-	int ret=0, temp=0, lastOp=1;
+	ll ret=0, temp=0, lastOp=1;
 
 	for(int i=0; i<s.length(); i++)
 	{
@@ -66,7 +68,7 @@ int main()
 {
 	ios::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
-
+	
 	cin>>n;
 
 	for(int i=1; i<=n; i++)
