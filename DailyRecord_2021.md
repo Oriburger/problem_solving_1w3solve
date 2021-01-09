@@ -45,6 +45,10 @@
 - BOJ 7453 이분탐색 
 - *BOJ 11097 SCC (~ing)*
 
+### 2021/01/09
+- BOJ 10867 정렬 
+- *BOJ 11097 SCC (~ing)*
+
 </div>
 </details>
 
