@@ -55,7 +55,7 @@ int TarjanDFS(int curr)
 
 void Debug()
 {
-	printf("-Debug-\n\n");
+	printf("\n-Debug-\n");
 	for(int i=0; i<n; i++)
 	{
 		for(int j=0; j<n; j++)
@@ -88,42 +88,33 @@ int main()
 				int input;
 				scanf("%1d", &input);
 				if(input==true && i!=j)	
-				{
-					adj[i].push_back(j);
 					board[i][j]=true;
-				}
 			}
 		}
+
+		for(int k=0; k<n; k++)
+			for(int i=0; i<n; i++)
+				for(int j=0; j<n; j++)
+					if(board[i][k] && board[k][j] && board[i][j])
+						board[i][j]=false;
+
+		for(int i=0; i<n; i++)
+			for(int j=0; j<n; j++)
+				if(board[i][j])
+					adj[i].push_back(j);
 
 		for(int i=0; i<n; i++)
 			if(!discovered[i])
 				TarjanDFS(i);
 
-		for(int i=0; i<sccCnt; i++)
-		{
-			if(sccSize[i]==1) 
-				continue;
-			for(int j=1; j<scc[i].size(); j++)
-				ansList.push_back({scc[i][j-1], scc[i][j]});
-			ansList.push_back({scc[i][scc[i].size()-1], scc[i][0]});
-		}
-
-		for(int i=0; i<n; i++)
-			for(int j=0; j<n; j++)
-				for(int k=0; k<n; k++)
-					if(board[i][k] && board[k][j])
-						board[i][j]=false;
 
 		Debug();
 
 		for(int i=0; i<n; i++)
 		{
-			for(int j=0; j<n; j++)
+			for(auto &j : adj[i])
 			{
-				if(board[i][j]==true && sccId[i]!=sccId[j])
-				{
-					ansList.push_back({i, j});
-				}
+				if
 			}
 		}
 
