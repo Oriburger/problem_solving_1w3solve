@@ -7,7 +7,7 @@
 using namespace std;
 
 int t, n, sccCnt, visitCnt, ans;
-bool check[301][301];
+int board[301][301];
 vector<int> adj[301];
 vector<int> discovered, sccId, sccSize;
 vector<vector<int> > scc;
@@ -53,6 +53,20 @@ int TarjanDFS(int curr)
 	return lowLink;
 }
 
+void Debug()
+{
+	printf("-Debug-\n\n");
+	for(int i=0; i<n; i++)
+	{
+		for(int j=0; j<n; j++)
+			printf("%d ", (int)board[i][j]);
+		printf("\n");
+	}
+	printf("-----\n\n");
+
+	return;
+}
+
 int main()
 {
 	scanf("%d", &t);
@@ -74,7 +88,10 @@ int main()
 				int input;
 				scanf("%1d", &input);
 				if(input==true && i!=j)	
+				{
 					adj[i].push_back(j);
+					board[i][j]=true;
+				}
 			}
 		}
 
@@ -82,43 +99,38 @@ int main()
 			if(!discovered[i])
 				TarjanDFS(i);
 
-		int cnt=0;
-		for(int cur=0; cur<n; cur++)
+		for(int i=0; i<sccCnt; i++)
 		{
-			for(int &next : adj[cur])
+			if(sccSize[i]==1) 
+				continue;
+			for(int j=1; j<scc[i].size(); j++)
+				ansList.push_back({scc[i][j-1], scc[i][j]});
+			ansList.push_back({scc[i][scc[i].size()-1], scc[i][0]});
+		}
+
+		for(int i=0; i<n; i++)
+			for(int j=0; j<n; j++)
+				for(int k=0; k<n; k++)
+					if(board[i][k] && board[k][j])
+						board[i][j]=false;
+
+		Debug();
+
+		for(int i=0; i<n; i++)
+		{
+			for(int j=0; j<n; j++)
 			{
-				if(cnt==sccCnt-1) break;
-				if(sccId[cur]!=sccId[next] &&
-					!check[sccId[cur]][sccId[next]])
+				if(board[i][j]==true && sccId[i]!=sccId[j])
 				{
-					ansList.push_back({cur, next});
-					check[sccId[cur]][sccId[next]]=true;
-					cnt++;
+					ansList.push_back({i, j});
 				}
 			}
 		}
 
-		for(int i=0; i<sccCnt; i++)
-		{
-			if(sccSize[i]==1) continue;
-			//printf("sccId[%d] : ", i);
-			for(int j=1; j<scc[i].size(); j++)
-				ansList.push_back({scc[i][j-1], scc[i][j]});
-				//printf("%d ", scc[i][j]);
-			//printf("\n");
-				
-			ansList.push_back({scc[i][scc[i].size()-1], scc[i][0]});
-		}
+		printf("%d\n", (int)ansList.size());
+		for(auto &ans : ansList)
+			printf("%d %d\n", ans.first+1, ans.second+1);
 
-		ans = sccCnt-1;
-		for(int i=0; i<sccCnt; i++)
-			ans+=(sccSize[i]-1)*2;
-
-		printf("%d\n", ans);
-		sort(ansList.begin(), ansList.end());
-		for(auto &p : ansList)
-			printf("%d %d\n", p.first+1, p.second+1);
-				
 		Clear();
 	}
 
@@ -130,7 +142,7 @@ void Clear()
 	for(int i=0; i<301; i++)
 	{
 		adj[i].clear();
-		memset(check[i], false, sizeof(bool)*300);
+		memset(board[i], false, sizeof(bool)*300);
 	}
 	discovered.clear();
 	finished.clear();
