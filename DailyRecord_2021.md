@@ -49,6 +49,9 @@
 - BOJ 10867 정렬 
 - *BOJ 11097 SCC (~ing)*
 
+### 2021/01/10
+- *BOJ 11097 SCC (~ing)*
+
 </div>
 </details>
 
