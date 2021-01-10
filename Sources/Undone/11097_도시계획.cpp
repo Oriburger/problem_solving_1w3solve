@@ -14,7 +14,20 @@ vector<pair<int, int> > ans;
 vector<bool> finished;
 stack<int> stk;
 
-void Clear();
+void Init()
+{
+	sccCnt=0, visitCnt=1;
+	for(int i=0; i<301; i++)
+		adj[i].clear();
+	discovered.clear();
+	finished.clear();
+	sccId.clear();
+	ans.clear();
+	sccId.resize(n, 0);
+	discovered.resize(n, 0);
+	finished.resize(n, false);
+	memset(board, false, sizeof(board));
+}
 
 int TarjanDFS(int curr)
 {
@@ -52,21 +65,6 @@ int TarjanDFS(int curr)
 	}
 
 	return lowLink;
-}
-
-void Init()
-{
-	sccCnt=0, visitCnt=1;
-	for(int i=0; i<301; i++)
-		adj[i].clear();
-	discovered.clear();
-	finished.clear();
-	sccId.clear();
-	ans.clear();
-	sccId.resize(n, 0);
-	discovered.resize(n, 0);
-	finished.resize(n, false);
-	memset(board, false, sizeof(board));
 }
 
 int main()
