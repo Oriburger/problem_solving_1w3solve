@@ -14,6 +14,7 @@ vector<pair<int, int> > ans;
 vector<bool> finished;
 stack<int> stk;
 
+//컨테이너 초기화...
 void Init()
 {
 	sccCnt=0, visitCnt=1;
@@ -29,6 +30,7 @@ void Init()
 	memset(board, false, sizeof(board));
 }
 
+//일반적인 타잔의 알고리즘 
 int TarjanDFS(int curr)
 {
 	stk.push(curr);
@@ -52,6 +54,7 @@ int TarjanDFS(int curr)
 			int v = stk.top();
 			stk.pop();
 
+			//scc간의 간선들을 묶어준다.
 			if(!flag && curr!=u) ans.push_back({curr, u});
 			else if(u!=v) ans.push_back({u, v});
 			u=v; flag = true;
@@ -69,13 +72,13 @@ int TarjanDFS(int curr)
 
 int main()
 {
-	scanf("%d", &t);
+	scanf("%d", &t); 
 
 	while(t--)
 	{
 		scanf("%d", &n);
 
-		Init();
+		Init(); //컨테이너 초기화 & 할당
 
 		for(int i=0; i<n; i++)
 		{
@@ -83,26 +86,31 @@ int main()
 			{
 				int input;
 				scanf("%1d", &input);
-				if(input && i!=j)	
-					board[i][j]=true;
+				if(input && i!=j)
+					board[i][j]=true; //인접행렬에 우선 check
 			}
 		}
 
+		//플로이드-워셜 변형 알고리즘, 필요없는 간선들을 없애준다.
+		//i->k->j 경로가 있다면, i->j는 제거
 		for(int k=0; k<n; k++)
 			for(int i=0; i<n; i++)
 				for(int j=0; j<n; j++)
 					if(board[i][k] && board[k][j] && board[i][j])
 						board[i][j]=false;
 
+		//타잔 알고리즘 수행 위한 인접리스트 생성
 		for(int i=0; i<n; i++)
 			for(int j=0; j<n; j++)
 				if(board[i][j])
 					adj[i].push_back(j);
 
+		//SCC를 구성해준다.
 		for(int i=0; i<n; i++)
 			if(!discovered[i])
 				TarjanDFS(i);
 
+		//이제 SCC 사이를 연결하는 간선도 추가한다.
 		for(int i=0; i<n; i++)
 			for(auto &j : adj[i])
 				if(sccId[i]!=sccId[j])
