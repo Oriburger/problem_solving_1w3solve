@@ -80,16 +80,8 @@ int main()
 
 		for(int i=0; i<m; i++)
 		{
-			string st;
 			int a, b;
-			
-			cin>>st;
-			if(st[0]=='+') a = st[1]-'0';
-			else a = -1*(st[1]-'0');
-
-			cin>>st;
-			if(st[0]=='+') b = st[1]-'0';
-			else b = -1*(st[1]-'0');
+			cin>>a>>b;
 
 			//음수? !a, !b이고, 인덱스는 짝수
 			//양수? a, b이고, 인덱스는 홀수 
