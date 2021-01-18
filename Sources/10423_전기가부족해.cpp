@@ -3,7 +3,7 @@
 #include <algorithm>
 using namespace std;
 
-struct Edge { long long cost; int u; int v; };
+struct Edge { int64_t cost; int u; int v; };
 
 struct DisjointSet
 {
