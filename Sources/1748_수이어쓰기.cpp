@@ -1,7 +1,8 @@
 #include <iostream>
+#include <cmath>
 using namespace std;
 
-int n, answer;
+int n, ans=0;
 
 int main()
 {
@@ -9,18 +10,11 @@ int main()
 	cin.tie(NULL);
 	
 	cin>>n;
-	
-	for(int i=1; i<=n; i++)
-	{
-		int temp=i;
-		do
-		{
-			answer++;
-			temp/=10;	
-		}while(temp>0);
-	}
-	
-	cout<<answer<<'\n';
-	
+
+	for(int i=1; i<=n; i*=10)
+		ans += n-i+1;
+
+	cout<<ans<<'\n';
+
 	return 0;
 }
