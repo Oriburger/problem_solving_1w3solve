@@ -33,6 +33,7 @@ int main()
 		adj[b-1][a-1]=l;
 	}
 
+	//플로이드-워셜
 	for(int k=0; k<n; k++)
 	{
 		for(int i=0; i<n; i++)
@@ -46,15 +47,16 @@ int main()
 		}
 	}
 
+	//각 도시마다의 최댓값을 비교한다.
 	for(int i=0; i<n; i++)
 	{
-		int temp=item[i];
-		for(int j=0; j<n; j++)
+		int temp=item[i]; //내린 지점의 아이템도 get 
+		for(int j=0; j<n; j++) //범위 내의 아이템을 모두 get
 		{
 			if(i!=j && adj[i][j] <= m)
 				temp += item[j];
 		}
-		ans = max(ans, temp);
+		ans = max(ans, temp); //ans값 갱신
 	}
 	cout<<ans<<'\n';
 
