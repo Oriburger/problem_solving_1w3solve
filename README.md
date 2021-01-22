@@ -1,4 +1,4 @@
-# PS Study
+# Algorithm Study - 1 day 1 solve
 ---
 - `BaekJoon Online Judge`의 소스코드
 
