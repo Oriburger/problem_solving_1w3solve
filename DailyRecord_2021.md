@@ -137,6 +137,7 @@
 
 ### 2021/01/31
 - BOJ 4354 KMP 
+- BOJ 1305 KMP 
 
 </div>
 </details>
