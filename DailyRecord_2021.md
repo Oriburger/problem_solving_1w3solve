@@ -154,6 +154,7 @@
 
 ### 2021/02/01
 - BOJ 1701 KMP 
+- BOJ 16172 KMP
 
 </div>
 </details>
