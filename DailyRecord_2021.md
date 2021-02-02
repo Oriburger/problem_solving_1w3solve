@@ -156,7 +156,7 @@
 - *BOJ 7575 KMP (~ing)*
 
 ### 2021/02/02
-- BOJ 13506 KMP 
+- **[★]BOJ 13506 KMP**
 
 </div>
 </details>
