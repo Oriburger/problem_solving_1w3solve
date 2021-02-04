@@ -2,38 +2,37 @@
 #include <cmath>
 using namespace std;
 
-int n, r, c, cnt=0;
-
-void Search(int y, int x, int len)
+int GetAnswer(int n, int r, int c)
 {
-	if(len==2)
+	if(n==0) return 0;
+
+	if(pow(2, n-1) <= r)
 	{
-		if(y==r && x==c) cout<<cnt<<'\n';
-		else if(y==r && x+1==c) cout<<cnt+1<<'\n';
-		else if(y+1==r && x==c) cout<<cnt+2<<'\n';
-		else if(y+1==r && x+1==c) cout<<cnt+3<<'\n';
-		
-		cnt+=4;
-		
-		return;
+		if(pow(2, n-1) <= c) //4
+			return GetAnswer(n-1, r-pow(2, n-1), c-pow(2, n-1)) + pow(pow(2, n-1), 2)*3;
+		else //3
+			return GetAnswer(n-1, r-pow(2, n-1), c) + pow(pow(2, n-1), 2)*2;
 	}
-	
-	Search(y, x, len/2);
-	Search(y, x+len/2, len/2);
-	Search(y+len/2, x, len/2);
-	Search(y+len/2, x+len/2, len/2);
-	
-	return;
+	else
+	{
+		if(pow(2, n-1) <= c) //2
+			return GetAnswer(n-1, r, c-pow(2, n-1)) + pow(pow(2, n-1), 2);
+		else //1
+			return GetAnswer(n-1, r, c);
+	}
+
+	return 0;
 }
 
 int main()
 {
 	ios::sync_with_stdio(false);
 	cin.tie(NULL); cout.tie(NULL);
-	
+
+	int n, r, c;
 	cin>>n>>r>>c;
-	
-	Search(0, 0, pow(2, n));
-	
+
+	cout<<GetAnswer(n, r, c);
+
 	return 0;
 }
