@@ -43,6 +43,21 @@ int TarjanDFS(int curr)
 	return lowLink;
 }
 
+void Init()
+{
+	sccCnt=0, visitCnt=0;
+	sccId.clear();
+	sccId.resize(n+1);
+	finished.clear();
+	finished.resize(n+1, false);
+	discovered.clear();
+	discovered.resize(n+1);
+	indegree.clear();
+	indegree.resize(n+1);
+	outdegree.clear();
+	outdegree.resize(n+1);
+}
+
 int main()
 {
 	ios::sync_with_stdio(false);
@@ -54,18 +69,7 @@ int main()
 	{
 		cin>>n>>m;
 
-		sccCnt=0, visitCnt=0;
-		sccId.clear();
-		sccId.resize(n+1);
-		finished.clear();
-		finished.resize(n+1, false);
-		discovered.clear();
-		discovered.resize(n+1);
-		indegree.clear();
-		indegree.resize(n+1);
-		outdegree.clear();
-		outdegree.resize(n+1);
-
+		Init();
 		for(int i=1; i<=n; i++)
 			adj[i].clear();
 		
@@ -79,18 +83,13 @@ int main()
 			if(!discovered[i])
 				TarjanDFS(i);
 	
-		
 		for(int i=1; i<=n; i++)
-		{
 			for(int j : adj[i])
-			{
 				if(sccId[i]!=sccId[j])
 				{
 					outdegree[sccId[i]]++;
 					indegree[sccId[j]]++;
 				}
-			}
-		}
 
 		int incnt=0, outcnt=0;
 		for(int i=0; i<sccCnt; i++)
