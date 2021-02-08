@@ -31,7 +31,6 @@ struct DisjointSet
 	}
 };
 
-bool flag = false;
 int n, m, k, cnt, sum;
 vector<Edge> edges;
 vector<int> ans;
@@ -65,9 +64,7 @@ int main()
 			
 			if(cnt == n-1) break;
 		}
-		if(cnt != n-1) flag = true;
-
-		if(flag) break;
+		if(cnt != n-1) break;
 
 		edges.erase(edges.begin());
 		ans[i-1]=sum;
