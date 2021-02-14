@@ -14,19 +14,8 @@ int n, m, st, dest;
 vector<P> adj[MAX_N];
 vector<ll> profit(MAX_N, 0);
 vector<ll> upper;
-vector<bool> visited(MAX_N, false);
 
-void DFS(int curr)
-{
-	visited[curr]=true;
-	for(auto &p : adj[curr])
-	{
-		int next = p.first;
-		if(!visited[next]) DFS(next);
-	}
-}
-
-bool bellmanFord(int st)
+int bellmanFord(int st)
 {
 	//시작점을 제외한 모든 정점까지의 최단 거리 상한을 INF로
 	upper.resize(n, MIN_INF);
@@ -56,8 +45,9 @@ bool bellmanFord(int st)
 		}
 	}
 
-	if(check[dest]) return true; //V번째 순회에서도 완화성공? : 사이클 존재
-	else return false;
+	if(upper[dest]==MIN_INF) return 1;
+	else if(check[dest]) return 2; //V번째 순회에서도 완화성공? : 사이클 존재
+	return 0;
 }
 
 int main()
@@ -75,17 +65,12 @@ int main()
 	}
 	for(int i=0; i<n; i++)
 		cin>>profit[i];
+	
+	int result = bellmanFord(st);
 
-	DFS(st);
-	if(!visited[dest]) 
-		cout<<"gg\n";
-	else
-	{
-		int result = bellmanFord(st);
-
-		if(result == true) cout<<"Gee\n";
-		else cout<<upper[dest]<<'\n';
-	}
+	if(result == 1) cout<<"gg\n";
+	else if(result == 2) cout<<"Gee\n";
+	else cout<<upper[dest]<<'\n';
 
 	return 0;
 }
