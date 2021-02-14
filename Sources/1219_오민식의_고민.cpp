@@ -17,10 +17,10 @@ vector<ll> upper;
 
 int bellmanFord(int st)
 {
-	//시작점을 제외한 모든 정점까지의 최단 거리 상한을 INF로
+	//시작점을 제외한 모든 정점까지의 최단 거리 상한을 MIN_INF로
 	upper.resize(n, MIN_INF);
 	upper[st] = profit[st];
-	vector<bool> check(n, false);
+	vector<bool> check(n, false); //무한 사이클에 포함된 정점인지 체크
 
 	//n*2번 순회한다
 	for(int i=0; i<n*2; i++)
@@ -33,11 +33,12 @@ int bellmanFord(int st)
 				ll cost = p.second + profit[next];
 
 				//(cur, next) 간선을 따라 완화를 시도
-				if(check[cur]) check[next]=true;
+				if(check[cur]) check[next]=true; //무한 사이클에서 도달가능한 정점이라면, 
 				else if(upper[cur]!=MIN_INF && 
 							upper[next] < upper[cur] + cost)
 				{
-					//성공
+                    //n-1번의 순회 이후의 완화?
+                    //사이클! -> 정점 체크!
 					if(i>=n-1) check[next] = true;
 					else upper[next] = upper[cur] + cost;
 				}
@@ -45,8 +46,8 @@ int bellmanFord(int st)
 		}
 	}
 
-	if(upper[dest]==MIN_INF) return 1;
-	else if(check[dest]) return 2; //V번째 순회에서도 완화성공? : 사이클 존재
+	if(upper[dest]==MIN_INF) return 1; //만약, dest까지 도달이 불가능하다면,
+	else if(check[dest]) return 2; //도착 정점이 체크가 되었다면? gee
 	return 0;
 }
 
