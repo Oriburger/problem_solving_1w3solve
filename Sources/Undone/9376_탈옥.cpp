@@ -1,3 +1,15 @@
+/* ------------------------------
+
+1. 맵 바깥 경계를 만듦
+2. 죄수의 각 위치에서 BFS
+3. BFS 수행때, 열게된 문은 다음 BFS에서 열린채로 유지
+4. 각각의 최소 횟수를 더해서 출력
+
+
+ 현재? 구현중 (ing)
+
+------------------------------ */
+
 #include <iostream>
 #include <vector>
 #include <queue>
@@ -80,8 +92,18 @@ int main()
 					prisoner_pos.push_back({i, j});
 			}
 
-		BFS({0, 0});
+		for(Pos &p : prisoner_pos)
+		{
+			BFS({p.y, p.x});
+			ans += cache[0][0];
+			for(int i=0; i<h+2; i++)
+			{
+				cache[i].clear();
+				cache[i].resize(w+2, INF);
+			}
+		}
 
+/*
 		for(int i=0; i<=h+1; i++)
 		{
 			for(int j=0; j<=w+1; j++)
@@ -92,9 +114,7 @@ int main()
 			cout<<'\n';
 		}
 		cout<<"----\n";
-
-		for(Pos &p : prisoner_pos)
-			ans += cache[p.y][p.x];
+*/
 
 		cout<<ans<<'\n';
 	}
