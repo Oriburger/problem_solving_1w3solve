@@ -28,6 +28,7 @@ void BFS(Pos start)
 		cache[i].resize(w+2, INF);
 
 	cache[start.y][start.x] = 0;
+	sum[start.y][start.x]=INF;
 
 	while(!q.empty())
 	{
@@ -39,18 +40,19 @@ void BFS(Pos start)
 			Pos next = {curr.y + dy[i], curr.x + dx[i]};
 			
 			if(next.y < 0 || next.x < 0 
-				|| next.y >= h+1 || next.x >= w+1) continue;
+				|| next.y >= h+2 || next.x >= w+2) continue;
 			if(board[next.y][next.x]=='*') continue;
 			if(cache[next.y][next.x]!=INF) continue;
 
 			cache[next.y][next.x] = cache[curr.y][curr.x];
 			if(board[next.y][next.x]=='#')
 			{
-				board[next.y][next.x] = '.';
 				cache[next.y][next.x] = cache[curr.y][curr.x] + 1;
 				q.push_front(next);
 			}
 			else q.push_back(next);
+
+			if(sum[next.y][next.x]==-1) sum[next.y][next.x]=0;
 		}
 	}
 	
@@ -60,15 +62,17 @@ void BFS(Pos start)
 		{
 			if(cache[i][j]==INF)
 			{
-				cout<<"@";
+		//		cout<<"@";
 				continue; 
 			}
-			cout<<cache[i][j];
+		//	if(board[i][j]=='#')
+		//		cout<<cache[i][j];
+		//	else cout<<".";
 			sum[i][j]+=cache[i][j];
 		}
-		cout<<'\n';
+		//cout<<'\n';
 	}
-	cout<<"------\n";
+	//cout<<"------\n";
 }
 
 int main()
@@ -82,14 +86,14 @@ int main()
 	{
 		cin>>h>>w;
 
-		ans=0;
+		ans=INF;
 		prisoner_pos.clear();
 		for(int i=0; i<h+2; i++)
 		{
 			board[i].clear();
 			sum[i].clear();
 			board[i].resize(w+2, '.');
-			sum[i].resize(w+2, INF);
+			sum[i].resize(w+2, -1);
 		}
 	
 		for(int i=1; i<=h; i++)
@@ -109,16 +113,22 @@ int main()
 		{
 			for(int j=0; j<=w+1; j++)
 			{
-			//	if(cache[i][j]==INF) cout<<"@";
-			//	else cout<<cache[i][j];
-				ans = min(ans, sum[i][j]);
+				if(board[i][j]!='*' && sum[i][j]!=-1)
+				{
+					if(board[i][j]=='#') sum[i][j]-=2;
+					ans = min(ans, sum[i][j]);
+				}
+
+				//if(sum[i][j]>=INF) cout<<"@";
+				//else cout<<sum[i][j];
 			}
+			//cout<<'\n';
 		}
 		//cout<<"----\n";
 
 
 		cout<<ans<<'\n';
-		cout<<"===================\n";
+	//	cout<<"===================\n";
 	}
 
 	return 0;
