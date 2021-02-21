@@ -88,7 +88,7 @@
 
 ## 2021/02
 <details value="보기">
-<summary>Details</summary>
+<summary>자세히</summary>
 <div markdown="1">
 
 ### 2021/02/01
@@ -176,7 +176,7 @@
 
 ## 2021/03
 <details value="보기">
-<summary>Details</summary>
+<summary>자세히</summary>
 <div markdown="1">
 
 </div>
@@ -186,7 +186,7 @@
 
 ## 2021/04
 <details value="보기">
-<summary>Details</summary>
+<summary>자세히</summary>
 <div markdown="1">
 
 </div>
@@ -196,7 +196,7 @@
 
 ## 2021/05
 <details value="보기">
-<summary>Details</summary>
+<summary>자세히</summary>
 <div markdown="1">
 
 </div>
@@ -207,7 +207,7 @@
 ## 2021/06
 
 <details>
-<summary>Details</summary>
+<summary>자세히</summary>
 <div markdown="1">
 
 </div>
@@ -218,7 +218,7 @@
 ## 2021/07
 
 <details>
-<summary>Details</summary>
+<summary>자세히</summary>
 <div markdown="1">
 
 </div>
@@ -229,7 +229,7 @@
 ## 2021/08
 
 <details>
-<summary>Details</summary>
+<summary>자세히</summary>
 <div markdown="1">
 
 </div>
@@ -240,7 +240,7 @@
 ## 2021/10
 
 <details>
-<summary>Details</summary>
+<summary>자세히</summary>
 <div markdown="1">
 
 </div>
@@ -251,7 +251,7 @@
 ## 2021/11
 
 <details>
-<summary>Details</summary>
+<summary>자세히</summary>
 <div markdown="1">
 
 </div>
@@ -262,7 +262,7 @@
 ## 2021/12
 
 <details>
-<summary>Details</summary>
+<summary>자세히</summary>
 <div markdown="1">
 
 </div>
