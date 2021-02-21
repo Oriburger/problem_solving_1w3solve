@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <queue>
 #include <deque>
 #include <cstring>
 #include <utility>
@@ -9,26 +8,21 @@ using namespace std;
 
 const int dy[4] = {1, -1, 0, 0};
 const int dx[4] = {0, 0, 1, -1};
-const int INF = 2147000000;
 
 struct Pos{ int y, x; };
 
 int t, h, w, ans;
-vector<char> board[103];
-vector<Pos> prisoner_pos;
-vector<int> sum[103];
+int sum[103][103]; //BFS 결과값의 합
+int cache[3][103][103]; //각 BFS 결과값
+vector<char> board[103]; //맵
+vector<Pos> prisoner; //BFS 시작점 저장 배열 (죄수 2명과 (0, 0))
 
-void BFS(Pos start)
+void BFS(Pos start, const int idx)
 {
 	deque<Pos> q;
 	q.push_back(start);
-	vector<int> cache[103];
 
-	for(int i=0; i<h+2; i++)
-		cache[i].resize(w+2, INF);
-
-	cache[start.y][start.x] = 0;
-	sum[start.y][start.x]=INF;
+	cache[idx][start.y][start.x]=0;
 
 	while(!q.empty())
 	{
@@ -42,37 +36,20 @@ void BFS(Pos start)
 			if(next.y < 0 || next.x < 0 
 				|| next.y >= h+2 || next.x >= w+2) continue;
 			if(board[next.y][next.x]=='*') continue;
-			if(cache[next.y][next.x]!=INF) continue;
+			if(cache[idx][next.y][next.x]!=-1) continue;
 
-			cache[next.y][next.x] = cache[curr.y][curr.x];
 			if(board[next.y][next.x]=='#')
 			{
-				cache[next.y][next.x] = cache[curr.y][curr.x] + 1;
+				cache[idx][next.y][next.x] = cache[idx][curr.y][curr.x] + 1;
+				q.push_back(next);
+			}
+			else
+			{
+				cache[idx][next.y][next.x] = cache[idx][curr.y][curr.x];
 				q.push_front(next);
 			}
-			else q.push_back(next);
-
-			if(sum[next.y][next.x]==-1) sum[next.y][next.x]=0;
 		}
 	}
-	
-	for(int i=0; i<h+2; i++)
-	{
-		for(int j=0; j<w+2; j++)
-		{
-			if(cache[i][j]==INF)
-			{
-		//		cout<<"@";
-				continue; 
-			}
-		//	if(board[i][j]=='#')
-		//		cout<<cache[i][j];
-		//	else cout<<".";
-			sum[i][j]+=cache[i][j];
-		}
-		//cout<<'\n';
-	}
-	//cout<<"------\n";
 }
 
 int main()
@@ -86,50 +63,47 @@ int main()
 	{
 		cin>>h>>w;
 
-		ans=INF;
-		prisoner_pos.clear();
+		/*----Init----*/
+		ans=2147000000;
+		prisoner.clear();
+		memset(cache, -1, sizeof(cache));
+		memset(sum, 0, sizeof(sum));
 		for(int i=0; i<h+2; i++)
 		{
 			board[i].clear();
-			sum[i].clear();
 			board[i].resize(w+2, '.');
-			sum[i].resize(w+2, -1);
 		}
-	
+
 		for(int i=1; i<=h; i++)
 			for(int j=1; j<=w; j++)
 			{
 				cin>>board[i][j];
 				if(board[i][j]=='$')
-					prisoner_pos.push_back({i, j});
+					prisoner.push_back({i, j});
 			}
 
-		prisoner_pos.push_back({0, 0});
-		for(Pos &p : prisoner_pos)
-			BFS({p.y, p.x});
+		/*----BFS----*/
+		prisoner.push_back({0, 0});
+		for(int i=0; i<3; i++)
+			BFS({prisoner[i].y, prisoner[i].x}, i);
 
-
-		for(int i=0; i<=h+1; i++)
+		/*----Answer----*/
+		for(int i=0; i<h+2; i++)
 		{
-			for(int j=0; j<=w+1; j++)
+			for(int j=0; j<w+2; j++)
 			{
-				if(board[i][j]!='*' && sum[i][j]!=-1)
-				{
-					if(board[i][j]=='#') sum[i][j]-=2;
-					ans = min(ans, sum[i][j]);
-				}
+				if(board[i][j]=='*') continue;
+				for(int k=0; k<3; k++)
+					sum[i][j]+=cache[k][i][j];
+				if(board[i][j]=='#')
+					sum[i][j]-=2;
+				
+				if(sum[i][j]<0) continue;
 
-				//if(sum[i][j]>=INF) cout<<"@";
-				//else cout<<sum[i][j];
+				ans = min(ans, sum[i][j]);
 			}
-			//cout<<'\n';
 		}
-		//cout<<"----\n";
-
-
 		cout<<ans<<'\n';
-	//	cout<<"===================\n";
 	}
-
 	return 0;
 }
