@@ -9,7 +9,7 @@
 ***
 ## 2021/01
 <details value="보기">
-<summary>Details</summary>
+<summary>자세히</summary>
 <div markdown="1">
 
 |날짜|내용|분류|설명|
