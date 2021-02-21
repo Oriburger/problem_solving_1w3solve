@@ -39,7 +39,7 @@
 ||BOJ 10768 기초|-|
 ||BOJ 10801 기초|-|
 ||BOJ 3059 기초|-|
-|21/01/12|<span style="color:yellow">[★] BOJ 3648</span>|2-SAT|-|
+|21/01/12|<span style="color:red">[★] BOJ 3648</span>|2-SAT|-|
 ||[★]BOJ 3747|2-SAT|(~ing)|
 |21/01/13|**[★]BOJ 3747**|2-SAT|-|
 |21/01/14|BOJ 12760|기초|-|
