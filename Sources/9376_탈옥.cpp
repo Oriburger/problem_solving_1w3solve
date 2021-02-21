@@ -17,9 +17,11 @@ int cache[3][103][103]; //각 BFS 결과값
 vector<char> board[103]; //맵
 vector<Pos> prisoner; //BFS 시작점 저장 배열 (죄수 2명과 (0, 0))
 
+//가중치 순으로 (문의 존재여부에 따라) 탐색을 진행
+//즉, 문이 없는 칸부터 탐색해야 열어야하는 문의 최소 개수를 도출할 수 있다.
 void BFS(Pos start, const int idx)
 {
-	deque<Pos> q;
+	deque<Pos> q; //우선순위-큐를 활용하는것보다 더 효율적이다.
 	q.push_back(start);
 
 	cache[idx][start.y][start.x]=0;
@@ -41,12 +43,12 @@ void BFS(Pos start, const int idx)
 			if(board[next.y][next.x]=='#')
 			{
 				cache[idx][next.y][next.x] = cache[idx][curr.y][curr.x] + 1;
-				q.push_back(next);
+				q.push_back(next); //가중치가 1인 간선이므로 push_back!
 			}
 			else
 			{
 				cache[idx][next.y][next.x] = cache[idx][curr.y][curr.x];
-				q.push_front(next);
+				q.push_front(next); //가중치가 0인 간선이므로, push_front!!
 			}
 		}
 	}
@@ -83,11 +85,14 @@ int main()
 			}
 
 		/*----BFS----*/
-		prisoner.push_back({0, 0});
-		for(int i=0; i<3; i++)
+		prisoner.push_back({0, 0}); //바깥에서부터 출발하는 임의의 사람
+		for(int i=0; i<3; i++) 
 			BFS({prisoner[i].y, prisoner[i].x}, i);
 
 		/*----Answer----*/
+		//각각의 BFS 결과값을 모두 더해서, 최소값을 더한다. 
+		//세명이 동시에 출발해서, 만나는 지점을 찾는 개념이다. 
+		//만약 세명이 문에서 만났다면, -2를 빼주어야한다.
 		for(int i=0; i<h+2; i++)
 		{
 			for(int j=0; j<w+2; j++)
