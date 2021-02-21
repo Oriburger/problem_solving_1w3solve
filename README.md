@@ -7,8 +7,6 @@
 - 문제 해설 [`Link`](https://blog.naver.com/uss425)
 ---
 ## 2021/02
-<details value="보기">
-<summary>자세히</summary>
 <div markdown="1">
 
 |날짜|내용|분류|설명|
@@ -49,4 +47,3 @@
 |21/02/21|**[⭐] BOJ 9376**|BFS|-|
 
 </div>
-</details>
