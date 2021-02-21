@@ -5,6 +5,8 @@
 - 오답 소스도 섞여있음
 
 - 문제 해설 [`Link`](https://blog.naver.com/uss425)
+
+- 이전의 기록은 DailyRecord@@.md
 ---
 ## 2021/02
 <div markdown="1">
