@@ -8,19 +8,13 @@ const int MAX = 1001;
 const int dy[3] = {-1, 0};
 const int dx[3] = {0, -1};
 
-bool flag = false;
 string s1, s2;
 vector<char> ans;
 int cache[MAX][MAX];
 
-void GetAnswer(int y, int x)
+bool GetAnswer(int y, int x)
 {
-	if(flag) return;
-	if(cache[y][x]==0)
-	{
-		flag = true; 
-		return;
-	}
+	if(cache[y][x]==0) return true;
 
 	bool check = false;
 	for(int i=0; i<2; i++)
@@ -30,8 +24,7 @@ void GetAnswer(int y, int x)
 
 		if(cache[y][x] == cache[ny][nx])
 		{
-			GetAnswer(ny, nx);
-			if(flag) return;
+			if(GetAnswer(ny, nx)) return true;
 			check = true;
 		}
 	}
@@ -41,11 +34,12 @@ void GetAnswer(int y, int x)
 		if(cache[y][x]-1 == cache[ny][nx])
 		{
 			ans.push_back(s1[y]);
-			GetAnswer(ny, nx);
-			if(flag) return;
+			if(GetAnswer(ny, nx)) return true;
 			ans.pop_back();
 		}
 	}
+
+	return false;
 }
 
 int main()
