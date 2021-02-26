@@ -5,7 +5,7 @@ using namespace std;
 int n;
 vector<int> arr, ans;
 
-void Answer(int l, int r) //small left ,,, 
+void Answer(int l, int r)
 {
 	ans.push_back(arr[l]);
 	if(l==r) return;
