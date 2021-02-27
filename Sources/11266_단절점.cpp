@@ -29,12 +29,12 @@ int DFS(int curr, bool isRoot)
 		if(!discovered[next])
 		{
 			children++;
-			//이 서브트리에서 갈 수 있는 가장 높은 정점의 번호
-			int subtree = DFS(next, false);
+			//이 서브트리에서 갈 수 있는 가장 높은(level이 가장 작은) 정점의 번호
+			int lowPoint = DFS(next, false);
 			//그 노드가 자기 자신 이하에 있다면, 현재 정점은 단절점
-			if(!isRoot && subtree >= discovered[curr])
+			if(!isRoot && lowPoint >= discovered[curr])
 				isCutVertex[curr]=true;
-			ret = min(ret, subtree);
+			ret = min(ret, lowPoint);
 		}
 		else
 			ret = min(ret, discovered[next]);
