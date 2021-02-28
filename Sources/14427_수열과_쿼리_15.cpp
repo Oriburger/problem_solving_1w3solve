@@ -28,9 +28,9 @@ struct SegTree
 		P leftVal = init(arr, left, mid, node*2);
 		P rightVal = init(arr, mid+1, right, node*2+1);
 
-		if(leftVal.first > rightVal.first)
+		if(leftVal > rightVal)
 			return rangeAns[node] = rightVal;
-		else if(leftVal.first == rightVal.first)
+		else if(leftVal == rightVal)
 		{
 			if(leftVal.second > rightVal.second) 
 				return rangeAns[node] = rightVal;
@@ -50,8 +50,8 @@ struct SegTree
 		P leftVal = query(left, right, node*2, nodeLeft, mid);
 		P rightVal = query(left, right, node*2+1, mid+1, nodeRight);
 
-		if(leftVal.first > rightVal.first) return rightVal;
-		else if(leftVal.first == rightVal.first)
+		if(leftVal > rightVal) return rightVal;
+		else if(leftVal == rightVal)
 		{
 			if(leftVal.second > rightVal.second) return rightVal;
 			return leftVal;
@@ -75,9 +75,9 @@ struct SegTree
 		P leftVal = update(idx, newVal, node*2, nodeLeft, mid);
 		P rightVal = update(idx, newVal, node*2+1, mid+1, nodeRight);
 
-		if(leftVal.first > rightVal.first) 
+		if(leftVal > rightVal) 
 			return rangeAns[node] = rightVal;
-		else if(leftVal.first == rightVal.first)
+		else if(leftVal == rightVal)
 		{
 			if(leftVal.second > rightVal.second) 
 				return rangeAns[node] = rightVal;
