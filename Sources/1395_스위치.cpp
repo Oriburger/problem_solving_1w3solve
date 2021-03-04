@@ -1,3 +1,4 @@
+#include <string>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -12,7 +13,7 @@ struct SegTree
 	SegTree(int k)
 	{
 		n = k;
-		rangeAns.resize(n*4);
+		rangeAns.resize(n*4, 0);
 		lazy.resize(n*4, false);
 	}
 
@@ -20,7 +21,7 @@ struct SegTree
 	{
 		propagate(node, nodeLeft, nodeRight);
 		
-		if(right < nodeLeft || nodeRight < left) return 0;
+		if(right < nodeLeft || left > nodeRight) return 0;
 		if(left <= nodeLeft && nodeRight <= right) return rangeAns[node];
 
 		int mid = (nodeLeft + nodeRight) / 2;
@@ -46,8 +47,8 @@ struct SegTree
 			rangeAns[node] = (nodeRight - nodeLeft + 1) - rangeAns[node];
 			if(nodeLeft != nodeRight)
 			{
-				lazy[node*2] += newVal;
-				lazy[node*2+1] += newVal;
+				lazy[node*2] = !lazy[node*2];
+				lazy[node*2+1] = !lazy[node*2+1]; 
 			}
 			return rangeAns[node];
 		}
@@ -67,14 +68,14 @@ struct SegTree
 	{
 		if(!lazy[node]) return;
 
-		rangeAns[node] += (nodeRight - nodeLeft + 1) * lazy[node];
+		rangeAns[node] = (nodeRight - nodeLeft + 1) - rangeAns[node];
 
 		if(nodeLeft != nodeRight)
 		{
-			lazy[node*2] += lazy[node];
-			lazy[node*2+1] += lazy[node];
+			lazy[node*2] = !lazy[node*2];
+			lazy[node*2+1] = !lazy[node*2+1]; 
 		}
-		lazy[node] = 0;
+		lazy[node] = false;
 	}
 };
 
@@ -95,7 +96,7 @@ int main()
 		cin>>a>>b>>c;
 
 		if(a==0) tree.update_range(b-1, c-1);
-		else cout<<tree.query(b-1, b-1)<<'\n';
+		else cout<<tree.query(b-1, c-1)<<'\n';
 	}
 
 	return 0;
