@@ -21,5 +21,5 @@
 |21/03/03|**[⭐]BOJ 16975**|세그먼트 트리, Lazy Propagation| 구현 연습하자 |
 ||*BOJ 1395(~ing)*|세그먼트 트리, Lazy Propagation| - |
 |21/03/04|**BOJ 1395**|세그먼트 트리, Lazy Propagation| - |
-|21/03/05|||-|
+|21/03/05|*BOJ 2934(~ing)*|세그먼트 트리, Lazy Propagation| - |
 </div>
