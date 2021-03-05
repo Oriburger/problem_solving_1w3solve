@@ -23,5 +23,5 @@
 |21/03/04|**BOJ 1395**|세그먼트 트리, Lazy Propagation| - |
 |21/03/05|*BOJ 2934(~ing)*|세그먼트 트리, Lazy Propagation| - |
 ||**[⭐]BOJ 14245**|세그먼트 트리, Lazy Propagation| 난 멍청하다 |
-||**[⭐]BOJ 12844**|세그먼트 트리, Lazy Propagation| 난 멍청하다 |
+||**[⭐]BOJ 12844**|세그먼트 트리, Lazy Propagation| 나는  |
 </div>
