@@ -24,4 +24,5 @@
 |21/03/05|*BOJ 2934(~ing)*|세그먼트 트리, Lazy Propagation| - |
 ||**[⭐]BOJ 14245**|세그먼트 트리, Lazy Propagation| 다시 풀어보자 |
 ||**[⭐]BOJ 12844**|세그먼트 트리, Lazy Propagation| 이것도 다시..  |
+|21/03/06|||
 </div>
