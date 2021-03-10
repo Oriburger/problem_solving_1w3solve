@@ -29,37 +29,6 @@ void MakeTree(P curr)
 	}
 }
 
-int GetLCA(int u, int v)
-{
-	if(depth[u] < depth[v]) swap(u, v);
-	int diff = depth[u] - depth[v];
-
-	//깊이 차이를 없애기 위해 u를 이동시킴.
-	for(int j=0; diff; j++)
-	{
-		if(diff % 2) u = parent[u][j];
-		diff /= 2;
-	}
-
-	//u와 v가 다르면 동시에 같은 높이만큼 위로 이동.
-	if(u != v)
-	{
-		//높이 2^17, 2^16, ..., 2^1, 2^0 순으로 시도
-		for(int j=MAX_N-1; j>=0; j--)
-		{
-			if(parent[u][j]!=-1 && parent[u][j] != parent[v][j])
-			{
-				u = parent[u][j];
-				v = parent[v][j];
-			}
-		}
-		//마지막엔 두 정점 u, v의 부모가 같으므로 한 번 더 올림.
-		u = parent[u][0];
-	}	
-	
-	return u;
-}
-
 int main()
 {
 	ios::sync_with_stdio(false);
@@ -69,8 +38,8 @@ int main()
 	cin>>n;
 
 	parent.resize(MAX_N, vector<int>(MAX_DEPTH, -1));
-	maxRoad.resize(MAX_N, vector<int>(MAX_DEPTH, -1));
-	minRoad.resize(MAX_N, vector<int>(MAX_DEPTH, -1));
+	maxRoad.resize(MAX_N, vector<int>(MAX_DEPTH));
+	minRoad.resize(MAX_N, vector<int>(MAX_DEPTH));
 	depth.resize(MAX_N, -1);
 	depth[0]=0;
 
@@ -87,6 +56,7 @@ int main()
 	//트리 만들기
 	MakeTree({0, 0});
 	
+	
 	//parent 배열 채움, bottom-up 방식
 	for(int j=0; j<MAX_DEPTH-1; j++)
 		for(int i=1; i<n; i++)
@@ -97,18 +67,46 @@ int main()
 				minRoad[i][j+1] = min(minRoad[i][j], minRoad[parent[i][j]][j]);
 			}
 	
+	
 	cin>>m;
 	//m번의 쿼리 수행
 	for(int i=0; i<m; i++)
 	{
-		int u, v, lca;
+		int u, v;
 		int maxAns=-1, minAns=INF;
 		cin>>u>>v;
 
 		u-=1; v-=1;
-		lca = GetLCA(u, v);
 
-		
+		if(depth[u] < depth[v]) swap(u, v);
+		int diff = depth[u] - depth[v];
+
+		//깊이 차이를 없애기 위해 u를 이동시킴.
+		for(int j=0; diff; j++)
+		{
+			if(diff % 2) u = parent[u][j];
+			diff /= 2;
+		}
+
+		//u와 v가 다르면 동시에 같은 높이만큼 위로 이동.
+		if(u != v)
+		{
+			//높이 2^17, 2^16, ..., 2^1, 2^0 순으로 시도
+			for(int j=MAX_N-1; j>=0; j--)
+			{
+				if(parent[u][j]!=-1 && parent[u][j] != parent[v][j])
+				{	
+					maxAns = max(maxAns, max(maxRoad[u][j], maxRoad[v][j]));
+					minAns = min(minAns, min(minRoad[u][j], minRoad[v][j]));
+					u = parent[u][j];
+					v = parent[v][j];
+				}
+			}
+			//마지막엔 두 정점 u, v의 부모가 같으므로 한 번 더 올림.
+			u = parent[u][0];
+		}
+
+		cout<<minAns<<' '<<maxAns<<'\n';
 	}
 
 	return 0;
