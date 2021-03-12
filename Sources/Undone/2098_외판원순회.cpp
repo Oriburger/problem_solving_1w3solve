@@ -4,34 +4,27 @@
 #include <vector>
 using namespace std;
 
-int n, w[17][17];
-int ans = 2147000000;
-vector<bool> visited;
-vector<int> path;
+const int MAX_N = 16;
+const int INF = 2147000000;
 
-void Answer(vector<int>& path, int total)
+int n, w[MAX_N][MAX_N];
+int dp[MAX_N][1<<MAX_N];
+int ans = INF;
+
+int Answer(int curr, int state)
 {
-	int curr = path.back();
-
-	if(path.size()==n)
+	if(state == (1<<n)-1 )
 	{
-		int tmp = w[curr][path.front()];
-		ans = min(ans, total + tmp);
-		return;
+		
 	}
 
+	int& ret = dp[curr][state];
+	if(ret != 0) return ret;
+
+	int tmp = INF;
 	for(int next=0; next<n; next++)
 	{
-		if(visited[next]) continue;
-		if(w[curr][next]==0) continue;
-
-		visited[next]=true;
-		path.push_back(next);
-
-		Answer(path, total + w[curr][next]);
-
-		visited[next]=false;
-		path.pop_back();
+		
 	}
 }
 
@@ -46,18 +39,7 @@ int main()
 	for(int j=0; j<n; j++)
 		cin>>w[i][j];
 
-	for(int i=0; i<n; i++)
-	{
-		path.clear();
-		visited.clear();
-		visited.resize(n, false);
-
-		path.push_back(i);
-		visited[i]=true;
-		Answer(path, 0);
-	}
-
-	cout<<ans<<'\n';
+	cout<<Answer(0, 1)<<'\n';
 
 	return 0;
 }
