@@ -1,4 +1,4 @@
-# Algorithm Study - 1 day 1 solve
+# Algorithm Study - 1 day 1 commit
 ---
 - `BaekJoon Online Judge`의 소스코드
 
