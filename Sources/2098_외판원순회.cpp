@@ -15,7 +15,8 @@ int Answer(int curr, int state)
 {
 	if(state == (1<<n)-1 )
 	{
-		
+		if(w[curr][0]==0) return INF;
+		return w[curr][0];
 	}
 
 	int& ret = dp[curr][state];
@@ -24,8 +25,15 @@ int Answer(int curr, int state)
 	int tmp = INF;
 	for(int next=0; next<n; next++)
 	{
-		
+		if(w[curr][next]==0  || state & (1<<next)) continue;
+
+		int nextVal = Answer(next, state | (1<<next));
+
+		if(nextVal!=INF)
+			tmp = min(tmp, w[curr][next] + nextVal);
 	}
+
+	return ret = tmp;
 }
 
 int main()
