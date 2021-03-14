@@ -11,75 +11,49 @@ const int dx[4] = {0, 0, 1, -1};
 
 struct Pos{ int y; int x; };
 
-int n, m, keyState = (1<<6);
-int ans=0; bool flag = false;
+int n, m;
 char board[50][50];
 Pos start;
 
-int BFS()
+int BFS(Pos start)
 {
-	bool visited[50][50];
+	int visited[50][50][(1<<6)+1];
 	queue<pair<Pos, int> > q;
-	
-	memset(visited, false, sizeof(visited));
+	memset(visited, 0, sizeof(visited));
 
-	q.push({start, 0});
-	visited[start.y][start.x]=true;
+	q.push({start, (1<<6)});
+	visited[start.y][start.x][(1<<6)]=1;
 	board[start.y][start.x]='.';
 
 	while(!q.empty())
 	{
 		Pos curr = q.front().first;
-		int curCnt = q.front().second;
+		int curState = q.front().second;
 		q.pop();
-
-	//	cout<<"curr : "<<curr.y<<' '<<curr.x<<'\n';
 
 		for(int i=0; i<4; i++)
 		{
 			Pos next = {curr.y + dy[i], curr.x + dx[i]};
+			int nextState = curState;
 
-			//cout<<" > next : "<<next.y<<' '<<next.x<<" --- ";
-
-			if(next.y<0 || next.y>=n || next.x<0 || next.x>=m)
-			{
-			//	cout<<"Out of range\n";
-				continue;
-			}
-			if(board[next.y][next.x]=='#' || visited[next.y][next.x])
-			{
-			//	cout<<"Wall or already visited\n";
-				continue;
-			}
+			if(next.y<0 || next.y>=n || next.x<0 || next.x>=m) continue;
+			if(board[next.y][next.x]=='#' || visited[next.y][next.x][nextState]) continue;
 			if((board[next.y][next.x]>='A' && board[next.y][next.x]<='F')
-				&& !(keyState & (1<<(board[next.y][next.x]-'A'))))
-			{
-			//	cout<<"Key is not found!\n";
-				continue;
-			}
-
-		//	cout<<"pushed, ";
+				&& !(curState & (1<<(board[next.y][next.x]-'A')))) continue;
 
 			if(board[next.y][next.x]=='1')
-			{
-				flag = true;
-			//	cout<<" escaped!\n";
-				return curCnt+1;
-			}
-			else if(board[next.y][next.x]>='a' && board[next.y][next.x]<='f')
-			{
-				keyState |= (1<<(board[next.y][next.x]-'a'));
-				start = {next.y, next.x};
-			//	cout<<" found a key!\n";
-				return curCnt+1;
-			}
+				return visited[curr.y][curr.x][curState];
 
-			q.push({next, curCnt+1});
-			visited[next.y][next.x]=true;
+			else if(board[next.y][next.x]>='a' && board[next.y][next.x]<='f')
+				nextState |= (1<<(board[next.y][next.x]-'a'));
+
+			q.push({next, nextState});
+			board[next.y][next.x] = '.';
+			visited[next.y][next.x][nextState]=visited[curr.y][curr.x][curState]+1;
 		}
 	}
 
-	return 0;
+	return -1;
 }
 
 int main()
@@ -97,24 +71,7 @@ int main()
 			start = {i, j};
 	}
 
-	while(!flag)
-	{
-	//	cout<<"start at {";
-	//	cout<<start.y<<' '<<start.x<<"} --"<<'\n';
-
-		int temp = BFS();
-
-		if(temp==0)
-		{
-			ans=-1;
-			break;
-		}
-
-		ans += temp;
-		//cout<<"-----------------\n\n";
-	}
-
-	cout<<ans<<'\n';
+	cout<<BFS(start)<<'\n';
 
 	return 0;
 }
