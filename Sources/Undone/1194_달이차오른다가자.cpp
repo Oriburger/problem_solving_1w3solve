@@ -37,7 +37,8 @@ int BFS(Pos start)
 			int nextState = curState;
 
 			if(next.y<0 || next.y>=n || next.x<0 || next.x>=m) continue;
-			if(board[next.y][next.x]=='#' || visited[next.y][next.x][nextState]) continue;
+			if(board[next.y][next.x]=='#') continue;
+			if(visited[next.y][next.x][nextState]) continue;
 			if((board[next.y][next.x]>='A' && board[next.y][next.x]<='F')
 				&& !(curState & (1<<(board[next.y][next.x]-'A')))) continue;
 
