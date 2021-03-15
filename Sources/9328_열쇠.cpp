@@ -15,8 +15,8 @@ struct Pos{ int y; int x; };
 int h, w, ans;
 Pos stPos;
 string keySet;
-char board[101][101];
-bool visited[101][101];
+char board[102][102];
+bool visited[102][102];
 vector<bool> hasKey;
 
 bool BFS(Pos start)
@@ -32,8 +32,6 @@ bool BFS(Pos start)
 		Pos curr = q.front();
 		q.pop();
 
-		//cout<<"curr : "<<curr.y<<' '<<curr.x<<'\n';
-
 		for(int i=0; i<4; i++)
 		{
 			Pos next = {curr.y + dy[i], curr.x + dx[i]};
@@ -44,7 +42,6 @@ bool BFS(Pos start)
 
 			if(board[next.y][next.x]=='$')
 			{
-			//	cout<<"Found Document on - {"<<next.y<<", "<<next.x<<"} -\n";
 				board[next.y][next.x]='.';
 				ans++;
 			}
@@ -97,15 +94,13 @@ int main()
 		stPos = {0, 0};
 		while(1)
 		{
-			//cout<<"--stPos : "<<stPos.y<<' '<<stPos.x<<"----[";
-			//cout<<board[stPos.y][stPos.x]<<"]----\n";
 			if(!BFS(stPos))
 				break;
-			//cout<<"-------------------------------\n";
 		}
 		cout<<ans<<'\n';
 
 		hasKey.clear();
+		keySet.clear();
 	}
 
 	return 0;
