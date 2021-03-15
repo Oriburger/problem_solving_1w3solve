@@ -38,11 +38,8 @@ int BFS(Pos start)
 			if(next.y<0 || next.x<0 || next.y>=h || next.x>=w) continue;
 			if(board[next.y][next.x]=='x') continue;
 			if(board[next.y][next.x]>='0' && board[next.y][next.x]<='9')
-			{	
-				if(curState & (1<<(board[next.y][next.x]-'0'))) continue;
-				else nextState |= (1<<(board[next.y][next.x]-'0'));
-			}
-
+				nextState |= (1<<(board[next.y][next.x]-'0'));
+			
 			if(visited[next.y][next.x][nextState]) continue;
 
 			visited[next.y][next.x][nextState] = visited[curr.y][curr.x][curState] + 1;
@@ -82,19 +79,3 @@ int main()
 
 	return 0;
 }
-
-/*
-
-10 10
-*x*x*x*x*x
-..........
-.xxxxxxxx*
-..........
-xxxxxxxxx.
-..........
-.xxxxxxxx*
-..........
-xxxxxxxxx.
-o.........
-
-*/
