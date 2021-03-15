@@ -36,32 +36,32 @@ bool BFS(Pos start)
 		{
 			Pos next = {curr.y + dy[i], curr.x + dx[i]};
 			
-			if(next.y<0 || next.x<0 || next.y>=h+2 || next.x>=w+2) continue;
-			if(board[next.y][next.x] == '*') continue;
-			if(visited[next.y][next.x]) continue;
+			if(next.y<0 || next.x<0 || next.y>=h+2 || next.x>=w+2) continue; //범위 밖
+			if(board[next.y][next.x] == '*') continue; //벽
+			if(visited[next.y][next.x]) continue; //이미 방문함       -> continue
 
-			if(board[next.y][next.x]=='$')
+			if(board[next.y][next.x]=='$') //문서를 발견! 챙기자.
 			{
-				board[next.y][next.x]='.';
-				ans++;
+				board[next.y][next.x]='.'; //빈 칸이 되었다.
+				ans++; //ans 1 증가
 			}
-			else if(board[next.y][next.x]<='Z' && board[next.y][next.x]>='A')
+			else if(board[next.y][next.x]<='Z' && board[next.y][next.x]>='A') //문이다!
+			{ 
+				if(hasKey[board[next.y][next.x]-'A'])  //열쇠가 있나?
+					board[next.y][next.x] = '.'; //있다면 그냥 열어버리자.
+				else continue; //없네.. 돌아가자. 
+			}
+			else if(board[next.y][next.x]<='z' && board[next.y][next.x]>='a') //열쇠다!
 			{
-				if(hasKey[board[next.y][next.x]-'A']) 
-					board[next.y][next.x] = '.';
-				else continue;
+				hasKey[board[next.y][next.x]-'a'] = true; //체크체크.
+				stPos = {next.y, next.x}; //다음 BFS의 시작지점
+				board[next.y][next.x]='.'; //빈 칸이 되었다.
+				flag = true; //다음 BFS가 가능하다.
 			}
-			else if(board[next.y][next.x]<='z' && board[next.y][next.x]>='a')
-			{
-				hasKey[board[next.y][next.x]-'a'] = true;
-				stPos = {next.y, next.x};
-				board[next.y][next.x]='.';
-				flag = true;
-			}
-			q.push(next);
+			q.push(next); //큐에 넣고, 방문 체크
 			visited[next.y][next.x] = true;
 		}
-	}
+	} 
 	return flag;
 }
 
@@ -80,18 +80,18 @@ int main()
 		ans=0;
 		memset(board, 0, sizeof(board));
 		hasKey.resize(26, false);
-		for(int i=1; i<=h; i++)
+		for(int i=1; i<=h; i++) //가장 자리에 빈 공간을 만듦.
 			for(int j=1; j<=w; j++)
 				cin>>board[i][j];
 
-		cin>>keySet;
+		cin>>keySet; 
 		if(keySet[0]!='0')
 		{
 			for(int i=0; i<keySet.size(); i++)
-				hasKey[keySet[i]-'a']=true;
+				hasKey[keySet[i]-'a']=true;  //기존에 갖고 있는 열쇠 체크
 		}
 
-		stPos = {0, 0};
+		stPos = {0, 0}; //최초 시작은 빌딩 밖
 		while(1)
 		{
 			if(!BFS(stPos))
