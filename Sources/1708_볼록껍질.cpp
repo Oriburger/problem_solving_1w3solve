@@ -48,22 +48,24 @@ int main()
 		p[i] = Point(x, y);
 	}
 
-	//점들을 y -> x좌표 순으로 정렬 : 0번 점이 왼쪽 제일 아래에 위치
+	//y좌표 x좌표가 작은순으로 정렬 
+	// => 기준점인 0번 점이 왼쪽 제일 아래에 위치
 	sort(p.begin(), p.end(), CompPoint);
+
+	//기준점인 0번 점으로부터 상대 위치를 계산한다.
 	for(int i=1; i<n; i++)
 	{
 		p[i].p = p[i].x - p[0].x;
 		p[i].q = p[i].y - p[0].y;
 	}
-	//0번을 제외한 점들을 반시계 방향으로 정렬
+	//기준점을 제외한 점들을 반시계 방향으로 정렬
 	sort(p.begin()+1, p.end(), CompPoint);
 
 	stack<int> stk;
-	//스택에 0, 1번 점을 넣음
-	stk.push(0);
+	stk.push(0); //스택에 0, 1번 점을 넣음
 	stk.push(1);
+	
 	int next = 2;
-	//모든 점을 훑는다
 	while(next<n)
 	{
 		while(stk.size() >= 2)
@@ -72,7 +74,10 @@ int main()
 			first=stk.top();
 			stk.pop();
 			second=stk.top();
-			if(CCW(p[second], p[first], p[next])>0)
+
+			//first, second, next가 CCW(반시계 방향)이라면, first를 push
+			//CW(시계 방향)이라면, while문 반복
+			if(CCW(p[second], p[first], p[next]) > 0)
 			{
 				stk.push(first);
 				break;
