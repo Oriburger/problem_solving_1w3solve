@@ -1,4 +1,4 @@
-# Daily Record of Study
+# STUDY RECORD
 <br>
 > 2020/05/15 기록 시작<br>
 > 2020/06/21 daily_record.md 최초작성<br>
