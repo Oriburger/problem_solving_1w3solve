@@ -38,21 +38,58 @@ struct DisjointSet
 
 		//트리의 높이가 더 높은쪽에 붙여준다.
 		if(rank[u] > rank[v]) swap(u, v);
-		parent[u] = v;
 		size[v] += size[u];
-		if(size[v] == n)
+		parent[u] = v;
 		if(rank[u] == rank[v]) rank[v]+=1;
 	}
 
-	bool isAllConnected()
+	int getsize(int u)
 	{
-		return flag;
+		u = find(u);
+
+		return size[u];
 	}
 };
 
 int n, k;
 Civ board[MAX][MAX];
 queue<Pos> q;
+
+void PrtBoard()
+{
+	cout<<"==========\n";
+	for(int i=0; i<n; i++)
+	{
+		for(int j=0; j<n; j++)
+		{
+			cout<<board[i][j].val<<' ';
+		}
+		cout<<'\n';
+	}
+	cout<<"==========\n";
+}
+
+void Init(queue<Pos> q, DisjointSet &djs)
+{
+	while(!q.empty())
+	{
+		Pos curr = q.front();
+		int curId = board[curr.y][curr.x].id;
+		q.pop();
+
+		for(int i=0; i<4; i++)
+		{
+			int ny = curr.y + dy[i];
+			int nx = curr.x + dx[i];
+			if(ny<0 || nx<0 || ny>=n || nx>=n) continue;
+			
+			int nextId = board[ny][nx].id;
+			if(nextId==0) continue;
+
+			djs.merge(nextId, curId);
+		}
+	}
+}
 
 int main()
 {
@@ -61,14 +98,22 @@ int main()
 
 	cin>>n>>k;
 
-	DisjointSet djs(n);
+	DisjointSet djs(k+1);
 	for(int i=0; i<k; i++)
 	{
 		int y, x;
 		cin>>y>>x;
-		board[y][x]={i+1, 0};
-		q.push({y, x});
+		board[y-1][x-1]={i+1, 0};
+		q.push({y-1, x-1});
 	}
+
+	Init(q, djs);
+
+	if(djs.getsize(board[q.front().y][q.front().x].id)==k)
+	{
+		cout<<0<<'\n';
+		return 0;
+	}	
 
 	while(!q.empty())
 	{
@@ -76,31 +121,41 @@ int main()
 		int curId = board[curr.y][curr.x].id;
 		q.pop();
 
-		if(djs.isAllConnected())
-		{
-			cout<<board[curr.y][curr.x].val<<'\n';
-			break;
-		}
-
 		for(int i=0; i<4; i++)
 		{
 			int ny = curr.y + dy[i];
 			int nx = curr.x + dx[i];
-			int nextId = board[ny][nx].id;
 
 			if(ny<0 || nx<0 || ny>=n || nx>=n) continue;
-			if(nextId == curId) continue;
-			else if(nextId != 0)
+			int nextId = board[ny][nx].id;
+
+			if(nextId != 0)
 			{
 				if(djs.find(nextId) == djs.find(curId)) continue;
+				//cout<<"{"<<ny<<','<<nx<<"} - {"<<curr.y<<','<<curr.x<<"} \n";
+				//cout<<nextId<<" - "<<curId<<" is merged\n";
 				djs.merge(nextId, curId);
+
+				if(djs.getsize(nextId)==k)
+				{
+					//cout<<ny<<' '<<nx<<'\n';
+					cout<<board[ny][nx].val<<'\n';
+
+					//PrtBoard();
+
+					return 0;
+				}
+				continue;
 			}
+
+			if(board[ny][nx].val > 0) continue;
 
 			q.push({ny, nx});
 			board[ny][nx]={board[curr.y][curr.x].id
 						 , board[curr.y][curr.x].val+1};
 		}
 	}
+
 
 	return 0;
 }
