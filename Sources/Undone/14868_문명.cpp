@@ -129,26 +129,20 @@ int main()
 			if(ny<0 || nx<0 || ny>=n || nx>=n) continue;
 			int nextId = board[ny][nx].id;
 
-			if(nextId != 0)
+			if(nextId != 0) //다음 칸이 미개지역이 아니라면
 			{
+				//이미 결합된 문명이면 continue;
 				if(djs.find(nextId) == djs.find(curId)) continue;
-				//cout<<"{"<<ny<<','<<nx<<"} - {"<<curr.y<<','<<curr.x<<"} \n";
-				//cout<<nextId<<" - "<<curId<<" is merged\n";
 				djs.merge(nextId, curId);
 
+				//모든 문명이 결합이 되어있다면
 				if(djs.getsize(nextId)==k)
 				{
-					//cout<<ny<<' '<<nx<<'\n';
 					cout<<board[ny][nx].val<<'\n';
-
-					//PrtBoard();
-
 					return 0;
 				}
 				continue;
 			}
-
-			if(board[ny][nx].val > 0) continue;
 
 			q.push({ny, nx});
 			board[ny][nx]={board[curr.y][curr.x].id
