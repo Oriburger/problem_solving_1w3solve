@@ -48,5 +48,5 @@
 ||**BOJ 1708**| 볼록 껍질 (Convex Hull) | 개념 익히기🧐 |
 ||~~*BOJ 14868(~ing)*~~| 서로소 집합 (Disjoint Set), BFS | 차근차근 풀어보자 |
 |21/03/18|~~*BOJ 14868(~ing)*~~| 서로소 집합 (Disjoint Set), BFS | 😡맞😡왜😡틀😡 |
-|21/03/19|BOJ 14868| 서로소 집합 (Disjoint Set), BFS | 머쓱😅 |
+|21/03/19|BOJ 14868| 서로소 집합 (Disjoint Set), BFS | 머쓱😅, 풀이 포스팅🙌 |
 </div>
