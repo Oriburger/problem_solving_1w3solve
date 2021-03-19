@@ -7,10 +7,8 @@ using namespace std;
 const int dy[4]={1, -1, 0, 0};
 const int dx[4]={0, 0, -1, 1};
 const int MAX = 2001;
-const int INF = 100000000;
 
 struct Pos{ int y; int x; };
-struct Civ{ int id; int val; };
 
 struct DisjointSet
 {
@@ -52,7 +50,7 @@ struct DisjointSet
 };
 
 int n, k;
-Civ board[MAX][MAX];
+int board[MAX][MAX];
 queue<Pos> q, qq;
 
 void Init(queue<Pos> q, DisjointSet &djs)
@@ -60,7 +58,6 @@ void Init(queue<Pos> q, DisjointSet &djs)
 	while(!q.empty())
 	{
 		Pos curr = q.front();
-		int curId = board[curr.y][curr.x].id;
 		q.pop();
 
 		for(int i=0; i<4; i++)
@@ -69,10 +66,9 @@ void Init(queue<Pos> q, DisjointSet &djs)
 			int nx = curr.x + dx[i];
 			if(ny<0 || nx<0 || ny>=n || nx>=n) continue;
 			
-			int nextId = board[ny][nx].id;
-			if(nextId==0) continue;
+			if(board[ny][nx]==0) continue;
 
-			djs.merge(nextId, curId);
+			djs.merge(board[ny][nx], board[curr.y][curr.x]);
 		}
 	}
 }
@@ -89,14 +85,14 @@ int main()
 	{
 		int y, x;
 		cin>>y>>x;
-		board[y-1][x-1]={i+1, 0}; //해당 문명의 id는 i+1
+		board[y-1][x-1]=i+1; //해당 문명의 id는 i+1
 		q.push({y-1, x-1});
 	}
 
 	Init(q, djs); //인접한 문명들을 모두 결합해준다.
 	
 	//이미 모두 결합된 상태라면? 0 출력,
-	if(djs.getsize(board[q.front().y][q.front().x].id)==k)
+	if(djs.getsize(board[q.front().y][q.front().x])==k)
 	{
 		cout<<0<<'\n';
 		return 0;
@@ -121,13 +117,11 @@ int main()
 				int nx = curr.x + dx[i];
 
 				if(ny<0 || nx<0 || ny>=n || nx>=n) continue;
-				if(board[ny][nx].val > 0) continue;
-				if(board[ny][nx].val == 0 && board[ny][nx].id != 0) continue;
+				if(board[ny][nx] != 0) continue;
 
 				q.push({ny, nx});
 				qq.push({ny, nx}); //결합에 사용되는 큐에 push
-				board[ny][nx]={board[curr.y][curr.x].id
-						 	, board[curr.y][curr.x].val+1};
+				board[ny][nx]=board[curr.y][curr.x];
 			}
 		}
 
@@ -135,7 +129,6 @@ int main()
 		while(!qq.empty())
 		{
 			Pos curr = qq.front();
-			int curId = board[curr.y][curr.x].id;
 			qq.pop();
 
 			for(int i=0; i<4; i++)
@@ -144,19 +137,17 @@ int main()
 				int nx = curr.x + dx[i];
 				if(ny<0 || nx<0 || ny>=n || nx>=n) continue;
 				
-				int nextId = board[ny][nx].id;
-
-				if(nextId == 0) continue;
-				else if(nextId != curId) //서로다른 문명이라면 
+				if(board[ny][nx] == 0) continue;
+				else if(board[ny][nx] != board[curr.y][curr.x]) //서로다른 문명이라면 
 				{       
 					//이미 결합되었다면  continue; 
-					if(djs.find(nextId)==djs.find(curId)) continue;
+					if(djs.find(board[ny][nx])==djs.find(board[curr.y][curr.x])) continue;
 						
 					//문명 결합 
-					djs.merge(nextId, curId);
+					djs.merge(board[ny][nx], board[curr.y][curr.x]);
 					
 					//총 결합된 문명의 수가 k이라면, 
-					if(djs.getsize(curId)==k)
+					if(djs.getsize(board[curr.y][curr.x])==k)
 					{
 						cout<<ans<<'\n';
 						return 0;
