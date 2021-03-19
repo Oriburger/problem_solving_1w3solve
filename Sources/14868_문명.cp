@@ -55,20 +55,6 @@ int n, k;
 Civ board[MAX][MAX];
 queue<Pos> q, qq;
 
-void PrtBoard()
-{
-	cout<<"==========\n";
-	for(int i=0; i<n; i++)
-	{
-		for(int j=0; j<n; j++)
-		{
-			cout<<board[i][j].val<<' ';
-		}
-		cout<<'\n';
-	}
-	cout<<"==========\n";
-}
-
 void Init(queue<Pos> q, DisjointSet &djs)
 {
 	while(!q.empty())
@@ -119,12 +105,14 @@ int main()
 	int ans = 0;
 	while(!q.empty())
 	{
+		/* 한 턴씩 전파와 결합을 진행한다 */
 		int tmp = q.size();
-
+		ans++; //턴 증가.
+		
+		//문명 전파
 		while(tmp--)
 		{
 			Pos curr = q.front();
-			qq.push(curr);
 			q.pop();
 
 			for(int i=0; i<4; i++)
@@ -134,15 +122,16 @@ int main()
 
 				if(ny<0 || nx<0 || ny>=n || nx>=n) continue;
 				if(board[ny][nx].val > 0) continue;
+				if(board[ny][nx].val == 0 && board[ny][nx].id != 0) continue;
 
 				q.push({ny, nx});
+				qq.push({ny, nx}); //결합에 사용되는 큐에 push
 				board[ny][nx]={board[curr.y][curr.x].id
 						 	, board[curr.y][curr.x].val+1};
 			}
 		}
 
-		ans++;
-
+		//문명 결합!
 		while(!qq.empty())
 		{
 			Pos curr = qq.front();
@@ -158,12 +147,15 @@ int main()
 				int nextId = board[ny][nx].id;
 
 				if(nextId == 0) continue;
-				else if(nextId != curId)
-				{
+				else if(nextId != curId) //서로다른 문명이라면 
+				{       
+					//이미 결합되었다면  continue; 
 					if(djs.find(nextId)==djs.find(curId)) continue;
-
+						
+					//문명 결합 
 					djs.merge(nextId, curId);
-
+					
+					//총 결합된 문명의 수가 k이라면, 
 					if(djs.getsize(curId)==k)
 					{
 						cout<<ans<<'\n';
