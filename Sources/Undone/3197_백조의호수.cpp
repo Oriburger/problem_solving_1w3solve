@@ -62,14 +62,13 @@ struct DisjointSet
 
 int r, c;
 int board[MAX][MAX];
+bool check[MAX][MAX];
 vector<Pos> goose;
 queue<Pos> combine, propagate;
 
 void Init(Pos start, const int id)
 {
 	queue<Pos> q;
-	bool check[MAX][MAX];
-	memset(check, false, sizeof(check));
 
 	board[start.y][start.x] = id;
 	q.push(start);
@@ -86,17 +85,18 @@ void Init(Pos start, const int id)
 
 			if(ny<0 || nx<0 || ny>=r || nx>=c) continue;
 			if(board[ny][nx] > 0) continue;
-			else if(board[ny][nx] == -1 && !check[ny][nx])
+			else if(board[ny][nx] == -1)
 			{
-				check[ny][nx] = true;
-				propagate.push({ny, nx});
+				if(!check[curr.y][curr.x])
+				{
+					check[curr.y][curr.x] = true;
+					propagate.push({curr.y, curr.x});
+				}
+				continue;
 			}
 
-			if(board[ny][nx]==0)
-			{
-				q.push({ny, nx});
-				board[ny][nx] = id;
-			}
+			q.push({ny, nx});
+			board[ny][nx] = id;
 		}
 	}
 }
@@ -135,33 +135,37 @@ int main()
 	}
 
 	//====구역 id 초기화================
-	int cnt=1;
+	int cnt=0;
 	for(int i=0; i<r; i++)
 		for(int j=0; j<c; j++)
 			if(!board[i][j])
-				Init({i, j}, cnt++);
+				Init({i, j}, ++cnt);
 
 	if(cnt==1) //이미 하나로 결합된 경우라면?
 	{
 		cout<<0<<'\n';
 		return 0;
 	}
-/*
+
 	//====각 구역의 백조 포함 여부 초기화
-	DisjointSet djs(cnt);
+	DisjointSet djs(cnt+1);
 	for(auto &p : goose)
 		djs.setGoose(board[p.y][p.x]);
 
 	//====전파와 결합================
 	int ans = 0;
 	while(!propagate.empty())
+//	for(int test=0; test<3; test++)
 	{
 		int ppgSize = propagate.size();
 		ans += 1;
 
+		cout<<"["<<ans<<"] ppgSize : "<<ppgSize<<'\n';
+
 		while(ppgSize--)
 		{
 			Pos curr = propagate.front();
+			int curId = board[curr.y][curr.x];
 			combine.push(curr);
 			propagate.pop();
 
@@ -169,12 +173,10 @@ int main()
 			{
 				int ny = curr.y + dy[i];
 				int nx = curr.x + dx[i];
-
 				if(ny<0 || nx<0 || ny>=r || nx>=c) continue;
 				if(board[ny][nx] > 0) continue;
 
-				board[ny][nx] = board[curr.y][curr.x];
-				propagate.push({ny, nx});
+				
 			}		
 		}
 
@@ -195,12 +197,14 @@ int main()
 				if(board[ny][nx]==-1) continue;
 
 				int nextId = board[ny][nx];
-				if(nextId != curId)
+				
+				if(nextId == curId) continue;
+				else
 				{
 					if(djs.find(curId)==djs.find(nextId)) continue;
 
 					djs.merge(curId, nextId);
-					if(djs.getSize(curId)==goose.size())
+					if(djs.getSize(curId)==2)
 					{
 						cout<<ans<<'\n';
 						return 0;
@@ -210,6 +214,6 @@ int main()
 		}
 	}
 	cout<<ans<<'\n';
-*/
+
 	return 0;
 }
