@@ -67,7 +67,8 @@ vector<Pos> swan;
 queue<Pos> combine;
 queue<pair<Pos, int> > propagate;
 
-void Init(Pos start, const int id)
+//구역을 id에 따라 나누고, 전파를 위한 Queue를 초기화한다.
+void Init(Pos start, const int id) 
 {
 	queue<Pos> q;
 
@@ -86,35 +87,22 @@ void Init(Pos start, const int id)
 
 			if(ny<0 || nx<0 || ny>=r || nx>=c) continue;
 			if(board[ny][nx] > 0) continue;
+
+			//다음 칸이 빙판? 
 			else if(board[ny][nx] == -1)
 			{
-				if(!check[ny][nx])
-				{
-					check[ny][nx] = true;
-					propagate.push({{ny, nx}, id});
-				}
+				//이미 큐에 한번 들어간 칸이라면 continue;
+				if(check[ny][nx]) continue;
+				
+				check[ny][nx] = true;
+				propagate.push({{ny, nx}, id}); //전파 BFS에 사용될 큐에 Push
 				continue;
 			}
 
-			q.push({ny, nx});
-			board[ny][nx] = id;
+			q.push({ny, nx}); //큐에 넣고
+			board[ny][nx] = id; //구역을 나눈다.
 		}
 	}
-}
-
-void PrtBoard()
-{
-	cout<<'\n';
-	for(int i=0; i<r; i++)
-	{
-		for(int j=0; j<c; j++)
-		{
-			if(board[i][j]==-1) cout<<'X';
-			if(board[i][j]>0) cout<<'.';
-		}
-		cout<<'\n';
-	}
-	cout<<"-----------\n";
 }
 
 int main()
@@ -130,8 +118,8 @@ int main()
 		{
 			char temp;
 			cin>>temp;
-			if(temp=='L') swan.push_back({i, j});
-			board[i][j] = (temp == 'X' ? -1 : 0);
+			if(temp=='L') swan.push_back({i, j}); 
+			board[i][j] = (temp == 'X' ? -1 : 0); //빙판은 -1, 나머지는 0
 		}
 	}
 
@@ -144,7 +132,7 @@ int main()
 
 	if(cnt==1) //이미 하나로 결합된 경우라면?
 	{
-		cout<<0<<'\n';
+		cout<<0<<'\n'; //0 출력
 		return 0;
 	}
 
@@ -165,10 +153,11 @@ int main()
 		{
 			Pos curr = propagate.front().first;
 			int curId = propagate.front().second;
-			combine.push(curr);
+			
+			combine.push(curr); //결합에 사용될 Queue에 Push
 			propagate.pop();
 
-			board[curr.y][curr.x] = curId;
+			board[curr.y][curr.x] = curId; //녹은 빙판에 구역 id를 부여
 
 			for(int i=0; i<4; i++)
 			{
@@ -176,13 +165,13 @@ int main()
 				int nx = curr.x + dx[i];
 				if(ny<0 || nx<0 || ny>=r || nx>=c) continue;
 				if(board[ny][nx] > 0) continue;
-
-				if(board[ny][nx]==-1)
+ 
+				if(board[ny][nx]==-1) //다음 칸이 빙판이라면 
 				{
-					if(check[ny][nx]) continue;
+					if(check[ny][nx]) continue; //이미 큐에 들어간적 있다면 continue;
 					
-					check[ny][nx] = true;
-					propagate.push({{ny, nx}, curId});
+					check[ny][nx] = true; //체크
+					propagate.push({{ny, nx}, curId}); //큐에 push 
 				}
 			}		
 		}
@@ -207,11 +196,11 @@ int main()
 				if(nextId == curId) continue;
 				else
 				{
+					//이미 결합된 구역이라면 continue;
 					if(djs.find(curId)==djs.find(nextId)) continue;
 
-					djs.merge(curId, nextId);
-					//두 백조가 한 컴포넌트 안에 있다면?
-					if(djs.getSize(curId)==2)
+					djs.merge(curId, nextId); //두 구역을 merge
+					if(djs.getSize(curId)==2) //백조가 한 컴포넌트에 있다면 
 					{
 						cout<<ans<<'\n';
 						return 0;
