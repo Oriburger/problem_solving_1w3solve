@@ -17,9 +17,9 @@ struct DisjointSet
 
 	//size는 트리에서 백조가 포함된 노드의 개수
 	vector<int> parent, rank, size; 
-	vector<bool> hasGoose;
+	vector<bool> hasSwan;
 	DisjointSet(int n) : n(n), parent(n), rank(n, 1)
-						, size(n, 0), hasGoose(n, false)
+						, size(n, 0), hasSwan(n, false)
 	{
 		flag = false; 
 		for(int i=0; i<n; i++)
@@ -46,10 +46,10 @@ struct DisjointSet
 		return true;
 	}
 
-	void setGoose(const int id)
+	void setSwan(const int id)
 	{
 		size[id] = 1;
-		hasGoose[id] = true;
+		hasSwan[id] = true;
 		return;
 	}
 
@@ -63,8 +63,9 @@ struct DisjointSet
 int r, c;
 int board[MAX][MAX];
 bool check[MAX][MAX];
-vector<Pos> goose;
-queue<Pos> combine, propagate;
+vector<Pos> swan;
+queue<Pos> combine;
+queue<pair<Pos, int> > propagate;
 
 void Init(Pos start, const int id)
 {
@@ -87,10 +88,10 @@ void Init(Pos start, const int id)
 			if(board[ny][nx] > 0) continue;
 			else if(board[ny][nx] == -1)
 			{
-				if(!check[curr.y][curr.x])
+				if(!check[ny][nx])
 				{
-					check[curr.y][curr.x] = true;
-					propagate.push({curr.y, curr.x});
+					check[ny][nx] = true;
+					propagate.push({{ny, nx}, id});
 				}
 				continue;
 			}
@@ -129,7 +130,7 @@ int main()
 		{
 			char temp;
 			cin>>temp;
-			if(temp=='L') goose.push_back({i, j});
+			if(temp=='L') swan.push_back({i, j});
 			board[i][j] = (temp == 'X' ? -1 : 0);
 		}
 	}
@@ -149,25 +150,25 @@ int main()
 
 	//====각 구역의 백조 포함 여부 초기화
 	DisjointSet djs(cnt+1);
-	for(auto &p : goose)
-		djs.setGoose(board[p.y][p.x]);
+	for(auto &p : swan)
+		djs.setSwan(board[p.y][p.x]);
 
 	//====전파와 결합================
 	int ans = 0;
 	while(!propagate.empty())
-//	for(int test=0; test<3; test++)
 	{
 		int ppgSize = propagate.size();
 		ans += 1;
 
-		cout<<"["<<ans<<"] ppgSize : "<<ppgSize<<'\n';
-
+		//하루 단위로 전파를 진행
 		while(ppgSize--)
 		{
-			Pos curr = propagate.front();
-			int curId = board[curr.y][curr.x];
+			Pos curr = propagate.front().first;
+			int curId = propagate.front().second;
 			combine.push(curr);
 			propagate.pop();
+
+			board[curr.y][curr.x] = curId;
 
 			for(int i=0; i<4; i++)
 			{
@@ -176,12 +177,17 @@ int main()
 				if(ny<0 || nx<0 || ny>=r || nx>=c) continue;
 				if(board[ny][nx] > 0) continue;
 
-				
+				if(board[ny][nx]==-1)
+				{
+					if(check[ny][nx]) continue;
+					
+					check[ny][nx] = true;
+					propagate.push({{ny, nx}, curId});
+				}
 			}		
 		}
 
-		PrtBoard();
-
+		//전파가 끝나면? 결합을 진행
 		while(!combine.empty())
 		{
 			Pos curr = combine.front();
@@ -204,6 +210,7 @@ int main()
 					if(djs.find(curId)==djs.find(nextId)) continue;
 
 					djs.merge(curId, nextId);
+					//두 백조가 한 컴포넌트 안에 있다면?
 					if(djs.getSize(curId)==2)
 					{
 						cout<<ans<<'\n';
