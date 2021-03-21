@@ -1,15 +1,8 @@
 #include <iostream>
 #include <vector>
-#include <queue>
 #include <stack>
 #include <algorithm>
 using namespace std;
-
-const int MAX = 1501;
-const int dy[4] = {1, -1, 0, 0};
-const int dx[4] = {0, 0, -1, 1};
-
-struct Pos { int y; int x; };
 
 struct DisjointSet
 {
@@ -50,7 +43,7 @@ struct DisjointSet
 
 int n, m, q;
 long long ans=0;
-vector<pair<int, int> > edges;
+vector<pair<int, int> > edges; 
 vector<bool> check;
 stack<int> stk;
 
@@ -64,6 +57,7 @@ int main()
 	DisjointSet djs(n);
 	check = vector<bool>(m, false);
 
+	//간선의 목록 저장
 	for(int i=0; i<m; i++)
 	{
 		int u, v;
@@ -71,17 +65,19 @@ int main()
 		edges.push_back({u-1, v-1});
 	}
 
+	//역순으로 진행하기 위한 가장 마지막 상태 만듦
 	for(int i=0; i<q; i++)
 	{
 		int a; cin>>a;
-		check[a-1] = true;
+		check[a-1] = true; 
 		stk.push(a-1);
 	}
-
 	for(int i=0; i<m; i++)
-		if(!check[i])
+		if(!check[i]) 
 			djs.merge(edges[i].first, edges[i].second);
-	
+
+	//오프라인 쿼리 : 역순으로 진행
+	//(가장 마지막 상태에서 간선을 추가하며 질의에 답함)
 	while(!stk.empty())
 	{
 		int u, v;
