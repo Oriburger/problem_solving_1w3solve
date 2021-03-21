@@ -52,5 +52,6 @@
 || 이론 공부 | 오프라인 쿼리(Offline Query) *(조금)* | - |
 ||**BOJ 13306**| 오프라인 쿼리(Offline Query) & 서로소 집합 | - |
 |21/03/20|**BOJ 3197**| 서로소 집합 (Disjoint Set), BFS | 블로그 풀이 포스팅😙, 영화🎞 |
+|21/03/21|BOJ 17398| 서로소 집합 (Disjoint Set) | - |
 
 </div>
