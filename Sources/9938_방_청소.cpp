@@ -35,13 +35,13 @@ struct DisjointSet
 		return true;
 	}
 
-	int getSize(int u)
+	int getSize(int u) //이 컴포넌트의 구성 노드(서랍) 개수를 반환
 	{
 		u = find(u);
 		return size[u];
 	}
 
-	int getCnt(int u)
+	int getCnt(int u) //이 컴포넌트에 보관된 술병의 개수를 반환
 	{
 		u = find(u);
 		return cnt[u];
@@ -65,18 +65,23 @@ int main()
 		cin>>a>>b;
 		a -= 1; b -= 1;
 
-		a = djs.find(a);
+		a = djs.find(a); 
 		b = djs.find(b);
 
-		if(!djs.getCnt(a)) djs.cnt[a]+=1;
+		//서랍 A가 비어있다면, 보관
+		if(!djs.getCnt(a)) djs.cnt[a]+=1; 
+		//서랍 B가 비어있다면, 보관
 		else if(!djs.getCnt(b)) djs.cnt[b]+=1;
+		//A가 속한 컴포넌트에 빈 자리가 존재한다면, 보관 
 		else if(djs.getSize(a) > djs.getCnt(a)) djs.cnt[a]+=1;
+		//B가 속한 컴포넌트에 빈 자리가 존재한다면, 보관
 		else if(djs.getSize(b) > djs.getCnt(b)) djs.cnt[b]+=1;
+		//보관이 불가능 하다면
 		else flag = false;
 
 		if(flag)
 		{
-			djs.merge(a, b);
+ 			djs.merge(a, b); //이동이 가능한 요소들을 merge 해준다.
 			cout<<"LADICA\n";
 		}
 		else
