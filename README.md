@@ -56,4 +56,5 @@
 |21/03/22| 이론 공부 | 비트 마스킹 | 노션에 정리🎓 |
 || BOJ 9938 | 서로소 집합 (Disjoint Set) | 💌블로그 풀이 |
 |21/03/23|*BOJ 3830 (~ing)*| 서로소 집합 (Disjoint Set) | - |
+||*BOJ 2169 (~ing)*| 동적 계획법 (Dynamic Programming) | - |
 </div>
