@@ -58,4 +58,5 @@
 |21/03/23|*BOJ 3830 (~ing)*| 서로소 집합 (Disjoint Set) | - |
 ||*BOJ 2169 (~ing)*| 동적 계획법 (Dynamic Programming) | - |
 |21/03/24|BOJ 2169| 동적 계획법 (Dynamic Programming) | - |
+||**[⭐]BOJ 3830**| 서로소 집합 (Disjoint Set) | 어..렵.. |
 </div>
