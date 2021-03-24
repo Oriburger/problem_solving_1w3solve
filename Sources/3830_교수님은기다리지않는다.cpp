@@ -10,8 +10,8 @@ struct DisjointSet
 {
 	int n;
 
-	vector<int> parent, weight;
-	DisjointSet(int n) : n(n), parent(n), weight(n, INF)
+	vector<int> parent, dist;
+	DisjointSet(int n) : n(n), parent(n), dist(n, 0)
 	{
 		for(int i=0; i<n; i++)
 			parent[i]=i;
@@ -20,17 +20,21 @@ struct DisjointSet
 	int find(int u)
 	{
 		if(u==parent[u]) return u;
-		return parent[u] = find(parent[u]);
+
+		int p = find(parent[u]);
+		dist[u] += dist[parent[u]];
+		return parent[u] = p;
 	}
 
-	bool merge(int u, int v)
+	bool merge(int u, int v, int w)
 	{
-		u = find(u); v = find(v);
-		if(u==v) return false;
+		int rootu = find(u);
+		int rootv = find(v);
 
-		if(weight[u] > weight[v])
+		if(rootu == rootv) return false;
 
-		parent[u] = v;
+		dist[rootv] = dist[u] - dist[v] + w;
+		parent[rootv] = rootu;
 		return true;
 	}
 };
@@ -53,19 +57,18 @@ int main()
 			char sel;
 			int a, b, w;
 
-			cin>>sel>>a>>b;
+			cin>>sel;
 
 			if(sel=='!')
 			{
-				cin>>w;
-
-		
-
-				djs.merge(a, b);
+				cin>>a>>b>>w;
+				djs.merge(a-1, b-1, w);
 			}
 			else
 			{
-
+				cin>>a>>b;
+				if(djs.find(a-1)!=djs.find(b-1)) cout<<"UNKNOWN\n";
+				else cout<<djs.dist[b-1]-djs.dist[a-1]<<'\n'; 
 			}
 		}
 	}
