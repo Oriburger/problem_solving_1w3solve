@@ -61,5 +61,5 @@
 ||**[⭐]BOJ 3830**| 서로소 집합 (Disjoint Set) | 어..렵.. |
 |21/03/25| 이론 공부 | 동적 계획법 (Dynamic Programming) | 🎒 **0-1 Knapsack 문제** 복습 및 노션에 정리 |
 ||BOJ 7579| 동적 계획법 (Dynamic Programming) | 0-1 Knapsack |
-|21/03/26||||
+|21/03/26|BOJ 2629| 동적 계획법 (Dynamic Programming) | 0-1 Knapsack |
 </div>
