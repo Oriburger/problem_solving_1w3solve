@@ -6,6 +6,6 @@
 
 - 문제 해설 [`Link`](https://blog.naver.com/uss425)
 
-- 이전의 기록은 DailyRecord@@.md
+- 공부 Log는  Oriburger/ljh_study_record 참고
 ---
 
