@@ -1,60 +1,59 @@
 #include <iostream>
-#include <cstring>
 #include <vector>
 using namespace std;
 
-int n, s[1001], cache[1001], choice[1001];
-vector<int> answer;
+int n;
+vector<int> s, cache, choices, ans;
 
-void reconstruct(int start)
+int LIS(int start)
 {
-	if(start != 0) answer.push_back(s[start]);
-	int next = choice[start+1];
-	if(next != -1) reconstruct(next);
-}
+	int &ret = cache[start+1];
+	if(ret != -1) return ret;
 
-int lis(int start)
-{
-	int& ret = cache[start];
-	
-	if(ret!=-1) return ret;
-	
 	ret = 1;
 	int bestNext = -1;
-	for(int next = start+1; next<=n; next++)
+	for(int next = start+1; next<n; next++)
 	{
-		if(s[start] < s[next])
+		if(start == -1 || s[start] < s[next])
 		{
-			int nextLis = lis(next) + 1;
-			if(ret < nextLis)
+			int cand = LIS(next) + 1;
+			if(cand > ret)
 			{
-				ret = nextLis;
+				ret = cand;
 				bestNext = next;
 			}
 		}
 	}
-	choice[start+1] = bestNext;
-	
+	choices[start+1] = bestNext;
 	return ret;
 }
+
+void reconstruct(int start)
+{
+	if(start != -1) ans.push_back(s[start]);
+	int next = choices[start+1];
+	if(next != -1) reconstruct(next);
+}
+
 
 int main()
 {
 	ios::sync_with_stdio(false);
-	cin.tie(NULL);
-	
-	cin>>n;
-	
-	memset(cache, -1, sizeof(cache));
-	for(int i=1; i<=n; i++) cin>>s[i];
+	cin.tie(NULL); cout.tie(NULL);
 
-	cout<<lis(0)-1<<'\n';
-	
-	reconstruct(0);
-	
-	for(int i=0; i<answer.size(); i++)
-		cout<<answer[i]<<' ';
-	cout<<'\n';
-	
+	s = vector<int>(1001, 0);
+	choices = cache = vector<int>(1001, -1);
+
+	cin>>n;
+
+	for(int i=0; i<n; i++)
+		cin>>s[i];
+
+	cout<<LIS(-1)-1<<'\n';
+
+	reconstruct(-1);
+	for(auto &p : ans)
+		cout<<p<<' ';
+
 	return 0;
 }
