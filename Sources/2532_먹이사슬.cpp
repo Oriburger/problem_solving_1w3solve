@@ -37,11 +37,6 @@ int main()
 	temp.push_back(-1);
 	for(int i=n-1; i>=0; i--)
 	{
-	//	cout<<arr[i].first<<' '<<arr[i].second<<'\n';
-
-		if(i < n-1 && arr[i].first == arr[i+1].first
-				   && arr[i].second == arr[i+1].second) continue;
-
 		if(temp.back() <= arr[i].second)
 			temp.push_back(arr[i].second);
 		else
