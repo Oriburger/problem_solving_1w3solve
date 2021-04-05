@@ -4,19 +4,21 @@
 #include <algorithm>
 using namespace std;
 
+typedef unsigned long long ll;
 typedef pair<int, int> P;
-typedef vector<int>::iterator VITER;
+typedef vector<ll>::iterator VITER;
 
 int n, t, ans=0;
-vector<int> s;
+bool flag = false;
+vector<ll> s;
 
-vector<int> wasteOfLIS()
+vector<ll> wasteOfLIS()
 {
-	vector<int> arr;
+	vector<ll> arr;
 	vector<P> track;
 	vector<bool> check(s.size(), false);
 
-	arr.push_back(-1);
+	arr.push_back(0);
 	for(int i=0; i<s.size(); i++)
 	{
 		if(arr.back() < s[i])
@@ -33,6 +35,12 @@ vector<int> wasteOfLIS()
 		}
 	}
 
+	if(arr.size()-1 == 1)
+	{
+		flag = true;
+		return s;
+	}
+
 	int temp = arr.size()-1;
 	for(int i=track.size(); i>=0; i--)
 	{
@@ -43,7 +51,7 @@ vector<int> wasteOfLIS()
 		}
 	}
 
-	vector<int> ret;
+	vector<ll> ret;
 	for(int i=0; i<s.size(); i++)
 		if(!check[i]) 
 			ret.push_back(s[i]);
@@ -58,18 +66,25 @@ int main()
 
 	cin>>n>>t;
 
-	s = vector<int>(n);
+	s = vector<ll>(n);
 	for(int i=0; i<n; i++)
 	{
 		int a, b;
 		cin>>a>>b;
-		s[i] = a + b*t;
+		s[i] = a + b*t + 1;
 	}
 	
 	while(!s.empty())
 	{
 		ans++;
 		s = wasteOfLIS();
+		if(flag)
+		{
+			ans += s.size()-1;
+			break;
+		}
+
+		break;
 	}
 
 	cout<<ans<<'\n';
