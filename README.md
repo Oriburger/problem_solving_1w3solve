@@ -1,6 +1,6 @@
 # Algorithm Study - 1 day 1 solve
 ---
-- `BaekJoon Online Judge`의 소스코드
+- `BaekJoon Online Judge`과 여러 온라인 저지의 소스코드
 
 - 덜 푼 문제의 소스코드도 섞여있음
 
