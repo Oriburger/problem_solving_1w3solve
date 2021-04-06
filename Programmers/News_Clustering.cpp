@@ -1,5 +1,9 @@
 /*
+
 2018 Kakao Blind Recruitment 1차 - 뉴스 클러스터링
+
+unordered_map을 활용하여 해결
+
 */
 
 #include <string>
