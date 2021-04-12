@@ -12,7 +12,8 @@ vector<bool> check;
 
 bool comp(P& p, P& q)
 {
-	return p.second != q.second ? p.second < q.second : p.first < q.first;
+	return p.second != q.second ? p.second < q.second 
+                                : p.first < q.first;
 }
 
 int main()
@@ -48,7 +49,6 @@ int main()
 					break;
 				}
 			}
-			//cout<<p.first<<' '<<p.second<<'\n';
 		}
 		cout<<ans<<'\n';
 		
