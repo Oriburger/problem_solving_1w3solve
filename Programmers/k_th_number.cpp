@@ -11,7 +11,7 @@ vector<int> solution(vector<int> array, vector<vector<int>> commands)
     {
         int p = commands[i][0];
         int q = commands[i][1];
-        int k = commands[i][2];ㄴㄴ
+        int k = commands[i][2];
         
         vector<int> temp;
         for(int j=p-1; j<q; j++)
