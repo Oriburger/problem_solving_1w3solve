@@ -1,27 +1,50 @@
 #include <iostream>
 #include <vector>
+#include <deque>
 #include <algorithm>
 using namespace std;
 
 int n;
 vector<int> arr, ans;
 
-void Answer()
+vector<int> Answer()
 {
-	vector<int>::iterator iter;
-	while(!arr.empty())
+	vector<int> ret; 
+
+	vector<bool> check(n, false);
+	ret.push_back(arr[0]);
+		
+	check[0]=true;
+	for(int i=0; i<n; i++)
 	{
-		iter = arr.begin();
-		for(; iter!=arr.end(); iter++)
+		if(check[i]) continue;
+		
+		if(ret.back()+1 != arr[i])
 		{
-			if(ans.empty() || ans.back()+1 != *iter)
-			{
-				ans.push_back(*iter);
-				arr.erase(iter);
-				break;
-			}
+			ret.push_back(arr[i]);
+			check[i]=true;
+			i=0;
 		}
 	}
+
+	if(ret.size()!=n)
+	{
+		vector<int> temp;
+		for(int i=0; i<n; i++)
+			if(!check[i]) temp.push_back(arr[i]);
+		
+		vector<int>::iterator iter;
+		iter = lower_bound(ret.begin(), ret.end(), temp[0]);
+		if(*iter == temp[0])
+			ret.insert(iter, temp.size(), temp[0]);
+		else
+		{
+			iter = lower_bound(ret.begin(), ret.end(), ret.back());
+			ret.insert(iter, temp.size(), temp[0]);
+		}
+	}
+	
+	return ret; 
 }
 
 int main()
@@ -36,8 +59,7 @@ int main()
 		cin>>arr[i];
 
 	sort(arr.begin(), arr.end());
-
-	Answer();
+	ans = Answer();
 
 	for(auto &p : ans)
 		cout<<p<<' ';
