@@ -29,17 +29,23 @@ vector<int> Answer()
 
 	if(ret.size()!=n) //아직 push되지 않고 남은게 있다면..?
 	{
-		vector<int> temp; //temp로 집합
+		vector<int> temp; //temp로 모여라!
 		for(int i=0; i<n; i++) 
 			if(!check[i]) temp.push_back(arr[i]);
-		
-		vector<int>::iterator iter;
+
+		vector<int>::iterator iter, iterTmp;
 		iter = lower_bound(ret.begin(), ret.end(), temp[0]); 
 		if(*iter == temp[0]) //남은 수가 이미 ret에 있다면 
 			ret.insert(iter, temp.size(), temp[0]); //거기에 insert
 		else //없다면? 
 		{
-			iter = lower_bound(ret.begin(), ret.end(), ret.back()); //들어갈 자리를 찾는다
+			iter = lower_bound(ret.begin(), ret.end(), ret.back());
+			while(1) //최대한 뒤에 insert 할 수 있게 탐색
+			{
+				iterTmp = lower_bound(iter, ret.end(), ret.back());
+				if(iterTmp == iter || iterTmp == ret.end()) break;
+				iter = iterTmp;
+			}
 			ret.insert(iter, temp.size(), temp[0]); //그리고 insert 
 		}
 	}
