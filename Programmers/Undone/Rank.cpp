@@ -5,7 +5,7 @@ using namespace std;
 
 vector<bool> checked;
 
-int BFS(vector<int>& degree, vector<vector<int>>& adj)
+int Answer(vector<int>& degree, vector<vector<int>>& adj)
 {
     int ret = 0;
     int n = degree.size();
@@ -61,8 +61,8 @@ int solution(int n, vector<vector<int>> results)
         radj[v].push_back(u);
     }
     
-    answer += BFS(outdegree, radj);
-    answer += BFS(indegree, adj);
+    answer += Answer(outdegree, radj);
+    answer += Answer(indegree, adj);
     
     return answer;
 }
