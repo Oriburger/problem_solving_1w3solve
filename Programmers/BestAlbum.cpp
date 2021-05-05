@@ -26,7 +26,8 @@ vector<int> solution(vector<string> genres, vector<int> plays)
     
     for(int i=0; i<plays.size(); i++)
     {
-        if(!genreIdx.count(genres[i]))
+        //새로운 장르라면? 추가
+        if(!genreIdx.count(genres[i])) 
         {
             genreIdx[genres[i]]=genreCnt;
             songData.push_back({});
@@ -35,20 +36,23 @@ vector<int> solution(vector<string> genres, vector<int> plays)
         
         songData[genreIdx[genres[i]]].push_back({i, plays[i]});
         playCntArr[genreIdx[genres[i]]].first += plays[i];
-    }    
+    }
+    //장르 총 재생 횟수를 내림차순으로 정렬
     sort(playCntArr.begin(), playCntArr.end(), greater<P>());
     
+    //많이 들은 장르 순으로 탐색
     for(auto &p : playCntArr)
     {
         int pickCnt = 0;
-        const int idx = p.second;
+        const int idx = p.second; //장르의 idx
         
+        //해당 장르의 노래들을 조건에 따라 정렬
         sort(songData[idx].begin(), songData[idx].end(), compSong);
         
         for(int i=0; i<songData[idx].size(); i++)
         {
             answer.push_back(songData[idx][i].first);
-            if(++pickCnt==2) break;
+            if(++pickCnt==2) break; //2개 골랐다면 break
         }
     }
     
