@@ -45,14 +45,12 @@ int solution(string numbers)
         for(int j=2; i*j < MAX; j++)
             isPrime[i*j] = false;
     
-    //checked 배열 초기화
-    checked.resize(MAX, false);        
+    //checked, visited 배열 초기화
+    checked.resize(MAX, false);
+    visited.resize(7, false);        
     //가능한 길이에서 모두 소수를 찾아준다
     for(int i=1; i<=numbers.size(); i++)
-    {
-        visited = vector<bool>(7, false);
         GetNum(numbers, "", i);
-    }
     
     return answer;
 }
