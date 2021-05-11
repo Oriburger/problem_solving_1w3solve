@@ -26,23 +26,23 @@ int solution(const int bridge_length, const int weight, vector<int> truck_weight
                 sum += truck_weights[i];
                 bridge.push(truck_weights[i]);
                 if(bridge.front() > 0)
-				{
-					cnt++;
-					sum -= bridge.front();
-				}
-                bridge.pop();
-                check[i] = true;
-				break;
-            }
-        }
-
-		bridge.push(0);
-		if(bridge.front() > 0)
 		{
 			cnt++;
 			sum -= bridge.front();
 		}
-		bridge.pop();
+                bridge.pop();
+                check[i] = true;
+		break;
+            }
+        }
+
+	bridge.push(0);
+	if(bridge.front() > 0)
+	{
+		cnt++;
+		sum -= bridge.front();
+	}
+	bridge.pop();
         answer++;
     }
     
