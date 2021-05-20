@@ -76,29 +76,36 @@ int Answer()
 		POS fishPos = GetBoardPos(id);
 		if(fishPos.y != -1)
 			MoveFish(fishPos);
-		//cout<<"ID : "<<id<<" / POS : {"<<fishPos.y<<','<<fishPos.x<<"}\n"; 
-		//PrtBoard(); 
+	//	cout<<"ID : "<<id<<" / POS : {"<<fishPos.y<<','<<fishPos.x<<"}\n"; 
+//		PrtBoard(); 
 	}
 	
-	POS pos = GetBoardPos(SHARK);
 	
-	int dir = board[pos.y][pos.x].dir;
+	
+	POS sharkPos = GetBoardPos(SHARK);
+	
+	int sharkDir = board[sharkPos.y][sharkPos.x].dir;
+	
+//	cout<<"sharkDir : "<<sharkDir+1<<'\n';
 	for(int i=1; i<=4; i++)
 	{
-		POS next = {pos.y + dy[dir]*i, pos.y + dy[dir]*i};
+		POS next = {sharkPos.y + dy[sharkDir]*i, sharkPos.x + dx[sharkDir]*i};
 
-		if(next.y < 0 || next.x <0 || next.y >=4 || next.x >= 4) continue;
+		if(next.y < 0 || next.x  < 0 || next.y >= 4 || next.x >= 4) continue;
 		if(board[next.y][next.x].id == 0) continue;
 			
 		NODE temp = board[next.y][next.x];
-
-		//cout<<"eat "<<board[next.y][next.x].id<<'\n';
-		board[pos.y][pos.x] = {0, 0};
-		board[next.y][next.x] = {SHARK, dir};
+	//	cout<<"shark : {"<<sharkPos.y<<','<<sharkPos.x<<"} ,"<<board[sharkPos.y][sharkPos.x].id<<'\n';
+	//	cout<<"next : {"<<next.y<<','<<next.x<<"}, "<<board[next.y][next.x].id<<'\n';
+	//	cout<<i<<") eat "<<board[next.y][next.x].id<<'\n';
+		
+		
+		board[sharkPos.y][sharkPos.x] = {-1, -1};
+		board[next.y][next.x] = {SHARK, sharkDir};
 		
 		ret = max(ret, Answer() + temp.id);
 		
-		board[pos.y][pos.x] = {SHARK, dir};
+		board[sharkPos.y][sharkPos.x] = {SHARK, sharkDir};
 		board[next.y][next.x] = temp;
 	}
 	
