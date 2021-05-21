@@ -2,7 +2,6 @@
 #include <vector>
 #include <algorithm>
 #include <utility>
-#include <Windows.h>
 #define SHARK 17
 using namespace std;
 
@@ -12,8 +11,6 @@ struct POS { int y; int x; };
 const int dy[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
 const int dx[8] = {0, -1, -1, -1, 0, 1, 1, 1};
 NODE board[4][4];
-
-
 
 POS GetBoardPos(int id)
 {
@@ -47,21 +44,6 @@ void MoveFish(POS pos)
 
 	return;
 }
-
-void PrtBoard()
-{
-	for(int i=0; i<4; i++)
-	{
-		for(int j=0; j<4; j++)
-		{
-			cout<<board[i][j].id<<'/'<<board[i][j].dir+1<<"  ";
-		}
-		cout<<'\n';
-	}
-	cout<<"------------\n";
-	Sleep(300);
-}
-
 int Answer()
 {
 	int ret = 0;
@@ -76,32 +58,20 @@ int Answer()
 		POS fishPos = GetBoardPos(id);
 		if(fishPos.y != -1)
 			MoveFish(fishPos);
-	//	cout<<"ID : "<<id<<" / POS : {"<<fishPos.y<<','<<fishPos.x<<"}\n"; 
-//		PrtBoard(); 
 	}
 	
-	
-	
 	POS sharkPos = GetBoardPos(SHARK);
-	
 	int sharkDir = board[sharkPos.y][sharkPos.x].dir;
-	
-//	cout<<"sharkDir : "<<sharkDir+1<<'\n';
 	for(int i=1; i<=4; i++)
 	{
 		POS next = {sharkPos.y + dy[sharkDir]*i, sharkPos.x + dx[sharkDir]*i};
 
 		if(next.y < 0 || next.x  < 0 || next.y >= 4 || next.x >= 4) continue;
-		if(board[next.y][next.x].id == 0) continue;
+		if(board[next.y][next.x].id == -1) continue;
 			
 		NODE temp = board[next.y][next.x];
-	//	cout<<"shark : {"<<sharkPos.y<<','<<sharkPos.x<<"} ,"<<board[sharkPos.y][sharkPos.x].id<<'\n';
-	//	cout<<"next : {"<<next.y<<','<<next.x<<"}, "<<board[next.y][next.x].id<<'\n';
-	//	cout<<i<<") eat "<<board[next.y][next.x].id<<'\n';
-		
-		
 		board[sharkPos.y][sharkPos.x] = {-1, -1};
-		board[next.y][next.x] = {SHARK, sharkDir};
+		board[next.y][next.x] = {SHARK, temp.dir};
 		
 		ret = max(ret, Answer() + temp.id);
 		
