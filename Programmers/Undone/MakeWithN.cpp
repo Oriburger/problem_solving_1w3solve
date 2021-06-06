@@ -2,44 +2,45 @@
 #include <vector>
 using namespace std;
 
-const int MAX = 32001;
+const int INF = 2147000000;
+int operand[8] = {1, 11, 111, 1111, 11111, 111111, 1111111, 11111111};
 
-int arr[5]={1, 11, 111, 1111, 11111};
-vector<int> cache(MAX+1, -1);
-
-//n을 만드는데 쓰이는 N의 최소 갯수 
-int DP(int n)
+int GetAnswer(int curr, int level, const int target)
 {
-    int &ret = cache[n];
-    if(ret != -1) return ret;
-    else if(ret > 8) return ret = MAX;
-    else if(ret==0) return ret=2;
+    if(level > 8) return INF;
+    if(curr == target) return 0;
     
-    ret = 2147000000;
-    for(int i=1; i<=5; i++)
+    int ret = INF;
+    for(int j=-1; j<1; j*=-1)
+    for(int i=1; i<=8; i++)
     {
-        if(n+arr[i-1] < MAX)
-            ret = min(ret, DP(n+arr[i-1])+i);
-        if(n-arr[i-1] >= 0)
-            ret = min(ret, DP(n-arr[i-1])+i);
-        if(n*arr[i-1] < MAX)
-            ret = min(ret, DP(n*arr[i-1])+i);
-        ret = min(ret, DP(n/arr[i-1])+i);
+        if(level + i > 8) break;
+        
+        ret = min(ret, GetAnswer(curr+(j*operand[i-1]), level+i, target)+i);
+        ret = min(ret, GetAnswer(curr-(j*operand[i-1]), level+i, target)+i);
+        ret = min(ret, GetAnswer((j*operand[i-1]-curr), level+i, target)+i);
+        ret = min(ret, GetAnswer(curr*(j*operand[i-1]), level+i, target)+i);
+        ret = min(ret, GetAnswer(curr/(j*operand[i-1]), level+i, target)+i);
+        if(curr!=0) ret = min(ret, GetAnswer((j*operand[i-1])/curr, level+i, target)+i);
+    }
+    if(level + 2 <= 8)
+    {
+        ret = min(ret, GetAnswer(curr+1, level+2, target)+2);
+        ret = min(ret, GetAnswer(curr-1, level+2, target)+2);
     }
     
-    return ret;
+    return ret;    
 }
 
-int solution(int N, int number)
+int solution(int N, const int number)
 {
-    for(int i=0; i<5; i++)
+    int answer = INF;
+    
+    for(int i=1; i<=8; i++)  
     {
-        arr[i]*=N;
-        if(arr[i]>=MAX) continue;
-        cache[arr[i]]=i+1;
+        operand[i-1] *= N;
+        answer = min(answer, GetAnswer(operand[i-1], i, number)+i);
     }
     
-    DP(MAX-1);
-    
-    return cache[number]>8 ? -1 : cache[number];
+    return answer==INF ? -1 : answer;
 }
