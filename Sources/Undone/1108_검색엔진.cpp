@@ -14,8 +14,8 @@ unordered_map<string, int> uset;
 int v, visitCnt=1, sccCnt=0;
 vector<bool> finished(MAX_V);
 vector<vector<int> > scc;
-vector<int> adj[MAX_V], discovered(MAX_V);
-vector<int> score(MAX_V, 1), sccId(MAX_V);
+vector<int> adj[MAX_V], discovered(MAX_V), sccId(MAX_V);
+vector<long long> score(MAX_V, 1);
 stack<int> stk;
 
 int GetValue(string key)
@@ -83,6 +83,7 @@ int main()
 			adj[u].push_back(v);
 		}
 	}
+	
 	/*=== SCC 구성 및 점수 계산 =======*/
 	for(int i=0; i<v; i++)
 		if(!discovered[i])
@@ -95,13 +96,10 @@ int main()
 					score[v] += score[u];
 
 	/*=== 정답 출력 =======*/
-
-	for(int i=0; i<7; i++)
-	{
 	string temp;
 	cin>>temp;
 
 	cout<<score[GetValue(temp)]<<'\n';
-	}
+	
 	return 0;
 }
