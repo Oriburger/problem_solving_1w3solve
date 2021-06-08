@@ -9,23 +9,23 @@ using namespace std;
 const int INF = 2147000000;
 const int MAX_V = 10001;
 
-unordered_map<string, int> umap;
+unordered_map<string, int> umap; //unordered_map을 이용한 string <=> int 매칭
 
-int v, visitCnt=1, sccCnt=0;
+int v, visitCnt=1, sccCnt=0; 
 vector<bool> finished(MAX_V);
 vector<vector<int> > scc;
 vector<int> adj[MAX_V], discovered(MAX_V), sccId(MAX_V);
-vector<long long> score(MAX_V, 1);
+vector<long long> score(MAX_V, 1); //각 정점의 점수를 저장, int의 범위를 벗어날 수 있음
 stack<int> stk;
 
-int GetValue(string key)
-{
-	if(umap.count(key)==0)
-		umap[key]=v++;
+int GetValue(string key) //key에 해당하는 value를 반환
+{                        //key : 문자열 형태의 사이트명,  value : 사이트명에 해당하는 정점번호
+	if(umap.count(key)==0) //umap에 등록되지 않은 key라면 등록
+		umap[key]=v++; 
 	return umap[key];
 }
 
-int TarjanDFS(int curr)
+int TarjanDFS(int curr) //타잔의SCC 알고리즘. 설명은 생략
 {
 	stk.push(curr);
 	discovered[curr] = visitCnt++;
@@ -87,13 +87,13 @@ int main()
 	/*=== SCC 구성 및 점수 계산 =======*/
 	for(int i=0; i<v; i++)
 		if(!discovered[i])
-			TarjanDFS(i);
+			TarjanDFS(i); //scc 구성
 
-	for(int i=sccCnt-1; i>=0; i--)
-		for(auto &u : scc[i])
+	for(int i=sccCnt-1; i>=0; i--) //위상정렬 순서대로 scc를 순회
+		for(auto &u : scc[i]) //scc를 구성하는 멤버들 중에
 			for(auto &v : adj[u])
-				if(sccId[u] != sccId[v])
-					score[v] += score[u];
+				if(sccId[u] != sccId[v]) //다른 scc와 연결된 정점이 있다면? 
+					score[v] += score[u]; //점수를 계산!
 
 	/*=== 정답 출력 =======*/
 	string temp;
