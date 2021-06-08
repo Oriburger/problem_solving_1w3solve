@@ -9,7 +9,7 @@ using namespace std;
 const int INF = 2147000000;
 const int MAX_V = 10001;
 
-unordered_map<string, int> uset;
+unordered_map<string, int> umap;
 
 int v, visitCnt=1, sccCnt=0;
 vector<bool> finished(MAX_V);
@@ -20,9 +20,9 @@ stack<int> stk;
 
 int GetValue(string key)
 {
-	if(uset.count(key)==0)
-		uset[key]=v++;
-	return uset[key];
+	if(umap.count(key)==0)
+		umap[key]=v++;
+	return umap[key];
 }
 
 int TarjanDFS(int curr)
@@ -83,7 +83,7 @@ int main()
 			adj[u].push_back(v);
 		}
 	}
-	
+
 	/*=== SCC 구성 및 점수 계산 =======*/
 	for(int i=0; i<v; i++)
 		if(!discovered[i])
