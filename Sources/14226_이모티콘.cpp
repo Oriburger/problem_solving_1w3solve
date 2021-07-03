@@ -62,3 +62,47 @@ int main()
 
 	return 0;
 }
+
+/* ---- Dynamic Programming 을 이용한 풀이 ---- 
+
+#include <iostream>
+#include <vector>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+
+const int MAX = 1001;
+const int INF = 2147000000;
+
+int s, cache[MAX][MAX]; //display, clipboard
+
+int GetAnswer(int display, int clip)
+{
+	if(display < 0 || display >= MAX || clip >= MAX) return INF;
+	if(display == s) return 0;
+
+	int &ret = cache[display][clip];
+	if(ret != -1) return ret;
+
+	ret = INF;
+	ret = min(ret, GetAnswer(display, display)+1);
+	ret = min(ret, GetAnswer(display-1, clip)+1);
+	ret = min(ret, GetAnswer(display+clip, clip)+1);
+
+	return ret;
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+
+	cin>>s;
+
+	memset(cache, -1, sizeof(cache));
+	cout<<GetAnswer(1, 0)<<'\n';
+
+	return 0;
+}
+
+*/
