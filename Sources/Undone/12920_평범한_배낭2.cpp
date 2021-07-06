@@ -4,7 +4,7 @@
 #include <algorithm>
 using namespace std;
 
-const int MAX_N = 101;
+const int MAX_N = 10001;
 const int MAX_M = 10001;
 const int INF = 2147000000;
 typedef long long ll;
@@ -45,21 +45,16 @@ int main()
 		cin>>v>>c>>k;
 
 		int tmp = 16384;
-		cout<<k<<" : ";
 
-		//while(k)
-		for(int j=0; j<3; j++)
+		while(k)
 		{
-			if(k < tmp) tmp/=2;
+			if(k <= tmp && tmp != 1) tmp/=2;
 			else
 			{
-			//	tmp = !tmp ? 1 : tmp;
-				cout<<tmp<<' ';
 				arr.push_back({tmp * v, tmp * c});
 				k -= tmp;
 			}
 		}
-		cout<<'\n';
 	}
 	n = arr.size();
 	
