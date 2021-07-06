@@ -44,17 +44,11 @@ int main()
 		int v, c, k;
 		cin>>v>>c>>k;
 
-		int tmp = 16384;
-
-		while(k)
-		{
-			if(k <= tmp && tmp != 1) tmp/=2;
-			else
-			{
-				arr.push_back({tmp * v, tmp * c});
-				k -= tmp;
-			}
-		}
+		int j=1;
+		for(; ((j*2)-1)<=k;j*=2)
+			arr.push_back({v*j, c*j});
+		int remain = k-(j-1); 
+		arr.push_back({v*remain, c*remain});
 	}
 	n = arr.size();
 	
