@@ -1,0 +1,33 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+const int MAX_P = 10001;
+
+typedef long long ll;
+
+ll t, p, q;
+vector<ll> cache;
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+
+	cin>>t;
+
+	for(int i=1; i<=t; i++)
+	{
+		cin>>p>>q;
+
+		cache = vector<ll>(p+1, 0);
+
+		cache[1] = 1 % q;
+		for(int j=2; j<=p; j++)
+			cache[j] = (cache[j-1] + cache[j-2])%q;
+
+		cout<<"Case #"<<i<<": "<<cache[p]<<'\n';
+	}
+
+	return 0;
+}
