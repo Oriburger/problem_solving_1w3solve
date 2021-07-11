@@ -8,7 +8,7 @@ const int MAX_N = 50;
 const int MAX_H = 500000;
 const int M_INF = -2147000000;
 
-int n, h[MAX_N], cache[MAX_N][MAX_H];
+int n, block[MAX_N], cache[MAX_N][MAX_H];
 
 /* ----
    DP(idx, h_diff)
@@ -24,12 +24,12 @@ int GetAnswer(int idx, int h_diff)
 
 	ret = M_INF;
 	ret = max(ret, GetAnswer(idx+1, h_diff)); //idx 번째 조각을 쓰지 않음
-	ret = max(ret, GetAnswer(idx+1, h_diff + h[idx])); //더 높은 탑에 배치
+	ret = max(ret, GetAnswer(idx+1, h_diff + block[idx])); //더 높은 탑에 배치
 	
-	if(h[idx] > h_diff) //더 낮은 탑에 배치
-		ret = max(ret, GetAnswer(idx+1, abs(h[idx]-h_diff)) + h_diff);
+	if(block[idx] > h_diff) //더 낮은 탑에 배치
+		ret = max(ret, GetAnswer(idx+1, abs(block[idx]-h_diff)) + h_diff);
 	else
-		ret = max(ret, GetAnswer(idx+1, abs(h[idx]-h_diff)) + h[idx]);
+		ret = max(ret, GetAnswer(idx+1, abs(block[idx]-h_diff)) + block[idx]);
 
 	return ret;
 }
@@ -43,7 +43,7 @@ int main()
 
 	memset(cache, -1, sizeof(cache));
 	for(int i=0; i<n; i++)
-		cin>>h[i];
+		cin>>block[i];
 	
 	int ans = GetAnswer(0, 0);
 
