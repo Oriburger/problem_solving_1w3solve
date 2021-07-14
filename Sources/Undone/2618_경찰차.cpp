@@ -29,26 +29,24 @@ int n, w;
 vector<Pos> task;
 int cache[1001][1001];
 
-int GetDist(const Pos &p1, const Pos &p2)
+inline int GetDist(int p1, int p2)
 {
-	return abs(p1.y-p2.y) + abs(p1.x-p2.x);
+	return abs(task[p1].y-task[p2].y) + abs(task[p1].x-task[p2].x);
 }
 
 int GetAnswer(int pa, int pb)
 {
-	if(pa == w+2 || pb == w+2) return 0;
-
+	if(pa == w+1 || pb == w+1) return 0;
+	
 	int &ret = cache[pa][pb];
 	if(ret != -1) return ret;
 
 	ret = INF;
+
 	int next = max(pa, pb) + 1;
 
-	cout<<next<<'\n';
-
-	ret = min(ret, GetAnswer(pa, next) + GetDist(task[pb], task[next]));
-	ret = min(ret, GetAnswer(next, pb) + GetDist(task[pa], task[next]));
-
+	ret = min(ret, GetAnswer(next, pb) + GetDist(pa, next));
+	ret = min(ret, GetAnswer(pa, next) + GetDist(pb, next));
 
 	return ret;
 }
@@ -62,17 +60,16 @@ int main()
 
 	task.push_back({1, 1});
 	task.push_back({n, n});
-
 	for(int i=0; i<w; i++)
 	{
 		int y, x;
 		cin>>y>>x;
 		task.push_back({y, x});
 	}
-
+	
 	memset(cache, -1, sizeof(cache));
-
 	cout<<GetAnswer(0, 1)<<'\n';
 
 	return 0;
 }
+
