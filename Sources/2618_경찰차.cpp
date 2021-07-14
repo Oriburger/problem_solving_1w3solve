@@ -1,20 +1,3 @@
-/*
-
-	N개의 동서방향 도로, N개의 남북방향 도로
-	- 도로에는 도로 번호가 존재 (1~N)
-	- 도로 사이 거리는 모두 1
-
-	도시에는 두 대의 경찰차
-	- 경찰차1의 초기위치 (1,1)
-	- 경찰차2의 초기위치 (N,N)
-	- 사건이 발생하면, 둘 중 하나가 처리
-	- 사건을 처리하면 해당 위치에서 대기
-	
-	사건이 발생한 순서대로 두 대의 경찰차에 맡기려고함
-	- 두 대의 경찰차가 이동하는 거리의 합이 최소가 되도록
-
-*/
-
 #include <iostream>
 #include <vector>
 #include <cstring>
@@ -28,6 +11,7 @@ const int M_INF = -2147000000;
 int n, w;
 vector<Pos> task;
 int cache[1001][1001];
+Pos trace[1001][1001];
 
 inline int GetDist(int p1, int p2)
 {
@@ -43,12 +27,18 @@ int GetAnswer(int pa, int pb)
 
 	ret = INF;
 
-	int next = max(pa, pb) + 1;
+	int next, val1, val2;
+	
+	next = max(pa, pb) + 1;
+	val1 = GetAnswer(next, pb) + GetDist(pa, next);
+	val2 = GetAnswer(pa, next) + GetDist(pb, next);
 
-	ret = min(ret, GetAnswer(next, pb) + GetDist(pa, next));
-	ret = min(ret, GetAnswer(pa, next) + GetDist(pb, next));
+	if(val1 < val2)
+		trace[pa][pb] = {next, pb};
+	else
+		trace[pa][pb] = {pa, next};
 
-	return ret;
+	return ret = min(val1, val2);
 }
 
 int main()
@@ -66,9 +56,21 @@ int main()
 		cin>>y>>x;
 		task.push_back({y, x});
 	}
-	
+
 	memset(cache, -1, sizeof(cache));
 	cout<<GetAnswer(0, 1)<<'\n';
+
+	int pa = 0, pb = 1;
+	for(int i=2; i<=w+1; i++)
+	{
+		Pos next = trace[pa][pb];
+
+		if(next.y == pa) cout<<2<<'\n';
+		else cout<<1<<'\n';
+
+		pa = next.y;
+		pb = next.x;
+	}
 
 	return 0;
 }
