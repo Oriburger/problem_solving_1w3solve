@@ -37,7 +37,7 @@ int GetAnswer(int y, int x, int cur_state, const int prev_state)
 		&& !isVisited(prev_state, x+1) && board[y][x] != 'x')
 	{
 		ret = max(ret, GetAnswer(y, x+1, (cur_state | (1<<x)), prev_state) + 1);
-		ret = max(ret, GetAnswer(y-1, 0, (cur_state | (1<<x)), prev_state) + 1);
+		ret = max(ret, GetAnswer(y-1, 0, 0, (cur_state | (1<<x))) + 1);
 	}
 	ret = max(ret, GetAnswer(y, x+1, cur_state, prev_state));
 	ret = max(ret, GetAnswer(y-1, 0, 0, cur_state));
