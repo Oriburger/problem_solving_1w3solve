@@ -1,11 +1,24 @@
+/*---
+## 참고 
+- https://www.slideshare.net/Baekjoon/baekjoon-online-judge-1019
+
+## 규칙?
+- 일의 자리가 0인 A와  일의 자리가 9인 B가 있을 때,
+- A부터 B까지 일의 자리에 0~9는 총 (B-A+1)번 등장
+
+## 구현?
+- [A가 B보다 작거나 같을 동안 반복] ------  
+- A와 B의 일의 자리를 맞춰준다 (맞춰주면서 ans[]배열 갱신, 맞추는건 ++, --연산)
+- A ~ B의 일의 자리에 있는 0~9의 개수를 ans[]에 더한다 (개수는 (B-A+1)*squ )가 됨.
+- A/=10, B/=10, squ*=10  (squ는 자릿수를 나타냄, 10의 거듭제곱 형태)
+----*/
+
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include <string>
 #include <algorithm>
 using namespace std;
-
-typedef vector<int>::iterator ITER;
 
 int n, head = 1, tail, squ = 1;
 vector<int> ans(10, 0);
