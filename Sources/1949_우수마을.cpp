@@ -8,7 +8,6 @@ const int MAX_N = 10001;
 
 int n, cache[MAX_N][2];
 vector<vector<int> > adj;
-vector<bool> visited;
 vector<int> ppl; //population
 
 int DFS(int curr, int prev, bool isBest)
@@ -23,11 +22,10 @@ int DFS(int curr, int prev, bool isBest)
 		if(next == prev) continue;
 		
 		int tmp = 0;
-		if(!isBest && cache[next][true] == -1)
+		if(!isBest)
 			tmp = DFS(next, curr, true);
 		
-		if(cache[next][false] == -1)
-			tmp = max(tmp, DFS(next, curr, false));
+		tmp = max(tmp, DFS(next, curr, false));
 		
 		ret += tmp;
 	}
