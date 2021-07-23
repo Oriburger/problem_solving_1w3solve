@@ -6,12 +6,12 @@
 using namespace std;
 
 const int MAX_N = 10001;
-//typedef pair<int, int> P;
+typedef pair<int, int> P;
 
-int n, cache[MAX_N][2];
-//P trace[MAX_N][2];
+int n, trace[MAX_N];
+int cache[MAX_N][2];
 vector<vector<int> > adj;
-vector<int> ans, w;
+vector<int> w;
 
 int DFS(int curr, int prev, bool isBest)
 {
@@ -28,11 +28,22 @@ int DFS(int curr, int prev, bool isBest)
 		if(!isBest) tmp1 = DFS(next, curr, true);
 		tmp2 = DFS(next, curr, false);
 
-		//trace[curr][isBest] = {next, (tmp1 < tmp2)}; 	
 		ret += max(tmp1, tmp2);
 	}
 
 	return ret;
+}
+
+void GetAnswer(int curr, int prev)
+{
+	if(cache[curr][true] > cache[curr][false] && !trace[prev])
+		trace[curr] = true;
+
+	for(auto &next : adj[curr])
+	{
+		if(next == prev) continue;
+		GetAnswer(next, curr);
+	}
 }
 
 int main()
@@ -45,7 +56,6 @@ int main()
 	adj.resize(n+1);
 	w.resize(n+1, 0);
 	memset(cache, -1, sizeof(cache));
-	//memset(trace, 0, sizeof(trace));
 
 	for(int i=1; i<=n; i++)
 		cin>>w[i];
@@ -63,19 +73,9 @@ int main()
 	tmp2 = DFS(1, 0, false);
 	cout<<max(tmp1, tmp2)<<'\n';
 	
-	//int pa = 1, pb = (tmp1 > tmp2);
-
+	GetAnswer(1, 0);
 	for(int i=1; i<=n; i++)
-	{
-		if(cache[i][true] > cache[i][false])
-			cout<<i<<' ';
-		//P next = trace[pa][pb];
-
-		//if(next.seoc) cout<<next.second<<' ';
-
-		//pa = next.first;
-		//pb = next.second;
-	}
+		if(trace[i]) cout<<i<<' ';
 
 	return 0;
 }
