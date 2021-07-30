@@ -26,36 +26,28 @@ void MoveBoard(const int dir, vec2nd &board)
 	const int end = abs(start - ((int)board.size()-1));
 	const int d = ((dir==RIGHT || dir==DOWN) ? -1 : 1);
 
-	/*debug--------------*/
-	//string arr[4] = {"UP", "DOWN", "LEFT", "RIGHT"};
-
-	//cout<<"dir : "<<arr[dir]<<" / start : "<<start<<" / end : "<<end<<" / d : "<<d<<'\n';
-
-
 	for(int i=0; i<board.size(); i++)
 	{
-		bool flag = false;
-		for(int j=start; j!=end; j+=d)
+		const bool flag[3] = {true, false, true};
+		for(int k=0; k<3; k++)
 		{
-			int &curr = (dir==RIGHT || dir==LEFT) ? board[i][j] : board[j][i];
-			int &next = (dir==RIGHT || dir==LEFT) ? board[i][j+d] : board[j+d][i];
-
-			//cout<<"{i, j} : {"<<i<<","<<j<<"} / ";
-			//cout<<curr<<' '<<next<<"\n";
-
-			if(curr == 0 && next != 0) 
+			for(int j=start; j!=end; j+=d)
 			{
-				swap(curr, next);
+				int &curr = (dir==RIGHT || dir==LEFT) ? board[i][j] : board[j][i];
+				int &next = (dir==RIGHT || dir==LEFT) ? board[i][j+d] : board[j+d][i];
+
+				if(flag[k] && curr == 0 && next != 0) 
+				{
+					swap(curr, next);
+					j=start-d;
+				}
+				if(!flag[k] && curr && next && curr == next) 
+				{
+					curr += next;
+					next = 0;
+				}
 			}
-			else if(curr && next && curr == next) 
-			{
-				curr += next;
-				next = 0;
-			}
-			else continue;
-			flag = true;
-		}
-		if(flag) i--;
+		}		
 	}
 }
 
@@ -77,11 +69,9 @@ int GetAnswer(const int depth, vec2nd &board)
 
 int main()
 {
-	//ios::sync_with_stdio(false);
-	//cin.tie(NULL); cout.tie(NULL);
+	ios::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
 
-	while(1)
-	{
 	int n;
 	vec2nd board;
 
@@ -93,7 +83,6 @@ int main()
 			cin>>board[i][j];
 
 	cout<<GetAnswer(0, board)<<'\n';
-	}
 
 	return 0;
 }
