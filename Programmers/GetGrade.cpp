@@ -15,17 +15,44 @@ char GetGrade(double score)
 
 string solution(vector<vector<int>> scores)
 {
-    string answer = "";
+    string answer;
     
     for(int i=0; i<scores.size(); i++)
     {
         double sum = 0;
+        int max_score = -1, min_score = 999, self_score;
+        int max_cnt = 0, min_cnt = 0;
         for(int j=0; j<scores.size(); j++)
         {
-            if(i==j) continue;
-            sum += scores[j][i];
-        }
-        answer.push_back(GetGrade(sum/(double)(scores.size()-1)));
+            int &curr = scores[j][i];
+            if(i==j) self_score = curr;
+            sum += curr;
+            
+            if(max_score < curr)
+            {
+                max_cnt = 1;
+                max_score = curr;
+            }
+            else if(max_score == curr)
+                max_cnt++;
+            
+            if(min_score > curr)
+            {
+                min_cnt = 1;
+                min_score = curr;
+            }
+            else if(min_score == curr)
+                min_cnt++;
+        }          
+        
+        if((max_score == self_score && max_cnt == 1) ||
+            (min_score == self_score && min_cnt == 1))
+            sum = (sum-self_score) / (double)(scores.size()-1);
+        
+        else
+            sum = sum / (double)(scores.size());
+                   
+        answer.push_back(GetGrade(sum));
     }
     
     return answer;
