@@ -9,20 +9,20 @@ vector<vector<int> > r;
 
 int Solve(int cnt)
 {
-	if(flag) return 0;
-	if(cnt==1 || dead[mafia])
+	if(flag) return 0; 
+	if(cnt==1 || dead[mafia]) //마피아 혼자 살아남거나, 마피아가 죽은 경우라면 반환
 	{
-		flag = (cnt==1);
+		flag = (cnt==1); //만약, 마피아 혼자 남는다면? 다른 모든 경우는 고려하지 않음
 		return 0;
 	}
 
 	int ret = 0;
-	if(cnt%2) //짝수 : 낮
+	if(cnt%2) //짝수 : 낮의 경우
 	{
 		int g_val = -1, g_idx=-1;
-		for(int i=0; i<n; i++)
+		for(int i=0; i<n; i++) //최대 유죄 지수인 사람을 찾음
 		{
-			if(dead[i]) continue;
+			if(dead[i]) continue; //이미 죽은 사람은 고려x
 			if(g_val < g[i])
 			{
 				g_idx = i;
@@ -30,25 +30,24 @@ int Solve(int cnt)
 			}
 		}
 
-		dead[g_idx] = true;
-		ret = max(ret, Solve(cnt-1));
-		dead[g_idx] = false;
+		dead[g_idx] = true; //그 사람을 죽임
+		ret = max(ret, Solve(cnt-1)); //다음 경우를 고려
+		dead[g_idx] = false; //백트래킹
 	}
 
-	else //홀수 : 밤
+	else //홀수 : 밤의 경우
 	{
-		//cout<<"Night\n";
 		for(int i=0; i<n; i++)
 		{
-			if(i==mafia || dead[i]) continue;
+			if(i==mafia || dead[i]) continue; //마피아 본인과, 이미 죽은사람 고려x
 
-			dead[i] = true;
-			for(int j=0; j<n; j++) g[j] += r[i][j];
+			dead[i] = true; //i번째 사람을 죽임
+			for(int j=0; j<n; j++) g[j] += r[i][j]; //유죄 지수 갱신
 			
-			ret = max(ret, Solve(cnt-1)+1);
+			ret = max(ret, Solve(cnt-1)+1); //다음 경우를 고려
 			
-			for(int j=0; j<n; j++) g[j] -= r[i][j];
-			dead[i] = false;
+			for(int j=0; j<n; j++) g[j] -= r[i][j]; //백트래킹
+			dead[i] = false; 
 		}
 	}
 
@@ -75,7 +74,7 @@ int main()
 
 	cin>>mafia;
 
-	cout<<Solve(n)<<'\n';
+	cout<<Solve(n)<<'\n'; 
 
 	return 0;
 }
