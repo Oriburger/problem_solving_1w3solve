@@ -1,53 +1,61 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-bool flag = 0;
-int n, mafia;
+int n, mafia, state = (1<<17);
+bool flag = false;
+
 vector<int> g;
-vector<bool> dead;
 vector<vector<int> > r;
+
+int Solve(int idx, int state, int cnt);
+
+inline bool isDead(int idx)
+{
+	if(state & (1<<idx)) return true;
+	return false;
+}
 
 int Solve(int cnt)
 {
-	if(flag) return 0; 
-	if(cnt==1 || dead[mafia]) //마피아 혼자 살아남거나, 마피아가 죽은 경우라면 반환
+	if(flag) return 0;
+	if(isDead(mafia) || cnt==1)
 	{
-		flag = (cnt==1); //만약, 마피아 혼자 남는다면? 다른 모든 경우는 고려하지 않음
+		flag = (cnt==1);
 		return 0;
 	}
-
+	
 	int ret = 0;
-	if(cnt%2) //짝수 : 낮의 경우
+	
+	if(cnt%2) //짝수 : 낮
 	{
-		int g_val = -1, g_idx=-1;
-		for(int i=0; i<n; i++) //최대 유죄 지수인 사람을 찾음
+		int g_val=-1, g_idx=-1;
+		for(int i=0; i<n; i++)
 		{
-			if(dead[i]) continue; //이미 죽은 사람은 고려x
+			if(isDead(i)) continue;
 			if(g_val < g[i])
 			{
 				g_idx = i;
 			    g_val = g[i];
 			}
 		}
-
-		dead[g_idx] = true; //그 사람을 죽임
-		ret = max(ret, Solve(cnt-1)); //다음 경우를 고려
-		dead[g_idx] = false; //백트래킹
+		state |= (1<<g_idx);
+		ret = max(ret, Solve(cnt-1));
+		state &= ~(1<<g_idx);
 	}
 
-	else //홀수 : 밤의 경우
+	else 
 	{
 		for(int i=0; i<n; i++)
 		{
-			if(i==mafia || dead[i]) continue; //마피아 본인과, 이미 죽은사람 고려x
+			if(i==mafia || isDead(i)) continue;
 
-			dead[i] = true; //i번째 사람을 죽임
-			for(int j=0; j<n; j++) g[j] += r[i][j]; //유죄 지수 갱신
-			
-			ret = max(ret, Solve(cnt-1)+1); //다음 경우를 고려
-			
-			for(int j=0; j<n; j++) g[j] -= r[i][j]; //백트래킹
-			dead[i] = false; 
+			state |= (1<<i);
+			for(int j=0; j<n; j++) g[j] += r[i][j];
+
+			ret = max(ret, Solve(cnt-1)+1);
+
+			state &= ~(1<<i);
+			for(int j=0; j<n; j++) g[j] -= r[i][j];
 		}
 	}
 
@@ -62,8 +70,7 @@ int main()
 	cin>>n;
 
 	g = vector<int>(n, 0);
-	dead = vector<bool>(n, 0);
-	r = vector<vector<int> >(n, vector<int>(n, 0));
+	r = vector<vector<int> >(n+1, vector<int>(n, 0));
 
 	for(int i=0; i<n; i++)
 		cin>>g[i];
@@ -74,7 +81,7 @@ int main()
 
 	cin>>mafia;
 
-	cout<<Solve(n)<<'\n'; 
+	cout<<Solve(n)<<'\n';
 
 	return 0;
 }
