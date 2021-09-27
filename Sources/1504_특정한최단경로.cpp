@@ -6,7 +6,7 @@
 using namespace std;
 
 typedef pair<int, int> P;
-const int INF = 800001;
+const int INF = 2147000000;
 
 int n, e, v1, v2;
 vector<vector<P> > adj;
@@ -60,6 +60,7 @@ int main()
 	}
 	cin>>v1>>v2;
 	
+	
 	long long stov1, stov2, v1tod, v2tod, v1tov2, v2tov1;
 	
 	Dijkstra(1);
@@ -78,8 +79,8 @@ int main()
 	v2tod = dist[n];
 	v2tov1 = dist[v1];
 	
-	int answer1 = stov1 + v1tov2 + v2tod;
-	int answer2 = stov2 + v2tov1 + v1tod;
+	long long answer1 = stov1 + v1tov2 + v2tod;
+	long long answer2 = stov2 + v2tov1 + v1tod;
 	
 	if(min(answer1, answer2) >= INF)
 		cout<<-1<<'\n';
