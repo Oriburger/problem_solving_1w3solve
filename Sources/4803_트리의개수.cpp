@@ -38,6 +38,8 @@ struct DisjointSet
 
 		if(rank[u] > rank[v]) swap(u, v);
 		parent[u] = v;
+		if(cyclic[u] || cyclic[v]) //merge시, cyclic 정보도 함께 합친다.
+			cyclic[u] = cyclic[v]= true;
 		if(rank[u] == rank[v]) rank[v]+=1;
 	}
 
@@ -76,7 +78,7 @@ int main()
 			
 			//이미 같은 컴포넌트라면
 			//같은 간선은 주어지지 않으므로, 사이클이라는 의미
-			if(djs.find(u) == djs.find(v)) 
+			if(djs.find(u) == djs.find(v))
 				djs.setCyclic(u);
 
 			else
