@@ -3,7 +3,7 @@
 #include <cstring>
 using namespace std;
 
-int cache[(1<<9)][5001];
+int cache[(1<<8)][5001];
 
 int get_answer(int visited, int energy, vector<vector<int>>& d)
 {
