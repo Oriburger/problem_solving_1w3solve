@@ -18,24 +18,13 @@ int main()
 		int tmp; cin>>tmp;
 		pq.push({tmp, i});
 
-		if(pq.empty()) ans.push_back(tmp);
-		else
+		while(1)
 		{
-			while(1)
-			{
-				P curr = pq.top();
-				
-				if(curr.second >= i-l+1) 
-				{
-					ans.push_back(curr.first);
-					break;
-				}
-				else 
-					pq.pop();
-			}
-		}		
+			P curr = pq.top();
+			if(curr.second < i-l+1) pq.pop();
+			else ans.push_back(curr.first);
+		}
 	}
-
 	for(const auto k : ans)
 		cout<<k<<' ';
 
