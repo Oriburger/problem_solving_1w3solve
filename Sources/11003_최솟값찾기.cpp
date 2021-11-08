@@ -22,7 +22,11 @@ int main()
 		{
 			P curr = pq.top();
 			if(curr.second < i-l+1) pq.pop();
-			else ans.push_back(curr.first);
+			else
+			{
+				ans.push_back(curr.first);
+				break;
+			}
 		}
 	}
 	for(const auto k : ans)
