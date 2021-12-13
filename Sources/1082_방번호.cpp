@@ -8,18 +8,13 @@ int n, m;
 vector<int> p;
 string cache[10][51];
 
-string get_max(string st1, string st2)
+string get_max(string &st1, string &st2)
 {
-	if(st1.size()>1 && st1[0]=='0') return st2;
+	if(st1.size()>1 && st1[0]=='0') return st2; //000000과 같은 수 방지
 	else if(st2.size()>1 && st2[0]=='0') return st1;
 
 	if(st1.size() == st2.size())
-		for(int i=0; i<st1.size(); i++)
-		{
-			if(st1[i]==st2[i]) continue;
-			if(st1[i]>st2[i])	return st1;
-			else return st2;
-		}
+		return st1 > st2 ? st1 : st2;
 
 	if(st1.size() > st2.size()) return st1;
 	return st2; 
@@ -59,7 +54,7 @@ int main()
 	string ans;
 	ans = GetAnswer(0, m);
 
-	if(ans=="") ans = "0";
+	//if(ans=="") ans = "0";  //주어지는 input은 반드시 수가 만들어짐
 	cout<<ans<<'\n';
 
 	return 0;
