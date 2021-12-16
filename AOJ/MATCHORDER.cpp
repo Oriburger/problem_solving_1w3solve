@@ -14,25 +14,25 @@ int main()
 	while(t--)
 	{
 		cin>>n;
-		
+
 		ans = 0;
 		russia = korea = vector<int>(n);
-		for(int i=0; i<n; i++)	
+		for(int i=0; i<n; i++)
 			cin>>russia[i];
 		for(int i=0; i<n; i++)
 			cin>>korea[i];
 		
-		multiset<int> ratings(korea.begin(), korea.end());
-		for(int i=0; i<n; i++)
+		//한국 선수들을 이진트리 기반 컨테이너 multiset에 넣음
+		multiset<int> kor_rating(korea.begin(), korea.end());
+		for(const auto& r : russia) //러시아 선수들을 차례로 순회하며:
 		{
-			//레이팅이 가장 높은 한국 선수도 이기지 못하면
-			if(*ratings.rbegin() < russia[i])
-				ratings.erase(ratings.begin()); //가장 레이팅이 낮은 선수를 내보냄
-			else //한 명이라도 이길 수 있는 사람이 존재하면
+			if(r > *kor_rating.rbegin()) //해당 러시아 선수가 한국의 모든 선수보다 레이팅이 높다면?
+				kor_rating.erase(kor_rating.begin()); //가장 낮은 레이팅의 한국 선수와 매칭
+			else //최소 한명이라도 이길 한국 선수가 존재한다면?
 			{
-				ans += 1; //정답 갱신
-				ratings.erase(ratings.lower_bound(russia[i])); 
-				//russia[i]를 이길수 있는 선수중 레이팅이 가장 낮은 선수를 출전
+				ans = ans + 1; //정답 갱신
+				kor_rating.erase(kor_rating.lower_bound(r));
+				//r을 이길 수 있는 선수들 중 가장 레이팅이 작은 선수를 고름
 			}
 		}
 		cout<<ans<<'\n';
