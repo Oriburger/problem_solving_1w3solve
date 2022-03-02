@@ -4,28 +4,26 @@
 using namespace std;
 
 unordered_map<string, int> umap;
-vector<string> arr;
+vector<string> clothes_list;
 
 int solution(vector<vector<string>> clothes) 
 {
-    int answer = 1;
+    int answer = 0;
     
-    for(int i=0; i<clothes.size(); i++)
+    for(auto &c : clothes)
     {
-        string b;
-        b = clothes[i][1];
-        
-        if(umap.count(b)==0)
+        if(umap.count(c[1])==0)
         {
-            arr.push_back(b);
-            umap[b]=2;
+            umap[c[1]]=0;
+            clothes_list.push_back(c[1]);
         }
-        else
-            umap[b]++;
+        umap[c[1]] += 1;
     }
     
-    for(int i=0; i<arr.size(); i++)        
-        answer *= umap[arr[i]];
+    if(!umap.empty()) answer = 1;
+    
+    for(auto &p : clothes_list)
+        answer *= (umap[p]+1);
     
     return answer-1;
 }
