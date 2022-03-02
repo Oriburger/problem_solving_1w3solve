@@ -1,24 +1,21 @@
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <unordered_set>
 using namespace std;
 
 unordered_set<string> uset;
 
-bool solution(vector<string> pnum) 
+bool solution(vector<string> phone_book)
 {
-    bool answer = true;
+    sort(phone_book.begin(), phone_book.end());
     
-    for(const auto& str : pnum)
-        for(int i=0; i<str.size(); i++)
-            uset.insert(str.substr(0, i));
-    
-    for(const auto& str : pnum)
-        if(uset.count(str)>0)
-        {
-            answer = false;
-            break;
-        }
-    
-    return answer;
+    for(const auto& s : phone_book)
+    {
+        for(int i=1; i<s.size(); i++)
+            if(uset.find(s.substr(0, i)) != uset.end())
+                return false;
+        uset.insert(s);
+    }
+    return true;
 }
