@@ -1,48 +1,40 @@
 #include <string>
 #include <vector>
-#include <unordered_map>
 #include <algorithm>
 using namespace std;
 
-const int MAX = 10001;
+bool flag = false; 
+vector<bool> checked(10000, false);
 
-bool flag = false;
-vector<string> answer;
-vector<vector<string>> tickets;
-vector<bool> checked(MAX, false); //ticket[i]를 사용했는가?
-
-void DFS(vector<string> picked, string curr)
+void DFS(vector<string> &picked, string curr, const vector<vector<string>> &tickets)
 {
     if(flag) return;
-    
     if(picked.size() == tickets.size()+1)
     {
         flag = true;
-        answer = picked; 
         return;
     }
     
     for(int i=0; i<tickets.size(); i++)
     {
-        if(checked[i]) continue;
-        if(tickets[i][0] != curr) continue;
+        if(curr != tickets[i][0] || checked[i]) continue;
         
         checked[i] = true;
         picked.push_back(tickets[i][1]);
-        DFS(picked, tickets[i][1]);
-        picked.pop_back(); //backtrack!
-        checked[i] = false; //backtrack!
+        
+        DFS(picked, tickets[i][1], tickets);
+        if(flag) break;
+        
+        checked[i] = false;
+        picked.pop_back();
     }
-    return;
 }
 
-vector<string> solution(vector<vector<string>> t)
+vector<string> solution(vector<vector<string>> tickets)
 {
-    tickets = t;    
+    vector<string> answer = {"ICN"};
     sort(tickets.begin(), tickets.end());
-    
-    DFS({"ICN"}, "ICN");
-    
+    DFS(answer, "ICN", tickets);
     return answer;
 }
 
