@@ -1,48 +1,25 @@
 #include <string>
+#include <queue>
 #include <vector>
-
 using namespace std;
 
 int solution(string name) 
 {
     int answer = 0;
+    int len = name.size(), min_val = len;
+    vector<int> pos;
     
-    //먼저, 각 자리별 최소 조작 횟수를 ans에 더한다.
-    for(int i=0; i<name.size(); i++)
+    for(int i=0; i<len; i++)
     {
-        if(name[i]=='A') continue; //바꾸지 않아도 된다면
-        else
-        {
-            int cnt = abs(name[i]-'A');
-            answer += min(cnt, 26-cnt); //앞으로 이동, 뒤로 이동 둘 중 하나가 최소
-        }
+        answer += min(name[i]-'A', 26+'A'-name[i]); //각 자리마다 바꾸는데에 필요한 최소 횟수를 더함
+        if(name[i]!='A') pos.push_back(i);
     }
+ 
+    if(pos.empty()) return answer; //바꿀게 없다면, 정답을 바로 반환
     
-    int curr = 0; //시작은 idx == 0
-    vector<bool> visited(name.size(), false);
-    visited[curr] = true;
+    min_val = min(len-*pos.begin(), pos.back()); //왼쪽으로 질러가는 방법 vs 오른쪽으로 질러가는 방법의 최소를 초기값으로 둠
+    for(int i=1; i<pos.size(); i++) //인접한 두 점을 기준으로 잡고, 원점을 통과하는 경로를 만들어 각 경우당 최솟값을 구해서 min_val을 갱신
+        min_val = min(min_val, len + pos[i-1] - pos[i] + min(pos[i-1], len-pos[i])); //min(pos[i-1], len-pos[i])는 추가로 더해지는 원점까지의 최소 거리
     
-    while(1)
-    {
-        int next = 0, nextDist = 9999; 
-        //현재 자리에서 가장 가까운 자리로 이동한다
-        for(int i=0; i<name.size(); i++) 
-        {
-            if(visited[i] || name[i]=='A') continue; //체크가 되어있거나, 바꾸지 않아도 되는 자리는 pass
-            
-            int temp = abs(curr - i);
-            if(nextDist > min(temp, (int)name.size()-temp)) //찾은 자리보다 더 가깝다면? 
-            {
-                next = i; //next와 이동수인 nextDist 갱신
-                nextDist = min(temp, (int)name.size()-temp);
-            }
-        }
-        if(nextDist == 9999) break; //만약 이동을 마쳤다면 break; 
-        
-        curr = next; //자리 이동
-        answer += nextDist; //이동한 만큼 더함 
-        visited[next] = true; //체크
-    }
-    
-    return answer;
+    return answer + min_val;
 }
