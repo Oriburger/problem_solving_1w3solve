@@ -3,37 +3,38 @@
 #include <unordered_set>
 using namespace std;
 
-unordered_set<int> uset[9];
-const int temp[8] = {1, 11, 111, 1111, 11111, 111111, 1111111, 11111111};
+int tmp[8] = {1, 11, 111, 1111, 11111, 111111, 1111111, 11111111};
+unordered_set<int> cache[9];
 
-int solution(int N, const int number)
-{    
-    for(int i=1; i<=8; i++)
-        uset[i].insert(temp[i-1]*N);
+int solution(int N, int number) 
+{
+    int answer = 0;
+    
+    for(int i=1; i<9; i++)
+        cache[i].insert(tmp[i-1]*N);
     
     for(int i=1; i<=8; i++)
     {
         for(int j=1; j<=i; j++)
         {
-            if(i + j > 8) continue;
+            if(i+j > 8) continue;
             
-            for(int a : uset[i])
+            for(auto &p : cache[i])
             {
-                for(int b : uset[j])
+                for(auto &q : cache[j])
                 {
-                    if(a!=b) uset[i+j].insert(abs(a-b));
-                    uset[i+j].insert(a+b);
-                    uset[i+j].insert(a*b);
-                    if(a && b) uset[i+j].insert(max(a, b)/min(a, b));
+                    if(p!=q) cache[i+j].insert(abs(p-q));
+                    cache[i+j].insert(p*q);
+                    cache[i+j].insert(p+q);
+                    if(p&&q) cache[i+j].insert(max(p,q)/min(p,q));
                 }
             }
         }
     }
     
-    int answer = -1;
-    
+    answer = -1;
     for(int i=1; i<=8; i++)
-        if(uset[i].count(number))
+        if(cache[i].count(number) > 0)
         {
             answer = i;
             break;
