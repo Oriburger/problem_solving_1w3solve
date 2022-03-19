@@ -1,29 +1,28 @@
 #include <string>
+#include <cstring>
 #include <vector>
 using namespace std;
 
-const int MOD = 1000000007;
-
-int dp[101][101];
-const int dy[2] = {0, 1};
-const int dx[2] = {1, 0};
+const int INF = 1000000007;
+int cache[101][101];
 
 int GetAnswer(int y, int x, const int n, const int m)
 {
-    if(y<=0 || x<=0 || y>n || x>m) return 0;
+    if(y>n || x>m) return 0;
+    int& ret = cache[y][x];
+    if(ret != 0) return ret == -1 ? 0 : ret;
+    if(y == n && x == m) return ret = 1;
     
-    int &ret = dp[y][x];
+    ret = (ret + GetAnswer(y+1, x, n, m)%INF)%INF;
+    ret = (ret + GetAnswer(y, x+1, n, m)%INF)%INF;
     
-    if(ret != 0) return ret==-1 ? 0 : ret;
-    if(y==n && x==m) return ret = 1;
-    
-    return ret = (GetAnswer(y+1, x, n, m) % MOD + GetAnswer(y, x+1, n, m) % MOD) % MOD;
+    return ret % INF ; 
 }
 
-int solution(int m, int n, vector<vector<int>> puddles)
-{
-    for(vector<int>& p : puddles)
-        dp[p[1]][p[0]]=-1;
+int solution(int m, int n, vector<vector<int>> puddles) 
+{   
+    for(auto &p : puddles)
+        cache[p[1]][p[0]] = -1;
     
     return GetAnswer(1, 1, n, m);
 }
