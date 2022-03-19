@@ -1,26 +1,30 @@
 #include <cstring>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
-int cache[501][501];
+const int dy[2] = {1, 1};
+const int dx[2] = {0, 1};
+int cache[500][500];
+vector<vector<int>> tri;
 
-int get_answer(int y, int x, vector<vector<int>> &t)
+int GetAnswer(int y, int x)
 {
     int &ret = cache[y][x];
-    if(x>y || ret != -1) return ret;
-    if(y == t.size()) return ret = 0;
+    if(ret != -1) return ret;
+    if(y == tri.size() || x > y) return ret = 0;
     
-    ret = t[y][x];
-    
-    ret += max(get_answer(y+1, x, t)
-                , get_answer(y+1, x+1, t));
+    ret = max(GetAnswer(y+1, x), GetAnswer(y+1, x+1))
+            + tri[y][x]; 
     
     return ret;
 }
 
-int solution(vector<vector<int>> triangle)
+int solution(vector<vector<int>> triangle) 
 {
     memset(cache, -1, sizeof(cache));
     
-    return get_answer(0, 0, triangle);
+    tri = triangle; 
+    
+    return GetAnswer(0, 0);    
 }
