@@ -41,8 +41,9 @@ int main()
 	sort(check.begin(), check.end(), Comp);
 
 	//--산술평균--
-
-	printf("%.0lf\n", round(sum/(double)n));
+	
+	double tmp = round((double)sum/(double)n); //재채점 : -0은 0으로 출력한다!
+	printf("%.0lf\n", tmp == -0 ? 0 : tmp);
 
 	//--중앙값--
 	printf("%d\n",arr[n/2]);
