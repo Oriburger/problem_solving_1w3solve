@@ -5,7 +5,7 @@ using namespace std;
 
 const int MAX = 1000000;
 
-int n, p, q;
+int n, ans;
 vector<int> arr;
 vector<bool> check(MAX+1, false);
 
@@ -24,25 +24,22 @@ int main()
 	
 	while(1)
 	{
-		bool flag = false; 
-		
+		ans = -1;
 		cin>>n;
 		if(n==0) break;
 		
 		for(auto &k : arr)
 		{
-			p = k;
-			q = *lower_bound(arr.begin(), arr.end(), n-k);
-			
-			if(p+q==n)
+			if(n < k) break; 
+			if(!check[n-k])
 			{
-				flag = true;
-				break; 
+				ans = k;
+				break;
 			}
 		}
 		
-		if(!flag) cout<<"Goldbach\'s conjecture is wrong.\n";
-		else cout<<n<<" = "<<p<<" + "<<q<<'\n';
+		if(ans==-1) cout<<"Goldbach\'s conjecture is wrong.\n";
+		else cout<<n<<" = "<<ans<<" + "<<n-ans<<'\n';
 	}
 	
 	return 0;
