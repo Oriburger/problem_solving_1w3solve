@@ -17,22 +17,22 @@ int main()
 	
 	cin>>n;
 	
-	ans = arr = vector<int>(n, -1);
+	ans = arr = vector<int>(n, -1); //-1로 초기화
 	for(int i=0; i<n; i++)
 	{
 		cin>>arr[i];
 		
-		while(!tmp.empty())
+		while(!tmp.empty()) //스택에 넣기전에 검사 : arr[i]이 오큰수가 될 수 있는지 판별
 		{
-			if(tmp.back().second >= arr[i]) break;
+			if(tmp.back().second >= arr[i]) break;  //만약 스택의 top보다 이 수가 작다면 break
 
-			ans[tmp.back().first] = arr[i];
-			tmp.pop_back();
+			ans[tmp.back().first] = arr[i]; //정답을 갱신! 스택의 top보다 크므로 arr[i]는 오큰수
+			tmp.pop_back(); 스택 pop
 		}
-		tmp.push_back({i, arr[i]});		
+		tmp.push_back({i, arr[i]});	스택에 넣음	
 	}
 		
-	for(auto &p : ans)
+	for(auto &p : ans) //정답 출력
 		cout<<p<<' ';
 	cout<<'\n';
 	
