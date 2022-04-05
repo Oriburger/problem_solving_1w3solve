@@ -10,7 +10,7 @@ int main()
 	
 	cin>>s;
 	
-	for(i=1; i<s; i++)
+	for(i=1; i<=s; i++) //재채점..
 	{
 		sum+=i;
 		if(sum>s)
