@@ -1,7 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <utility>
-#include <climits>
+#include <bits/stdc++.h>
 using namespace std;
 
 typedef long long ll;
@@ -17,7 +14,9 @@ struct SegTree
 		lazy.resize(n*4);
 		init(arr, 0, n-1, 1);
 	}
-
+    
+    //node 노드가 arr[left, right] 배열을 표현할 때,
+    //node를 루트로 하는 서브트리를 초기화하고, 이 구간의 합을 반환
 	ll init(const vector<ll>& arr, int left, int right, int node)
 	{
 		if(left==right)
@@ -29,7 +28,7 @@ struct SegTree
 
 		return rangeAns[node] = leftVal + rightVal;
 	}
-
+    
 	ll query(int left, int right, int node, int nodeLeft, int nodeRight)
 	{
 		propagate(node, nodeLeft, nodeRight);
@@ -109,7 +108,7 @@ int main()
 
 	for(int i=0; i<m+k; i++)
 	{
-		int a, b, c, d;
+		int a, b, c; ll d;
 		cin>>a>>b>>c;
 
 		if(a==1)
