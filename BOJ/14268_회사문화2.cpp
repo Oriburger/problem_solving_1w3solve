@@ -13,7 +13,7 @@ void propagate(int node, int nl, int nr)
         lazy[node*2] += lazy[node];
         lazy[node*2+1] += lazy[node];
     }
-    tree[node] = (nr-nl+1)*lazy[node];
+    tree[node] += (nr-nl+1)*lazy[node];
     lazy[node] = 0;
 }
 
@@ -79,15 +79,15 @@ int main()
     DFS(0);
     while(m--)
     {
-        int a, b, c;
-        cin>>a>>b;
-        if(a==1)
+        int sel, idx, w;
+        cin>>sel>>idx;
+        if(sel==1)
         {
-            cin>>c;
-            update(st[b-1], fin[b-1], c);
+            cin>>w;
+            update(st[idx-1], fin[idx-1], w);
         }
-        else if(a==2)
-            cout<<query(st[b-1], st[b-1])<<'\n';
+        else if(sel==2)
+            cout<<query(st[idx-1], st[idx-1])<<'\n';
     }
     
     return 0;
