@@ -50,10 +50,10 @@ int query(int l, int r) { return query(l, r, 1, 0, n-1); }
 
 void DFS(int curr)
 {
-    st[curr] = ++tmp; 
-    for(auto &next : adj[curr])
+    st[curr] = ++tmp; //탐색 시작 시점 
+    for(auto &next : adj[curr]) //DFS탐색
         if(st[next]==-1) DFS(next);
-    fin[curr] = tmp;
+    fin[curr] = tmp; //탐색 종료 시점
 }
 
 int main()
@@ -71,22 +71,22 @@ int main()
         int j; cin>>j;
         if(i>0)
         {
-            adj[j-1].push_back(i);  
-            adj[0].push_back(i);
+            adj[j-1].push_back(i); //j-1는 i의 상사
+            adj[0].push_back(i); 0은 모두의 상사
         }
     }
     
-    DFS(0);
-    while(m--)
+    DFS(0); //ETT!!!
+    while(m--) //m번의 쿼리
     {
         int sel, idx, w;
         cin>>sel>>idx;
-        if(sel==1)
+        if(sel==1) //구간 update : idx-1과 부하직원들이 칭찬을 받음!
         {
             cin>>w;
-            update(st[idx-1], fin[idx-1], w);
+            update(st[idx-1], fin[idx-1], w); 
         }
-        else if(sel==2)
+        else if(sel==2) //쿼리 : 해당 직원의 칭찬 포인트 출력
             cout<<query(st[idx-1], st[idx-1])<<'\n';
     }
     
