@@ -69,7 +69,7 @@ int main()
 
 	//SCC 구성이 가능한가?
 	for(int i=0; i<m; i+=2)
-		if(sccId[i] == sccId[i+1])
+		if(m > n || sccId[i] == sccId[i+1])
 		{
 			cout<<"OTL\n"; //불가능
 			return 0;
