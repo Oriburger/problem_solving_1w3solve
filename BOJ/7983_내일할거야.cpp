@@ -3,12 +3,6 @@ using namespace std;
 
 typedef pair<int, int> P;
 
-bool comp(const P& p1, const P& p2)
-{
-    if(p1.second == p2.second) return p1.first < p2.first;
-    return p1.second > p2.second;
-}
-
 int n, k;
 vector<P> arr; 
 
@@ -24,7 +18,11 @@ int main()
         arr.push_back({a, b});
         k = max(k, b);
     }
-    sort(arr.begin(), arr.end(), comp);
+    sort(arr.begin(), arr.end(), [](P p1, P p2) -> bool
+    {
+        if(p1.second == p2.second) return p1.first < p2.first;
+        return p1.second > p2.second;
+    });
     
     for(auto &p : arr)
     {
