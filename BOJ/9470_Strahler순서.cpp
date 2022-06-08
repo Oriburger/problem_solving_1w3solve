@@ -49,25 +49,24 @@ int main()
             last = curr;
             for(auto &next : adj[curr])
             {
+                int maxOrder = max(order[next].first, order[curr].first);
                 if(order[next].first == 0)
-                    order[next] = {order[curr].first, order[curr].first};
+                    order[next] = {maxOrder, maxOrder};
                 else
                 {
-                    if(order[next].second == order[curr].second)
-                        order[next] = {order[next].second+1, order[next].second+1};
+                    if(order[next].first == order[curr].first
+                        && order[next].second == maxOrder)
+                        order[next] = {maxOrder+1, maxOrder};
                     else
-                        order[next] = {max(order[next].first, order[curr].first)
-                                    , max(order[next].first, order[curr].first)};
+                        order[next] = {maxOrder, maxOrder};
                 }
 
                 if(--indegree[next] == 0)
                     q.push(next);
             }
         }
-        //cout<<'\n';
         cout<<k<<' '<<order[last].first<<'\n';
-        for(int i=1; i<=m; i++)
-            cout<<order[i].first<<'/'<<order[i].second<<'\n';
+
         order.clear();
         adj.clear();
         indegree.clear();
