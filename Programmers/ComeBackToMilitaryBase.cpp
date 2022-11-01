@@ -2,10 +2,8 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
-#include <utility>
 using namespace std;
 
-typedef pair<int, int> P;
 const int MAXN = 1e5;
 const int INF = 2147000000;
 
@@ -13,25 +11,24 @@ vector<vector<int> > adj(MAXN+1);
 
 int getShortestPath(int n, int start, int dest)
 {
-    vector<int> dist(n+1, INF);
-    priority_queue<P, vector<P>, greater<P> > pq;
+    queue<int> q;
+    vector<int> dist(n+1, -1);
     
-    pq.push({0, start});
+    q.push(start);
     dist[start] = 0;
     
-    while(!pq.empty())
+    while(!q.empty())
     {
-        int curr = pq.top().second;
-        int curDist = pq.top().first;
-        pq.pop();
+        int curr = q.front();
+        q.pop(); 
         
         if(curr == dest) break;
         
         for(auto &next : adj[curr])
         {
-            if(dist[curr] + 1 >= dist[next]) continue;
+            if(dist[next] != -1) continue;
             dist[next] = dist[curr] + 1;
-            pq.push({dist[next], next});
+            q.push(next);
         }
     }
     return dist[dest] == INF ? -1 : dist[dest];
