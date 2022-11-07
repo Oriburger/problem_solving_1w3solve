@@ -1,3 +1,5 @@
+//풀이) https://blog.naver.com/uss425/222922539773
+
 #include <string>
 #include <vector>
 #include <queue>
@@ -10,7 +12,7 @@ const int INF = 2e9;
 vector<bool> isSummit, isGate;
 vector<vector<P> > adj;
 
-class disjointSet //서로소 집합
+class disjointSet
 {
 private:
     vector<int> parent, rank;
@@ -22,10 +24,10 @@ public:
             parent[i] = i;
     }       
     
-    int find(int u) 
+    int find(int u)
     {
         if(parent[u]==u) return u;
-        return parent[u] = find(parent[u]); //경로 압축
+        return parent[u] = find(parent[u]);
     }
     
     void merge(int u, int v)
@@ -34,43 +36,52 @@ public:
         
         if(u == v) return;
         if(rank[u] < rank[v]) swap(u, v);
-        if(rank[u] == rank[v]) rank[u]++; //rank 최적화
+        if(rank[u] == rank[v]) rank[u]++;
         parent[v] = u;
     }
     
 };
 
-int BFS(int start, const vector<int>& gates)
+vector<int> dijkstra(vector<int>& gates)
 {
-    queue<int> q;
-    vector<int> intensity(adj.size(), -1); // start에서부터의 intensity
+    priority_queue<P, vector<P>, greater<P> > pq;
+    vector<int> dist(adj.size(), INF);
+    vector<P> temp;    
     
-    q.push(start);
-    intensity[start] = 0;
-    while(!q.empty())
+    for(auto &s : gates)
     {
-        int curr = q.front();
-        q.pop();
-        
-        for(auto &nextP : adj[curr])
-        {
-            int next = nextP.first;
-            int nextDist = nextP.second;
-            
-            if(intensity[next] != -1 || isSummit[next]) continue; //이미 방문 했거나 경로에 산봉우리가 있으면 continue
-            intensity[next] = max(intensity[curr], nextDist); //intensity 체크
-            
-            if(isGate[next]) continue; //gate라면 큐에는 넣지 않음
-            q.push(next);
-        }
+        pq.push({0, s});
+        dist[s] = 0;
     }
     
-    int ret = INF;
-    for(auto& gate : gates) //gate들의 intensity 비교
-        if(intensity[gate] != -1)
-            ret = min(ret, intensity[gate]);
+    while(!pq.empty())
+    {
+        int curr = pq.top().second;
+        int curDist = pq.top().first; 
+        pq.pop();
+        
+        if(curDist > dist[curr]) continue;
+        if(isSummit[curr])
+        {
+            temp.push_back({curDist, curr});
+            continue;
+        }
+        
+        for(P& nx : adj[curr])
+        {
+            int next = nx.first;
+            int nextDist = nx.second; 
+            
+            if(dist[next] > max(curDist, nextDist))
+            {
+                dist[next] = max(curDist, nextDist);
+                pq.push({dist[next], next});
+            }
+        }
+    }
+    sort(temp.begin(), temp.end());
     
-    return ret;
+    return {temp[0].second, temp[0].first};
 }
 
 vector<int> solution(int n, vector<vector<int>> paths, vector<int> gates, vector<int> summits) 
@@ -81,14 +92,14 @@ vector<int> solution(int n, vector<vector<int>> paths, vector<int> gates, vector
     adj.resize(n+1);
     
     int cnt = 0;
-    disjointSet djs(n); 
+    disjointSet djs(n);
     
     sort(paths.begin(), paths.end(), [](vector<int>& a, vector<int>& b) -> bool
         {
-          return a[2] < b[2];
-        }); //cost를 기준으로 path를 정렬
+            return a[2] < b[2];
+        });
     
-    for(vector<int>& edge : paths) //MST를 구성
+    for(vector<int>& edge : paths)
     {
         int u = edge[0], v = edge[1], cost = edge[2];
         
@@ -97,20 +108,14 @@ vector<int> solution(int n, vector<vector<int>> paths, vector<int> gates, vector
             djs.merge(u, v);
             adj[u].push_back({v, cost});
             adj[v].push_back({u, cost});
-            if(++cnt == n-1) break; //n-1개를 pick 하면 break;
+            if(++cnt == n-1) break;
         }
     }
     
     for(auto &s : summits) isSummit[s] = true;
-    for(auto &g : gates) isGate[g] = true; 
-    sort(summits.begin(), summits.end()); //summit이 정렬되어있지 않음에 주의
-  
-    for(auto &start : summits) //정답 탐색
-    {
-        int temp = BFS(start, gates);
-        if(temp < answer[1])
-            answer = {start, temp};
-    }
+    for(auto &g : gates) isGate[g] = true;
+    
+    answer = dijkstra(gates);
     
     return answer;
 }
