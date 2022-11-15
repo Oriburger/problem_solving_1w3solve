@@ -1,4 +1,4 @@
-# Algorithm Study - 1 day 1 solve
+# Algorithm Study - 1 week 3 solve
 ---
 - `BaekJoon Online Judge`과 여러 온라인 저지의 소스코드
 
