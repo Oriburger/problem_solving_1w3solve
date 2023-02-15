@@ -7,16 +7,9 @@ char st[3] = {'(', '{', '['};
 char fin[3] = {')', '}', ']'};
 string str; int ans = 0;
 
-int getHeadIdx(const char& c)
+inline int getHeadIdx(const char& c)
 {
-	for(int i=0; i<3; i++)
-		if(c == st[i]) return i;
-	return -1;
-}
-int getTailIdx(const char& c)
-{
-	for(int i=0; i<3; i++)
-		if(c == fin[i]) return i;
+	for(int i=0; i<3; i++) if(c == st[i]) return i;
 	return -1;
 }
 
@@ -29,26 +22,13 @@ int getScore(int idx)
 	{
 		const char& c = str[i];
 		if(c-'0' >= 0 && c-'0' <= 9) continue;
-		
-		int headIdx = getHeadIdx(c);
-		if(headIdx != -1)
-		{
-			stk.push(c);
-		}
-		else 
-		{
-			const char& t = stk.top();
-			int tailIdx = headIdx;
-			if(headIdx == tailIdx)
-				stk.pop();
-		}
+	
+		if(getHeadIdx(c) != -1) stk.push(c);
+		else stk.pop();		
 	}
-
 	while(!stk.empty())
 	{
-		if(stk.top() == '(') score += 1;
-		else if(stk.top() == '{') score += 2;
-		else if(stk.top() == '[') score += 3;
+		score += (1+getHeadIdx(stk.top()));
 		stk.pop();
 	}
 	return score;
@@ -64,7 +44,6 @@ int main()
 	for(int i=0; i<str.length(); i++)
 	{
 		const char& c = str[i];
-
 		if(c-'0' >= 0 && c-'0' <= 9)
 			ans = max(ans, getScore(i));
 	}
