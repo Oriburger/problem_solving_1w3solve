@@ -1,28 +1,15 @@
-/*i can make the messiest code*/
-
-#include <iostream>
-#include <string>
+#include <bits/stdc++.h>
 using namespace std;
 
-string str1, str2; 
-int answer=0;
+string str1, str2;
 
 int main()
 {
-	ios::sync_with_stdio(false);
-	cin.tie(NULL);
-	
 	cin>>str1>>str2;
+	reverse(str1.begin(), str1.end());
+	reverse(str2.begin(), str2.end());
 	
-	str1 = {str1[2],str1[1],str1[0]};
-	str2 = {str2[2],str2[1],str2[0]};
-	
-	cout<< ((str1[0]-'0') > (str2[0]-'0') ? str1
-			: (str1[0]-'0') < (str2[0]-'0') ? str2
-			: (str1[1]-'0') > (str2[1]-'0') ? str1
-			: (str1[1]-'0') < (str2[1]-'0') ? str2
-			: (str1[2]-'0') > (str2[2]-'0') ? str1
-			: (str1[2]-'0') < (str2[2]-'0') ? str1 : str2) <<'\n';
-	
+	if(str1>str2) cout<<str1<<'\n';
+	else cout<<str2<<'\n';
 	return 0;
-}
+}	
