@@ -2,26 +2,20 @@
 #include <vector>
 using namespace std;
 
-vector<int> arr;
-int k;
-
-int Answer(int idx, int curr)
+void dfs(int curr, int total, const vector<int>& nums, const int& target, int& ans)
 {
-    if(idx == arr.size())
-        return curr==k;
-    
-    int ret = 0;
-    
-    ret += Answer(idx+1, curr+arr[idx]);
-    ret += Answer(idx+1, curr-arr[idx]);
-    
-    return ret;
+    if(curr == nums.size())
+    {
+        ans += (total == target);
+        return;
+    }
+    dfs(curr+1, total + nums[curr], nums, target, ans);
+    dfs(curr+1, total - nums[curr], nums, target, ans);
 }
 
 int solution(vector<int> numbers, int target) 
 {
-    arr = numbers;    
-    k = target;
-    
-    return Answer(0, 0);
+    int answer = 0;
+    dfs(0, 0, numbers, target, answer);
+    return answer;
 }
