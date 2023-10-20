@@ -1,54 +1,46 @@
+#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
+#include <cmath>
+#include <queue>
+#include <utility>
 using namespace std;
 
-bool adj[201][201]; //그래프는 인접 행렬 형식
-vector<bool> visited; 
+typedef pair<int, int> P;
+vector<int> adj[101];
+vector<bool> visited(101, false);
 
-int DFS(int curr, const int n)
+void DFS(int curr, const P ignoreEdge, int &count)
 {
-    if(visited[curr]) return 0;
     visited[curr] = true;
+    count += 1;
     
-    int ret = 1;
-    for(int next=1; next<=n; next++)
+    for(int &next : adj[curr])
     {
-        if(!adj[curr][next]) continue;
+        if(P(curr, next) == ignoreEdge
+            || P(next, curr) == ignoreEdge) continue; 
+        if(visited[next]) continue;    
         
-        ret += DFS(next, n);
+        DFS(next, ignoreEdge, count);
     }
-    return ret;
 }
 
 int solution(int n, vector<vector<int>> wires) 
 {
-    int answer = 201;
+    int answer = 1e9;
     
-    for(int i=0; i<wires.size(); i++) //그래프 초기화
+    for(auto &w : wires)
     {
-        int u = wires[i][0];
-        int v = wires[i][1];
-        adj[u][v] = adj[v][u] = true;
+        adj[w[0]].push_back(w[1]);
+        adj[w[1]].push_back(w[0]);
     }
     
-    for(int i=0; i<wires.size(); i++) //모든 선을 하나씩 끊어보며 정답을 탐색
+    for(int i=0; i<wires.size(); i++)
     {
-        int u = wires[i][0];
-        int v = wires[i][1];
-        adj[u][v] = adj[v][u] = false; //i번째 선을 끊음
-        
-        vector<int> count;
-        visited = vector<bool>(n+1, false);
-        for(int j=1; j<=n; j++) //모든 정점에 대해 DFS를 진행하여 2개로 나뉜 구간의 크기를 구한다.
-        {
-            int temp = DFS(j, n);
-            if(!temp) continue; 
-            count.push_back(temp);
-        }
-        answer = min(answer, abs(count[0]-count[1])); //정답 갱신
-        adj[u][v] = adj[v][u] = true; //다시 재연결
+        int areaCnt = 0;
+        DFS(1, {wires[i][0], wires[i][1]}, areaCnt);
+        answer = min(answer, abs((n-areaCnt) - areaCnt));
+        visited = vector<bool>(101, false);
     }
-    
     return answer;
 }
