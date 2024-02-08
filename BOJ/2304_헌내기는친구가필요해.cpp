@@ -1,3 +1,8 @@
+/*
+	단순 2차원 배열 형태의 격자 그래프 탐색
+ 	범위에 벗어나지 않게, 중복되지 않게, 벽이 아닌곳으로 잘 탐색해주며
+  	탐색 간에 마주치는 사람의 수를 카운팅하면 됨
+*/
 #include <iostream>
 #include <vector>
 #include <algorithm>
