@@ -42,6 +42,12 @@ int main()
 				arr.push_back(str);
 		}
 		
+		if(n >= 33)
+		{
+			cout<<"0\n";
+			continue;
+		}
+		
 		int ans = 1e9;
 		for(int i=0; i<arr.size(); i++)
 		  for(int j=i+1; j<arr.size(); j++)
