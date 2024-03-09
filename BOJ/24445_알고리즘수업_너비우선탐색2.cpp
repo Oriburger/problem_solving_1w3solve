@@ -1,3 +1,10 @@
+/*
+
+BFS의 visited를 integer로 해서 순서를 기록.
+그리고 입력을 내림차순으로 소트
+
+*/
+
 #include <iostream>
 #include <vector>
 #include <queue>
