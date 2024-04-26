@@ -1,57 +1,49 @@
-#include <iostream> 
-#include <algorithm>
+#include <iostream>
 #include <vector>
-#include <cmath>
-#include <map>
+#include <algorithm>
 using namespace std;
 
-int n;
-unsigned long long answer;
-vector<vector<int> > adj;
-vector<int> posArr;
+struct dot { int pos; int color; };
+
+bool comp(const dot& a, const dot& b)
+{
+	if(a.color != b.color) 
+		return a.color < b.color;
+	return a.pos < b.pos;
+}
 
 int main()
 {
-	ios::sync_with_stdio(false);
-	cin.tie(NULL);
+	ios::sync_with_stdio(0);
+	cin.tie(0); cout.tie(0);
+	
+	long long n, ans = 0;
+	vector<dot> arr; 
 	
 	cin>>n;
 	
-	adj.resize(100001);
+	dot tmp; 
 	for(int i=0; i<n; i++)
 	{
-		int p, c;
-		cin>>p>>c;
-		
-		posArr.push_back(c);
-		adj[c].push_back(p);
+		cin>>tmp.pos>>tmp.color;
+		arr.push_back(tmp);
 	}
+	sort(arr.begin(), arr.end(), comp);
 	
-	sort(posArr.begin(), posArr.end());
-	posArr.erase(unique(posArr.begin(), posArr.end()), posArr.end());
 	
-	for(int i=0; i<posArr.size(); i++)
-		sort(adj[posArr[i]].begin(), adj[posArr[i]].end());
-	
-	for(int i=0; i<posArr.size(); i++)
+	for(int i=0; i<n; i++)
 	{
-		int curr = posArr[i];
+		int color = arr[i].color;
+		int dist = 1e9 + 1;
 		
-		if(adj[curr].size() < 2) continue;
-
-		for(int j=0; j<adj[curr].size(); j++)
-		{
-			if(j==adj[curr].size()-1)
-				answer+=adj[curr][j] - adj[curr][j-1];
-			else if(j==0)
-				answer+=adj[curr][j+1] - adj[curr][j]; 
-			else
-				answer += min(adj[curr][j]-adj[curr][j-1], 
-								adj[curr][j+1]-adj[curr][j]);
-		}
+		if(i > 0 && arr[i-1].color == color)
+			dist = min(dist, arr[i].pos - arr[i-1].pos);
+		if(i < n-1 && color == arr[i+1].color)
+			dist = min(dist, arr[i+1].pos - arr[i].pos);
+			
+		if(dist != 1e9 + 1) ans += (long long)dist;
 	}
-	
-	cout<<answer<<'\n';
+	cout<<ans<<'\n';
 	
 	return 0;
 }
